@@ -25,6 +25,7 @@ DublinCore
 FAir
 Findability
 Findable
+Gaspe
 Geolocation
 Github
 Hadley
@@ -34,12 +35,14 @@ IETF
 Interoperable
 JSON
 KiB
+LD
 LOM
 Monya
 Ngomo
 Ngonga
 Pomerantz
 RDF
+ROpenSci
 RelatedIdentifier
 SDG
 SDMX
@@ -51,7 +54,9 @@ UNSD
 URI
 URIs
 WS
+Wadsworth
 Wickham
+Wilks
 Zenodo
 actionability
 bibentry
@@ -102,6 +107,7 @@ overalapping
 pacakges
 pkgcheck
 pre
+programmatically
 quicky
 rOpenGov
 rOpenSci
@@ -125,10 +131,10 @@ schemeType
 schemeURI
 schemeURIs
 sdmx
+setosa
 statcodelist
 statcodelists
 subjectScheme
-surveydataset
 tibble
 tibbles
 tidyverse
@@ -139,6 +145,8 @@ understandability
 unescap
 utopistic
 valueURIs
+versicolor
+virginica
 wor
 www
 zenodo

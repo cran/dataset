@@ -6,15 +6,15 @@
 <!-- badges: start -->
 
 [![lifecycle](https://lifecycle.r-lib.org/articles/figures/lifecycle-experimental.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/dataset)](https://cran.r-project.org/package=dataset)
+[![CRAN_time_from_release](https://www.r-pkg.org/badges/ago/dataset)](https://cran.r-project.org/package=dataset)
 [![Status at rOpenSci Software Peer
 Review](https://badges.ropensci.org/553_status.svg)](https://github.com/ropensci/software-review/issues/553)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7110256.svg)](https://zenodo.org/record/6950435#.YukDAXZBzIU)
-[![devel-version](https://img.shields.io/badge/devel%20version-0.1.8-blue.svg)](https://github.com/dataobservatory-eu/dataset)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7391890.svg)](https://zenodo.org/record/6950435#.YukDAXZBzIU)
+[![devel-version](https://img.shields.io/badge/devel%20version-0.1.9.0004-blue.svg)](https://github.com/dataobservatory-eu/dataset)
 [![dataobservatory](https://img.shields.io/badge/ecosystem-dataobservatory.eu-3EA135.svg)](https://dataobservatory.eu/)
 [![Follow
 rOpenGov](https://img.shields.io/twitter/follow/ropengov.svg?style=social)](https://twitter.com/intent/follow?screen_name=ropengov)
-[![Follow
-author](https://img.shields.io/twitter/follow/digitalmusicobs.svg?style=social)](https://twitter.com/intent/follow?screen_name=digitalmusicobs)
 [![Codecov test
 coverage](https://codecov.io/gh/dataobservatory-eu/dataset/branch/master/graph/badge.svg)](https://app.codecov.io/gh/dataobservatory-eu/dataset?branch=master)
 [![pkgcheck](https://github.com/dataobservatory-eu/dataset/workflows/pkgcheck/badge.svg)](https://github.com/dataobservatory-eu/dataset/actions?query=workflow%3Apkgcheck)
@@ -28,9 +28,9 @@ interoperable datasets from data.frames, tibbles or data.tables that
 translate well into the W3C DataSet definition within the [Data Cube
 Vocabulary](https://www.w3.org/TR/vocab-data-cube/) in a reproducible
 manner. The data cube model in itself is is originated in the
-[Statistical Data and Metadata eXchange](https://sdmx.org/), and it is
-almost fully harmonized with the Resource Description Framework (RDF),
-the standard model for data interchange on the web[^1].
+*Statistical Data and Metadata eXchange*, and it is almost fully
+harmonized with the Resource Description Framework (RDF), the standard
+model for data interchange on the web[^1].
 
 A mapping of R objects into these models has numerous advantages:
 
@@ -60,20 +60,35 @@ You can install the development version of dataset from Github:
 remotes::install_github('dataobservatory-eu/dataset')
 ```
 
+or install from CRAN:
+
+``` r
+install.packages('dataset')
+```
+
 ## Getting started
 
-The dataset constructor creates a dataset from a data.frame or similar
-object.
+The `dataset()` constructor creates a dataset from a data.frame or
+similar object.
 
 ``` r
 library(dataset)
+#> 
+#> Attaching package: 'dataset'
+#> The following object is masked from 'package:base':
+#> 
+#>     as.data.frame
 my_iris_dataset <- dataset(
   x = iris, 
   Dimensions = NULL, 
-  Measures = c("Sepal.Length", "Sepal.Width",  "Petal.Length", "Petal.Width" ), 
+  Measures = c("Sepal.Length", "Sepal.Width",  "Petal.Length", "Petal.Width"), 
   Attributes = "Species", 
-  Title = "Iris Dataset"
+  Title = "Iris Dataset", 
+  Issued = 1936
 )
+
+is.dataset(my_iris_dataset)
+#> [1] TRUE
 ```
 
 Then you add the metadata:
@@ -88,55 +103,94 @@ my_iris_dataset <- dublincore_add(
   Language = "en"
 )
 
-dublincore(my_iris_dataset)
-#> $names
-#> [1] "Sepal.Length" "Sepal.Width"  "Petal.Length" "Petal.Width"  "Species"     
+print(my_iris_dataset)
+#> Iris Dataset by Edgar Anderson
+#> Published by American Iris Society
+#>    Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+#> 1           5.1         3.5          1.4         0.2  setosa
+#> 2           4.9         3.0          1.4         0.2  setosa
+#> 3           4.7         3.2          1.3         0.2  setosa
+#> 4           4.6         3.1          1.5         0.2  setosa
+#> 5           5.0         3.6          1.4         0.2  setosa
+#> 6           5.4         3.9          1.7         0.4  setosa
+#> 7           4.6         3.4          1.4         0.3  setosa
+#> 8           5.0         3.4          1.5         0.2  setosa
+#> 9           4.4         2.9          1.4         0.2  setosa
+#> 10          4.9         3.1          1.5         0.1  setosa
 #> 
-#> $dimensions
-#> [1] names       class       isDefinedBy codeList   
-#> <0 rows> (or 0-length row.names)
-#> 
-#> $measures
-#>                     names   class                       isDefinedBy
-#> Sepal.Length Sepal.Length numeric https://purl.org/linked-data/cube
-#> Sepal.Width   Sepal.Width numeric https://purl.org/linked-data/cube
-#> Petal.Length Petal.Length numeric https://purl.org/linked-data/cube
-#> Petal.Width   Petal.Width numeric https://purl.org/linked-data/cube
-#>                    codeListe
-#> Sepal.Length not yet defined
-#> Sepal.Width  not yet defined
-#> Petal.Length not yet defined
-#> Petal.Width  not yet defined
-#> 
-#> $attributes
-#>           names  class
-#> Species Species factor
-#>                                                                                                                                                    isDefinedBy
-#> Species https://purl.org/linked-data/cube|https://raw.githubusercontent.com/UKGovLD/publishing-statistical-data/master/specs/src/main/vocab/sdmx-attribute.ttl
-#>               codeListe
-#> Species not yet defined
-#> 
-#> $Type
-#>       resourceType resourceTypeGeneral
-#> 1 DCMITYPE:Dataset             Dataset
-#> 
-#> $Source
-#> [1] "https://doi.org/10.1111/j.1469-1809.1936.tb02137.x"
-#> 
-#> $Publisher
-#> [1] "American Iris Society"
-#> 
-#> $Date
-#> [1] "2022-12-01"
-#> 
-#> $Creator
-#> [1] "Edgar Anderson [aut]"
-#> 
-#> $Issued
-#> [1] 1935
-#> 
-#> $Language
-#> [1] "eng"
+#> ... 140 further observations.
+#> Source:https://doi.org/10.1111/j.1469-1809.1936.tb02137.x.
+```
+
+``` r
+summary(my_iris_dataset)
+#> Iris Dataset by Edgar Anderson
+#> Published by American Iris Society
+#>   Sepal.Length    Sepal.Width     Petal.Length    Petal.Width   
+#>  Min.   :4.300   Min.   :2.000   Min.   :1.000   Min.   :0.100  
+#>  1st Qu.:5.100   1st Qu.:2.800   1st Qu.:1.600   1st Qu.:0.300  
+#>  Median :5.800   Median :3.000   Median :4.350   Median :1.300  
+#>  Mean   :5.843   Mean   :3.057   Mean   :3.758   Mean   :1.199  
+#>  3rd Qu.:6.400   3rd Qu.:3.300   3rd Qu.:5.100   3rd Qu.:1.800  
+#>  Max.   :7.900   Max.   :4.400   Max.   :6.900   Max.   :2.500  
+#>        Species  
+#>  setosa    :50  
+#>  versicolor:50  
+#>  virginica :50  
+#>                 
+#>                 
+#>                 
+#> Source:https://doi.org/10.1111/j.1469-1809.1936.tb02137.x.
+```
+
+``` r
+metadata <- dublincore(x=my_iris_dataset)
+#> Title: Iris Dataset 
+#> Publiser:  American Iris Society  | Source:  https://doi.org/10.1111/j.1469-1809.1936.tb02137.x  | Date:  1936  | Language:  eng  | Identifier:   | Rights:   | Description:   | 
+#> names:  Sepal.Length, Sepal.Width, Petal.Length, Petal.Width, Species 
+#> - dimensions: <none>
+#> - measures: Sepal.Length (numeric)  Sepal.Width (numeric)  Petal.Length (numeric)  Petal.Width (numeric)  
+#> - attributes: Species (factor)
+```
+
+Beware that the metadata variable is more structured than the printed
+version.
+
+``` r
+str(metadata)
+#> List of 11
+#>  $ names     : chr [1:5] "Sepal.Length" "Sepal.Width" "Petal.Length" "Petal.Width" ...
+#>  $ dimensions:'data.frame':  0 obs. of  4 variables:
+#>   ..$ names      : chr(0) 
+#>   ..$ class      : chr(0) 
+#>   ..$ isDefinedBy: chr(0) 
+#>   ..$ codeList   : chr(0) 
+#>  $ measures  :'data.frame':  4 obs. of  4 variables:
+#>   ..$ names      : chr [1:4] "Sepal.Length" "Sepal.Width" "Petal.Length" "Petal.Width"
+#>   ..$ class      : chr [1:4] "numeric" "numeric" "numeric" "numeric"
+#>   ..$ isDefinedBy: chr [1:4] "https://purl.org/linked-data/cube" "https://purl.org/linked-data/cube" "https://purl.org/linked-data/cube" "https://purl.org/linked-data/cube"
+#>   ..$ codeListe  : chr [1:4] "not yet defined" "not yet defined" "not yet defined" "not yet defined"
+#>  $ attributes:'data.frame':  1 obs. of  4 variables:
+#>   ..$ names      : chr "Species"
+#>   ..$ class      : chr "factor"
+#>   ..$ isDefinedBy: chr "https://purl.org/linked-data/cube|https://raw.githubusercontent.com/UKGovLD/publishing-statistical-data/master/"| __truncated__
+#>   ..$ codeListe  : chr "not yet defined"
+#>  $ Type      :List of 2
+#>   ..$ resourceType       : chr "DCMITYPE:Dataset"
+#>   ..$ resourceTypeGeneral: chr "Dataset"
+#>  $ Title     :List of 1
+#>   ..$ Title: chr "Iris Dataset"
+#>  $ Date      : num 1936
+#>  $ Creator   :Class 'person'  hidden list of 1
+#>   ..$ :List of 5
+#>   .. ..$ given  : chr "Edgar"
+#>   .. ..$ family : chr "Anderson"
+#>   .. ..$ role   : chr "aut"
+#>   .. ..$ email  : NULL
+#>   .. ..$ comment: NULL
+#>  $ Source    : chr "https://doi.org/10.1111/j.1469-1809.1936.tb02137.x"
+#>  $ Publisher : chr "American Iris Society"
+#>  $ Language  : chr "eng"
 ```
 
 ## Development plans
@@ -232,6 +286,10 @@ Our
     with correct bibliographical and use metadata. See [Export And
     Publish a
     dataset](https://dataset.dataobservatory.eu/articles/publish.html)
+
+-   [x] Use programmatically the
+    [dataspice](https://github.com/ropensci/dataspice) package to
+    publish dataset documentation.
 
 -   [x] Relatively lightweight in dependencies and easily works with
     data.frame, [tibble](https://tibble.tidyverse.org/) or

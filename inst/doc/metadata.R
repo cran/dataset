@@ -76,18 +76,18 @@ print(iris_bibentry, sytle="html")
 ## ----petalexample-------------------------------------------------------------
 petal_length <- dataset(subset(iris, 
                                select = c("Petal.Length", "Species")), 
-        Dimensions = NULL, 
-        Measures   = "Petal.Length", 
-        Attributes = "Species")
+                        Dimensions = NULL, 
+                        Measures   = "Petal.Length", 
+                        Attributes = "Species")
 
 petal_width <- dataset(subset(iris, 
                               select = c("Petal.Width", "Species")), 
-        Dimensions = NULL, 
-        Measures   = "Petal.Width", 
-        Attribute  = "Species")
+                       Dimensions = NULL, 
+                       Measures   = "Petal.Width", 
+                       Attribute  = "Species")
 
 ## ----loaddplyr, message=FALSE-------------------------------------------------
-require(dplyr)
+library(dplyr)
 
 ## ----petalexampleprint--------------------------------------------------------
 petal_length %>%

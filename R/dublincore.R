@@ -103,7 +103,45 @@ dublincore <- function(x) {
   attributes_measures$class <- NULL
   attributes_measures$Size <- NULL
 
-  attributes_measures
+  simple_attributes <- attributes_measures
+  simple_attributes$dimensions <- NULL
+  simple_attributes$measures   <- NULL
+  simple_attributes$attributes <- NULL
+  simple_attributes$Type <- NULL
+  simple_attributes$Title <- NULL
+  simple_attributes$names <- NULL
+
+  cat(paste(paste0(names(unlist(attributes_measures$Title)), ": ", unlist(attributes_measures$Title)), collapse = " | "), "\n")
+  cat("Publiser: ", simple_attributes$Publisher, " | ")
+  cat("Source: ", simple_attributes$Source, " | ")
+  cat("Date: ", simple_attributes$Date, " | ")
+  cat("Language: ", simple_attributes$Language, " | ")
+  cat("Identifier: ", simple_attributes$Identifier, " | ")
+  cat("Rights: ", simple_attributes$Rights, " | ")
+  cat("Description: ", simple_attributes$Description, " | ")
+  cat("\n")
+
+  cat("names: ", paste(attributes_measures$names, collapse = ", "), "\n")
+
+  if(length(attributes_measures$dimensions$names)==0) {
+    cat("- dimensions: <none>\n")
+  } else {
+    cat("- dimensions:", paste0(attributes_measures$dimensions$names, " (", attributes_measures$dimensions$class, ") "), "\n")
+  }
+
+  if(length(attributes_measures$measures$names)==0) {
+    cat("- measures: <none>\n")
+  } else {
+    cat("- measures:", paste0(attributes_measures$measures$names, " (", attributes_measures$measures$class, ") "), "\n")
+  }
+
+  if(length(attributes_measures$attributes$names)==0) {
+    cat("- attributes: <none>\n")
+  } else {
+    cat("- attributes:", paste0(attributes_measures$attributes$names, " (", attributes_measures$attributes$class, ") "), "\n")
+  }
+
+  invisible(attributes_measures)
 }
 
 #' @rdname dublincore
@@ -125,79 +163,116 @@ dublincore_add <- function(x,
                            overwrite = TRUE) {
 
   ## Set the Title property ------------------------------------------------
-  if (is.null(attr(x, "Title"))) {
-    dataset_title(x) <- Title
-  } else if ( overwrite ) {
-    dataset_title(x, overwrite = TRUE) <- Title
-  } else {
-    message ("The dataset already has Title(s): ", dataset_title(x) )
+
+  if (! is.null(Title)) {
+    if (is.null(attr(x, "Title"))) {
+      dataset_title(x) <- Title
+    } else if ( is.na(attr(x, "Title")$Title) ) {
+      dataset_title(x, overwrite = TRUE) <- Title
+    } else if ( overwrite ) {
+      dataset_title(x, overwrite = TRUE) <- Title
+    } else {
+      message ("The dataset already has Title(s): ", dataset_title(x), ". Did not change (overwrite=FALSE)."  )
+    }
   }
 
   ## Set the Identifier property ---------------------------------------------
-  if (is.null(attr(x, "Identifier"))) {
-    identifier(x) <- Identifier
-  } else if ( overwrite ) {
-    identifier(x) <- Identifier
-  } else {
-    message ("The dataset already has an Identifier: ", identifier(x) )
+  if (! is.null(Identifier)) {
+    if (is.null(attr(x, "Identifier"))) {
+      identifier(x) <- Identifier
+    } else if ( is.na(attr(x, "Identifier")) ) {
+      identifier(x) <- Identifier
+    } else if ( overwrite ) {
+      identifier(x) <- Identifier
+    } else {
+      message ("The dataset already has an Identifier: ", identifier(x) )
+    }
+
   }
 
   ## Set the Creator property ---------------------------------------------
-  if (is.null(attr(x, "Creator"))) {
-    creator(x) <- Creator
-  } else if ( overwrite ) {
-    creator(x) <- Creator
-  } else {
-    message ("The dataset already has a Creator: ",  creator(x) )
+  if (!is.null(Creator)) {
+    if (is.null(attr(x, "Creator"))) {
+      creator(x) <- Creator
+    } else if ( is.na(attr(x, "Creator")) ) {
+      creator(x) <- Creator
+    } else if ( overwrite ) {
+      creator(x) <- Creator
+    } else {
+      message ("The dataset already has a Creator: ",  creator(x) )
+    }
   }
+
 
   ## Set the Subject property ------------------------------------------------
-  if (is.null(attr(x, "Subject"))) {
-    subject(x) <- Subject
-  } else if ( overwrite ) {
-    subject(x) <- subject
-  } else {
-    message ("The dataset already has Subject(s): ", subject(x) )
+  if (! is.null(Subject)) {
+    if (is.null(attr(x, "Subject"))) {
+      subject(x) <- Subject
+    } else if ( is.na(attr(x, "Subject")) ) {
+      subject(x) <- Subject
+    } else if ( overwrite ) {
+      subject(x) <- Subject
+    } else {
+      message ("The dataset already has Subject(s): ", subject(x) )
+    }
   }
 
+
   ## Set the Source property ------------------------------------------------
-  if (is.null(attr(x, "Source"))) {
-    dataset_source(x) <- Source
-  } else if ( overwrite ) {
-    dataset_source(x, overwrite = overwrite) <- Source
-  } else {
-    message ("The dataset already has a Source: ", dataset_source(x) )
+  if (!is.null(Source)){
+    if (is.null(attr(x, "Source"))) {
+      dataset_source(x) <- Source
+      # } else if ( is.na(attr(x, "Subject")) ) {
+      #    dataset_source(x, overwrite = overwrite) <- Source
+    } else if ( overwrite ) {
+      dataset_source(x, overwrite = overwrite) <- Source
+    } else {
+      message ("The dataset already has a Source: ", dataset_source(x) )
+    }
   }
 
   ## Set the Publisher property ---------------------------------------------
-  if (is.null(attr(x, "Publisher"))) {
-    publisher(x) <- Publisher
-  } else if ( overwrite ) {
-    publisher(x, overwrite = overwrite) <- Publisher
-  } else {
-    message ("The dataset already has a Publisher: ", publisher(x) )
+  if(!is.null(Publisher)){
+    if (is.null(attr(x, "Publisher"))) {
+      publisher(x) <- Publisher
+    } else if ( is.na(attr(x, "Publisher")) ) {
+      publisher(x) <- Publisher
+    } else if ( overwrite ) {
+      publisher(x, overwrite = overwrite) <- Publisher
+    } else {
+      message ("The dataset already has a Publisher: ", publisher(x) )
+    }
   }
 
-  ## Set the Right property ---------------------------------------------
-  if (is.null(attr(x, "Rights"))) {
-    rights(x) <- Rights
-  } else if ( overwrite ) {
-    rights(x, overwrite = overwrite) <- Rights
-  } else {
-    message ("The dataset already has a Rights (declaration): ", rights(x) )
+  ## Set the Rights property ---------------------------------------------
+  if (!is.null(Rights)) {
+    if (is.null(attr(x, "Rights"))) {
+      rights(x) <- Rights
+    } else if ( is.na(attr(x, "Rights")) ) {
+      rights(x) <- Rights
+    } else if ( overwrite ) {
+      rights(x, overwrite = overwrite) <- Rights
+    } else {
+      message ("The dataset already has a Rights (declaration): ", rights(x) )
+    }
   }
 
   ## Set the Format property ---------------------------------------------
-  if (is.null(attr(x, "Format"))) {
-    attr(x, "Format") <- Format
-  } else if ( overwrite ) {
-    attr(x, "Format") <- Format
-  } else {
-    message ("The dataset already has a Format: ",  attr(x, "Format") )
+  if(!is.null(Format)){
+    if (is.null(attr(x, "Format"))) {
+      attr(x, "Format") <- Format
+    } else if ( overwrite ) {
+      attr(x, "Format") <- Format
+    } else {
+      message ("The dataset already has a Format: ",  attr(x, "Format") )
+    }
   }
 
   ## Set the Issued property ---------------------------------------------
-  attr(x, "Issued") <- Date
+  ## See https://www.dublincore.org/specifications/dublin-core/dcmi-terms/terms/issued/
+  #if (is.null(Issued)) {
+  #  attr(x, "Issued") <- Date
+  #}
 
   ## Set the Type property ------------------------------------------------
   if (is.null(Type)) {
@@ -207,21 +282,29 @@ dublincore_add <- function(x,
   resource_type(x) <- Type
 
   ## Set the Description property -----------------------------------------
-  if (is.null(attr(x, "Description"))) {
-    description(x) <- Description
-  } else if ( overwrite ) {
-    description(x) <- Description
-  } else {
-    message ("The dataset already has a Description property: ", description(x) )
+  if (!is.null("Description")) {
+    if (is.null(attr(x, "Description"))) {
+      description(x) <- Description
+    } else if ( is.na(attr(x, "Description")) ) {
+      description(x) <- Description
+    } else if ( overwrite ) {
+      description(x) <- Description
+    } else {
+      message ("The dataset already has a Description property: ", description(x) )
+    }
   }
 
   ## Set the Language property --------------------------------
-  if (is.null(attr(x, "Language"))) {
-    language(x) <- Language
-  } else if ( overwrite ) {
-    language(x) <- Language
-  } else {
-    message ("The dataset already has a Language property: ", language(x) )
+  if (!is.null(Language)) {
+    if (is.null(attr(x, "Language"))) {
+      language(x) <- Language
+    } else if ( is.na(attr(x, "Language")) ) {
+      language(x) <- Language
+    } else if ( overwrite ) {
+      language(x) <- Language
+    } else {
+      message ("The dataset already has a Language property: ", language(x) )
+    }
   }
 
   x <- size(x)

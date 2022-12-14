@@ -23,7 +23,6 @@ difficulty_bills <- declared (
   c(0,1,2,-1,0), 
   labels = c(Never = 0, Time_to_time = 1, Always = 2, DK = -1)
   )
-
 age_exact <- declared (
   c( 34,45,21,55,-1), 
   labels = c( A = 34,A = 45,A  = 21, A= 55, DK = -1)
@@ -53,16 +52,16 @@ survey_dataset  <- dataset( x= raw_survey,
                             Title = "Tiny Survey", 
                             Creator = person("Jane", "Doe"))
 
-## ----datacite-----------------------------------------------------------------
-datacite(survey_dataset)
+## ----dublincore---------------------------------------------------------------
+dublincore(survey_dataset)
 
-## ---- eval=FALSE--------------------------------------------------------------
-#  # This is not valied in declared
-#  listen_spotify <- declared(
-#    c(0,1,9,0,1),
-#    labels = c( No = 0, Yes = 1,Inap = 9, DK =-1),
-#    na_values = c(9, -1)
-#    )
+## -----------------------------------------------------------------------------
+# This is not valied in declared
+listen_spotify <- declared(
+  c(0,1,9,0,1),
+  labels = c( No = 0, Yes = 1,Inap = 9, DK =-1), 
+  na_values = c(9, -1)
+  )
 
 ## ----printadecleared----------------------------------------------------------
 print(listen_spotify)
@@ -77,17 +76,17 @@ c(listen_spotify, declared(
 summary(listen_spotify)
 
 ## ----dataciteadataset---------------------------------------------------------
-survey_dataset <- datacite_add(survey_dataset, 
+survey_dataset <- dublincore_add(survey_dataset, 
                                Title = "Tiny Survey", 
                                Creator = person("Daniel", "Antal"), 
                                Identifier = "https://doi.org/xxxx.yyyyy",
                                Publisher = "Reprex", 
-                               PublicationYear = 2022, 
+                               Date = 2022, 
                                Subject = "Surveys", 
                                Language = "en")
 
-## ----showdatacite-------------------------------------------------------------
-datacite(survey_dataset)
+## ----showdublincore-----------------------------------------------------------
+dublincore(survey_dataset)
 
 ## ----summarizedataset---------------------------------------------------------
 summary(survey_dataset)

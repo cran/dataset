@@ -18,6 +18,7 @@
 #' @return The titles as a data.frame with a titleTypes column.
 #' @examples
 #' my_iris <- iris
+#'
 #' dataset_title(my_iris) <- dataset_title_create(
 #'     Title = c("Iris Dataset",
 #'     "The famous iris dataset of the R examples"),
@@ -32,7 +33,6 @@
 #' @export
 
 dataset_title <- function(x) {
-
   attr(x, "Title")
 }
 
@@ -54,23 +54,24 @@ dataset_title <- function(x) {
     }
   }
 
-  if (! inherits(value, 'data.frame')) {
-    stop("title(x) <- value: value must be a character, a factor, or a data.frame object.")
+  if (! inherits(value, 'list')) {
+    stop("title(x) <- value: value must be a character, a factor, or a list object.")
   }
 
-  if (! all(names(value) %in% c("Title", "titleType"))) {
-    stop("title(x) <- value: value must be a data.frame object with 'Title', 'titleType' columns.")
+  if (! all(names(value) %in%  c("Title", "AlternativeTitle", "Subtitle", "TranslatedTitle", "Other"))) {
+    stop("title(x) <- value: value must be a list object with a'Title' and optional 'AlternativeTitle', `Subtitle`, `TranslatedTitle` and `Other` columns.")
   }
 
   if ((is.null(attr(x, "Title"))) | overwrite ) {
     attr(x, "Title") <- value
   } else {
-    attr(x, "Title") <- rbind(attr(x, "Title"), value)
+    attr(x, "Title") <- c(attr(x, "Title"), value)
   }
   x
 }
 
 #' @rdname dataset_title
+#' @importFrom stats setNames
 #' @export
 dataset_title_create <- function (Title,
                                   titleType = "Title") {
@@ -83,8 +84,6 @@ dataset_title_create <- function (Title,
     stop("title_create(Title, titleType): you must input the same number of Titles, titleTypes values.")
   }
 
-  Title <- data.frame(Title = Title,
-                      titleType = titleType)
+  as.list(stats::setNames(Title, titleType))
 
-  Title
 }
