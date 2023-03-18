@@ -1,7 +1,7 @@
 Package: dataset
 Title: Create Data Frames that are Easier to Exchange and Reuse
-Date: 2022-12-14
-Version: 0.2.0
+Date: 2023-03-18
+Version: 0.2.1
 Authors@R: 
     c(person(given = "Daniel", family = "Antal", 
            email = "daniel.antal@dataobservatory.eu", 
@@ -37,9 +37,9 @@ VignetteBuilder: knitr
 Config/testthat/edition: 3
 Language: en-US
 NeedsCompilation: no
-Packaged: 2022-12-14 20:14:13 UTC; antaldaniel
+Packaged: 2023-03-18 10:21:17 UTC; antaldaniel
 Author: Daniel Antal [aut, cre] (<https://orcid.org/0000-0001-7513-6760>),
   Marcelo Perlin [rev] (<https://orcid.org/0000-0002-9839-4268>)
 Maintainer: Daniel Antal <daniel.antal@dataobservatory.eu>
 Repository: CRAN
-Date/Publication: 2022-12-14 23:30:07 UTC
+Date/Publication: 2023-03-18 12:40:02 UTC

@@ -1,7 +1,12 @@
+# dataset 0.2.1
+
+A minor correction to avoid vignettes downloading data from the Eurostat data warehouse on CRAN. Small readability improvements in the vignette articles.
+
 # dataset 0.2.0
 
 * New methods for the `dataset()` s3 class: `print.dataset()`, `summary.dataset()`, `subset.dataset`, `[.dataset`, `as.data.frame()`.
 * New vignette on how to use the [dataspice](https://github.com/ropensci/dataspice) package programmatically for publishing dataset documentation.
+* Released on CRAN.
 
 # dataset 0.1.9
 
