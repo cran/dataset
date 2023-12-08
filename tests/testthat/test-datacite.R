@@ -1,11 +1,4 @@
-my_ds <- dataset (data.frame(sex = c("M", "F"),
-                    value = c(1,2)
-                    ),
-         Measures = "value",
-         Dimensions = "sex")
-
-iris_ds <- datacite_add(
-   x = iris,
+iris_datacite <- datacite(
    Title = "Iris Dataset",
    Creator = person(family="Anderson", given ="Edgar", role = "aut"),
    Publisher = "American Iris Society",
@@ -13,8 +6,24 @@ iris_ds <- datacite_add(
    Geolocation = "US",
    Language = "en")
 
+
+
 test_that("datacite() works", {
-  expect_equal(datacite(iris_ds)$Language, 'eng')
-  expect_equal(datacite(iris_ds)$Creator, person ( given = "Edgar", family = "Anderson", role = "aut"))
-  expect_true(grepl("KiB", attr(iris_ds, "Size")))
+  expect_true(is.datacite(iris_datacite))
+  expect_equal(iris_datacite$language, 'en')
+  expect_equal(iris_datacite$geolocation, 'US')
+  expect_equal(iris_datacite$rights, ':tba')
+})
+
+test_that("as_datacite() works", {
+  expect_true(is.datacite(as_datacite(iris_dataset)))
+  expect_true(is.list(as_datacite(iris_dataset, type="list")))
+  expect_equal(as_datacite(iris_dataset, type="list")$Publisher, 'American Iris Society')
+  expect_true(is.dataset(as_datacite(iris_dataset, type="dataset")))
+  expect_equal(dataset_title(as_datacite(iris_dataset, type="dataset")), "The DataCite Metadata of `Iris Dataset'")
+  expect_equal(as_datacite(iris_dataset, type="dataset")$Rights, ':unas')
+  expect_equal(creator(as_datacite(iris_dataset, type ="dataset", author = person("Jane", "Doe"))),
+               person("Jane", "Doe")
+)
+  expect_equal(as_datacite(iris_dataset, type="dataset")$FundingReference, ':unas')
 })

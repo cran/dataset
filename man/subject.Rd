@@ -2,68 +2,68 @@
 % Please edit documentation in R/subject.R
 \name{subject}
 \alias{subject}
-\alias{subject<-}
 \alias{subject_create}
-\title{Get/Add subject(s) to a dataset}
+\alias{subject<-}
+\alias{is.subject}
+\title{Create/add/retrieve a subject}
 \usage{
 subject(x)
 
-subject(x, overwrite = FALSE) <- value
-
 subject_create(
   term,
-  subjectScheme = NA_character_,
-  schemeURI = NA_character_,
-  valueURI = NA_character_
+  schemeURI = NULL,
+  valueURI = NULL,
+  prefix = NULL,
+  subjectScheme = NULL,
+  classificationCode = NULL
 )
+
+subject(x, overwrite = FALSE) <- value
+
+is.subject(x)
 }
 \arguments{
-\item{x}{An R object}
+\item{x}{A dataset object created with \code{dataset::\link{dataset}}.}
 
-\item{overwrite}{Defaults to \code{FALSE}, in which case new subject(x) <- "Subject" calls
-are binding further Subjects to the already set Subject properties.}
+\item{term}{A subject term, for example, \code{"Data sets"}.}
 
-\item{value}{Subject terms, or a Subject object created by \code{\link{subject_create}}.}
+\item{schemeURI}{The URI of the subject identifier scheme, for example
+\code{"http://id.loc.gov/authorities/subjects"}}
 
-\item{term}{A term, or a character vector of multiple terms.}
+\item{valueURI}{The URI of the subject term.
+\code{"https://id.loc.gov/authorities/subjects/sh2018002256"}}
 
-\item{subjectScheme}{The scheme to which the term corresponds. If there are multiple terms,
-provide the subjectScheme(s) in the same order. Optional.}
+\item{prefix}{An abbreviated prefix of a scheme URI, for example,
+\code{"lcch:"} representing \code{"http://id.loc.gov/authorities/subjects"}.
+Widely used namespaces (schemes) have conventional abbreviations.}
 
-\item{schemeURI}{The URI(s) of the subject identifier scheme. If there are multiple terms,
-provide the schemeURIs in the same order as the terms. Optional.}
+\item{subjectScheme}{The name of the subject scheme or classification code or
+authority if one is used. It is a namespace.}
 
-\item{valueURI}{The URI of the subject term. If there are multiple terms,
-provide the valueURIs in the same order as the terms. Optional.}
+\item{classificationCode}{The classificationCode subproperty may be used for
+subject schemes, like ANZSRC, which do not have valueURIs for each subject term.}
+
+\item{overwrite}{If the attributes should be overwritten. In case it is set to \code{FALSE},
+it gives a message with the current \code{Subject} property instead of overwriting it.
+Defaults to \code{FALSE}.}
+
+\item{value}{A subject field created by \code{\link{subject}}.}
 }
 \value{
-The subjects as a data.frame of terms
+The Subject field of the dataset's attributes.
+
+A named list with the subject term, the subject scheme, URIs and prefix.
 }
 \description{
-Add one or more subject terms to the dataset's metadata.
-}
-\details{
-In the Dublin Core elements, \href{https://www.dublincore.org/specifications/dublin-core/dcmi-terms/#https://purl.org/dc/elements/1.1/subject}{dct::subject} is
-defined Typically, the subject will be represented using keywords, key phrases, or classification codes. It is
-recommended as a best practice to use a controlled vocabulary. \cr
-In DataCite, subjects are defined as key phrases from a controlled library.
+Create/add/retrieve a subject
 }
 \examples{
-x <- data.frame( geo = c("AL", "MK"),
-                value = c(1,2))
-my_subject <- subject_create (
-                  term = c("R (Computer program language)",
-                           "Questionnaires--Computer programs"),
-                  subjectScheme = rep("LC Subject Headings", 2),
-                  schemeURI = rep("http://id.loc.gov/authorities/subjects",2),
-                  valueURI = c("https://id.loc.gov/authorities/subjects/sh2002004407.html",
-                               "http://id.worldcat.org/fast/1085693/")
-)
- subject(x) <- my_subject
- subject(x)
-
- y <- data.frame()
- subject(y) <- "R (Computer program language)"
- subject(y) <- "Questionnaires--Computer programs"
- subject(y)
+subject(iris_dataset,
+        overwrite = TRUE) <- subject_create(
+                                  term  = "Irises (plants)",
+                                  schemeURI = "http://id.loc.gov/authorities/subjects",
+                                  valueURI = "https://id.loc.gov/authorities/subjects/sh85068079",
+                                  subjectScheme = "LCCH",
+                                  prefix = "lcch:")
+subject(iris_dataset)
 }

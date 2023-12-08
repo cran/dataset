@@ -30,23 +30,23 @@ document.addEventListener('DOMContentLoaded', function(e) {
 </script>
 
 <style type="text/css">
-  code{white-space: pre-wrap;}
-  span.smallcaps{font-variant: small-caps;}
-  span.underline{text-decoration: underline;}
-  div.column{display: inline-block; vertical-align: top; width: 50%;}
-  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-  ul.task-list{list-style: none;}
-    </style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
 
 
 
 <style type="text/css">
-  code {
-    white-space: pre;
-  }
-  .sourceCode {
-    overflow: visible;
-  }
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
 </style>
 <style type="text/css" data-origin="pandoc">
 pre > code.sourceCode { white-space: pre; position: relative; }
@@ -64,55 +64,54 @@ pre > code.sourceCode { white-space: pre-wrap; }
 pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
-  { counter-reset: source-line 0; }
+{ counter-reset: source-line 0; }
 pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
+{ position: relative; left: -4em; counter-increment: source-line; }
 pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
-  }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
 div.sourceCode
-  {   }
+{ }
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
 </style>
 <script>
 // apply pandoc div.sourceCode style to pre.sourceCode instead
@@ -471,126 +470,123 @@ measurement into a new table. However, the steps of tidying up a messy
 dataset require practice, like solving a Rubik cube––take a long time to
 do quicky.</p>
 <p>The tidy data principles frame Codd’s relational algebra,
-particularly the third normal form (3NF) into statistical language, and
+particularly the third normal form (3NF), into statistical language and
 make the storage and reuse of data in relational databases optional. It
 suggests a format for tabular data and data semantics that makes a very
-important, and usually the most time (resource) consuming part of data
-analysis far more efficient, because the analyst does not have to
-reinvent the wheel all the time.The data cube model can be seen as an
+important and usually the most time-consuming (resource-consuming) part
+of data analysis far more efficient because the analyst does not have to
+reinvent the wheel all the time. The data cube model can be seen as an
 extension of the tidy model that makes the storage, reuse, and exchange
-of data among different database, or their placement on a knowledge
-graph optimal.</p>
+of data among different database or their placement on a knowledge graph
+optimal.</p>
 <p>The wording of the tidy data principles is not sufficiently exact for
-the data cube model. THe 3NF form stipulates that the (e.g. table
-columns) are functionally dependent on solely the primary key, which
+the data cube model. The 3NF form stipulates that the (e.g. table
+columns) are functionally dependent solely on the primary key, which
 means that we must have a primary key that is locally unique in the
-table. The primary key must be a unique combination of the dimension and
-attribute columns, including the row identifier (rowid), if it exists.
+table. If it exists, the primary key must be a unique combination of the
+dimension and attribute columns, including the row identifier (rowid).
 This means a lot more than the uniqueness of the measurement unit.</p>
 <p>A usual dimension is the reference time period and the reference
 geographical area. Consider a dataset that contains population growth
 numbers from a county of a country, collected in the time period of
-2010..2015 quarterly, and in 2016:2020 annually, with the county borders
+2010..2015 quarterly and in 2016:2020 annually, with the county borders
 changing in 2014, and the unit of measure changed from the number of
 people in thousands to the number of people in millions. The
-meausurement of the reference time period and the aggregation area has
+measurements of the reference time period and the aggregation area has
 changed, too.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dataset)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>my_dataset <span class="ot">&lt;-</span> <span class="fu">dataset</span> (<span class="at">x =</span> <span class="fu">data.frame</span> (</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">time =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="dv">2019</span><span class="sc">:</span><span class="dv">2022</span>),<span class="dv">4</span>),</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">geo =</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="st">&quot;NL&quot;</span>,<span class="dv">8</span>), <span class="fu">rep</span>(<span class="st">&quot;BE&quot;</span>,<span class="dv">8</span>)),</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">sex =</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="st">&quot;F&quot;</span>, <span class="dv">4</span>), <span class="fu">rep</span>(<span class="st">&quot;M&quot;</span>, <span class="dv">4</span>), <span class="fu">rep</span>(<span class="st">&quot;F&quot;</span>, <span class="dv">4</span>), <span class="fu">rep</span>(<span class="st">&quot;M&quot;</span>, <span class="dv">4</span>)),</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">value =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">1</span>,<span class="dv">5</span>, <span class="cn">NA_real_</span>, <span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">2</span>,<span class="dv">1</span>, <span class="cn">NA_real_</span>, <span class="dv">2</span>,<span class="dv">5</span>),</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">unit =</span> <span class="fu">rep</span>(<span class="st">&quot;NR&quot;</span>,<span class="dv">8</span>),</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">freq =</span> <span class="fu">rep</span>(<span class="st">&quot;A&quot;</span>,<span class="dv">8</span>)),</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">Dimensions =</span> <span class="fu">c</span>(<span class="st">&quot;time&quot;</span>, <span class="st">&quot;geo&quot;</span>, <span class="st">&quot;sex&quot;</span>),</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">Measures =</span> <span class="st">&quot;value&quot;</span>,</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">Attributes =</span> <span class="fu">c</span>(<span class="st">&quot;unit&quot;</span>, <span class="st">&quot;freq&quot;</span>),</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">sdmx_attributes =</span> <span class="fu">c</span>(<span class="st">&quot;sex&quot;</span>, <span class="st">&quot;time&quot;</span>, <span class="st">&quot;freq&quot;</span>),</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">Title =</span> <span class="st">&quot;Example dataset&quot;</span>,</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">Creator =</span> <span class="fu">person</span>(<span class="st">&quot;Jane&quot;</span>, <span class="st">&quot;Doe&quot;</span>)</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>my_dataset <span class="ot">&lt;-</span> <span class="fu">dataset_local_id</span>(my_dataset)</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>my_dataset</span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                  local_id time geo sex value unit freq</span></span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1  geo=NL_sex=F_time=2019 2019  NL   F     1   NR    A</span></span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2  geo=NL_sex=F_time=2020 2020  NL   F     3   NR    A</span></span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3  geo=NL_sex=F_time=2021 2021  NL   F     2   NR    A</span></span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4  geo=NL_sex=F_time=2022 2022  NL   F     4   NR    A</span></span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5  geo=NL_sex=M_time=2019 2019  NL   M     2   NR    A</span></span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6  geo=NL_sex=M_time=2020 2020  NL   M     3   NR    A</span></span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 7  geo=NL_sex=M_time=2021 2021  NL   M     1   NR    A</span></span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 8  geo=NL_sex=M_time=2022 2022  NL   M     5   NR    A</span></span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 9  geo=BE_sex=F_time=2019 2019  BE   F    NA   NR    A</span></span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 10 geo=BE_sex=F_time=2020 2020  BE   F     4   NR    A</span></span>
-<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 11 geo=BE_sex=F_time=2021 2021  BE   F     3   NR    A</span></span>
-<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 12 geo=BE_sex=F_time=2022 2022  BE   F     2   NR    A</span></span>
-<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 13 geo=BE_sex=M_time=2019 2019  BE   M     1   NR    A</span></span>
-<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 14 geo=BE_sex=M_time=2020 2020  BE   M    NA   NR    A</span></span>
-<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 15 geo=BE_sex=M_time=2021 2021  BE   M     2   NR    A</span></span>
-<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 16 geo=BE_sex=M_time=2022 2022  BE   M     5   NR    A</span></span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(dataset)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>my_dataset <span class="ot">&lt;-</span> <span class="fu">dataset</span> (<span class="at">x =</span> <span class="fu">data.frame</span> (</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>  <span class="at">time =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="dv">2019</span><span class="sc">:</span><span class="dv">2022</span>),<span class="dv">4</span>),</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>  <span class="at">geo =</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="st">&quot;NL&quot;</span>,<span class="dv">8</span>), <span class="fu">rep</span>(<span class="st">&quot;BE&quot;</span>,<span class="dv">8</span>)),</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>  <span class="at">sex =</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="st">&quot;F&quot;</span>, <span class="dv">4</span>), <span class="fu">rep</span>(<span class="st">&quot;M&quot;</span>, <span class="dv">4</span>), <span class="fu">rep</span>(<span class="st">&quot;F&quot;</span>, <span class="dv">4</span>), <span class="fu">rep</span>(<span class="st">&quot;M&quot;</span>, <span class="dv">4</span>)),</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>  <span class="at">value =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">1</span>,<span class="dv">5</span>, <span class="cn">NA_real_</span>, <span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">2</span>,<span class="dv">1</span>, <span class="cn">NA_real_</span>, <span class="dv">2</span>,<span class="dv">5</span>),</span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a>  <span class="at">unit =</span> <span class="fu">rep</span>(<span class="st">&quot;NR&quot;</span>,<span class="dv">8</span>),</span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a>  <span class="at">freq =</span> <span class="fu">rep</span>(<span class="st">&quot;A&quot;</span>,<span class="dv">8</span>)),</span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a>  <span class="at">title =</span> <span class="st">&quot;Example dataset&quot;</span>,</span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a>  <span class="at">author =</span> <span class="fu">person</span>(<span class="st">&quot;Jane&quot;</span>, <span class="st">&quot;Doe&quot;</span>)</span>
+<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a>)</span>
+<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a>my_dataset</span>
+<span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a><span class="co">#&gt; Doe J (2023). &quot;Example dataset.&quot;</span></span>
+<span id="cb1-15"><a href="#cb1-15" tabindex="-1"></a><span class="co">#&gt;    time geo sex value unit freq</span></span>
+<span id="cb1-16"><a href="#cb1-16" tabindex="-1"></a><span class="co">#&gt; 1  2019  NL   F     1   NR    A</span></span>
+<span id="cb1-17"><a href="#cb1-17" tabindex="-1"></a><span class="co">#&gt; 2  2020  NL   F     3   NR    A</span></span>
+<span id="cb1-18"><a href="#cb1-18" tabindex="-1"></a><span class="co">#&gt; 3  2021  NL   F     2   NR    A</span></span>
+<span id="cb1-19"><a href="#cb1-19" tabindex="-1"></a><span class="co">#&gt; 4  2022  NL   F     4   NR    A</span></span>
+<span id="cb1-20"><a href="#cb1-20" tabindex="-1"></a><span class="co">#&gt; 5  2019  NL   M     2   NR    A</span></span>
+<span id="cb1-21"><a href="#cb1-21" tabindex="-1"></a><span class="co">#&gt; 6  2020  NL   M     3   NR    A</span></span>
+<span id="cb1-22"><a href="#cb1-22" tabindex="-1"></a><span class="co">#&gt; 7  2021  NL   M     1   NR    A</span></span>
+<span id="cb1-23"><a href="#cb1-23" tabindex="-1"></a><span class="co">#&gt; 8  2022  NL   M     5   NR    A</span></span>
+<span id="cb1-24"><a href="#cb1-24" tabindex="-1"></a><span class="co">#&gt; 9  2019  BE   F    NA   NR    A</span></span>
+<span id="cb1-25"><a href="#cb1-25" tabindex="-1"></a><span class="co">#&gt; 10 2020  BE   F     4   NR    A</span></span>
+<span id="cb1-26"><a href="#cb1-26" tabindex="-1"></a><span class="co">#&gt; 11 2021  BE   F     3   NR    A</span></span>
+<span id="cb1-27"><a href="#cb1-27" tabindex="-1"></a><span class="co">#&gt; 12 2022  BE   F     2   NR    A</span></span>
+<span id="cb1-28"><a href="#cb1-28" tabindex="-1"></a><span class="co">#&gt; 13 2019  BE   M     1   NR    A</span></span>
+<span id="cb1-29"><a href="#cb1-29" tabindex="-1"></a><span class="co">#&gt; 14 2020  BE   M    NA   NR    A</span></span>
+<span id="cb1-30"><a href="#cb1-30" tabindex="-1"></a><span class="co">#&gt; 15 2021  BE   M     2   NR    A</span></span>
+<span id="cb1-31"><a href="#cb1-31" tabindex="-1"></a><span class="co">#&gt; 16 2022  BE   M     5   NR    A</span></span>
+<span id="cb1-32"><a href="#cb1-32" tabindex="-1"></a><span class="co">#&gt; Further metadata: describe(x)</span></span></code></pre></div>
 <div id="the-data-cube-model" class="section level3">
 <h3>The data cube model</h3>
 <p>The tidy data is designed to be easily handled in relational
 databases and it is an ideal format for analysis in a closed system –
 for example, when all your data for the analysis is stored in a
-well-designed relational database. This semantics is however
-insufficient for exchanging data with several data sources, a problem
-that has been attracting solutions for a long time by statistical
-agencies and designers of hyperlinked, web-based products.</p>
-<p>The dataset package is inspired by the way statisticians have been
-for a long-time organizing data for publications: the data cube model.
+well-designed relational database. This semantics is, however,
+insufficient for exchanging data with several data sources. This problem
+has been attracting solutions for a long time by statistical agencies
+and designers of hyperlinked, web-based products.</p>
+<p>The dataset package is inspired by how statisticians have been
+organizing data for publications for a long time: the data cube model.
 The data cube model has additional, non-normative prescriptions for the
 structure of the (tidy) dataset: columns must be grouped into
 measurements, dimensions, and attributes. The dimensions are
-non-measured variables, such as reference geographical areas, reference
-time periods that are usually used to filter out subsets (slices) from a
-datacube. Attributes provide information about the measurements, such as
-unit of information, estimation method, and usually can be seen as
-metadata for modeling purposes: they contain observations (measurements)
-level metadata that is also often used for filtering (selecting actual,
-imputed or missing cases, for example.) Measurements are in fact the
-observations that we want to analyze.</p>
-<p>The data cube model has been long the preferred format to organize
+non-measured variables, such as reference geographical areas and
+reference time periods, that are usually used to filter out subsets
+(slices) from a datacube. Attributes provide information about the
+measurements, such as the unit of information and estimation method, and
+usually can be seen as metadata for modelling purposes: they contain
+observations (measurements) level metadata that is also often used for
+filtering (selecting actual, imputed or missing cases, for example.)
+Measurements are, in fact, the observations that we want to analyze.</p>
+<p>The data cube model has long been the preferred format to organize
 data for analytical use by SDMX. Statistical agencies exchange with each
-other and publish data in datasets that are conforming the data cube
-model. By organizing your R tabular data like statisticians, you make
-your work easier to synchronize with statistical data sources: you can
-download or exchange date in this format. Following the data cube model
-helps you to understand more easily the dataset and bring your data to
-be analyzed to a tidy form in one or two steps — usually using
-attributes for subsetting, dimensions for grouping, and measurements to
-carry out arithmetic calculations like computing the group average
-values.</p>
+other and publish data in datasets that conform to the data cube model.
+Organizing your R tabular data like statisticians makes your work easier
+to synchronize with statistical data sources: you can download or
+exchange data in this format. Following the data cube model helps you to
+understand the data more easily and bring your data to be analyzed to a
+tidy form in one or two steps — usually using attributes for subsetting,
+dimensions for grouping, and measurements to carry out arithmetic
+calculations like computing the group average values.</p>
 </div>
 </div>
 <div id="interoperability" class="section level2">
 <h2>Interoperability</h2>
 <p>While tidying aims and preventing reinventing the wheel and many
-times repeating the work of bringing the data from a data storage, such
-as a database, into a form that an analyst can work with, reproducible
+times repeating the work of bringing the data from data storage, such as
+a database, into a form that an analyst can work with, reproducible
 research has further aims that add to the quality and inefficiency of
 the analysis: it aims to make the tidy datasets and the research output
-easier to reuse, and to review and replicate for quality control and
-peer review. Data scientists know that however simple the tidy data
-rules are, it takes a long time to get a feeling to easily put any
-messy, stored data into a tidy format. To put the data into a format
-that is easy to review, and which offers an easy replication is even
-harder. As the famous article by Monya Baker, <a href="https://www.nature.com/articles/doi:10.1038/533452a.epdf">1,500
+easier to reuse and to review and replicate for quality control and peer
+review.</p>
+<p>Data scientists know that however simple the tidy data rules are, it
+takes a long time to get a feeling to easily put any messy, stored data
+into a tidy format. Putting the data into a format that is easy to
+review and offers an easy replication is even harder. As the famous
+article by Monya Baker, <a href="https://www.nature.com/articles/doi:10.1038/533452a.epdf">1,500
 scientists lift the lid on reproducibility</a> shows, the vast majority
 of scientists have experienced the problem that seemingly replicable,
-published scientific data cannot be replicated, and more worryingly, the
+published scientific data cannot be replicated. More worryingly, the
 majority of them expressed doubt about their ability to replicate their
-own findings. Datasets that are not easily replicated are also not
+very own findings. Datasets that are not easily replicated are also not
 easily used as building blocks for further joined, more composite
 data.</p>
 <p>The lack of interoperability is often connected to the barrier of
-understanding a dataset. Having a simple term in the column heading, and
-knowing that observations are in rows, variables are in columns is not
-always a sufficient help to understand the meaning of the dataset. The
-data cube model, which explicitly states dimensions, attributes for the
-measurements greatly increase the understandability.</p>
+understanding a dataset. Having a simple term in the column heading and
+knowing that observations are in rows and variables are in columns is
+not always sufficient to help to understand the meaning of the dataset.
+The data cube model, which explicitly states dimension attributes for
+the measurements, greatly increases the understandability.</p>
 <blockquote>
 <p>“Data is only potential information, raw and unprocessed, prior to
 anyone actually being informed by it.” —Jeffrey Pomerantz, Metadata</p>
@@ -598,27 +594,27 @@ anyone actually being informed by it.” —Jeffrey Pomerantz, Metadata</p>
 <p>Understanding data (stored in a tabular or other format) requires
 metadata, information by which the data can be represented in a simpler
 form. The simplest and most useful metadata for this purpose is a title
-or a label in the RDF model, a single, human readable sentence that
+or a label in the RDF model, a single, human-readable sentence that
 describes the data.</p>
 <p>The data cube model describes attributes, which can be seen as
 metadata about observations, to be placed into the tabular format, and
-dataset level metadata, such as the title. What is missing from a tidy
-dataset in a data.frame, tibble or data.table format is the
-metadata.</p>
+dataset-level metadata, such as the title. What is missing from a tidy
+dataset in a <code>data.frame</code>, <code>tibble</code> or
+<code>data.table</code> format is the metadata.</p>
 </div>
 <div id="attributes" class="section level2">
 <h2>Attributes</h2>
 <p>In R, attributes of an object are designed to record metadata about
-the object – if it is a tabular data, then about the dataset itself. For
-a tidy dataset, at least the names of the columns, the names of the
-rows, and the name of the object in memory are recorded. R places very
-few restrictions on how to add metadata in the attribute fields of an
-object, or place new fields – you can add far more metadata than the
-size of the actual data frame if you like.</p>
+the object – if it is tabular data, then about the dataset itself. For a
+tidy dataset, at least the names of the columns, the names of the rows,
+and the names of the objects in memory are recorded. R places very few
+restrictions on how to add metadata in the attribute fields of an object
+or place new fields – you can add far more metadata than the size of the
+actual data frame if you like.</p>
 <p>The dataset package defines a pseudo-class that enriches data frames
 with standardized metadata used in the RDF and SDMX datacube model, and
 the Dublin Core and DataCite metadata standards of libraries that make
-datasets easier to find, attribute, and more interoperable and reuseable
+datasets easier to find, attribute and more interoperable and reuseable
 by providing more information about their contents.</p>
 <p>The dataset class (see: <code>dataset()</code>)is a pseudo-class.
 Although it is defined as a class inherited from the base R data.frame
@@ -627,14 +623,14 @@ and for analytical purposes the object remains a data.frame. It is also
 a pseudo-class because the functions built in the dataset constructor
 work exactly as well on tibbles or data.table objects, because they only
 touch metadata attributes of the R object.</p>
-<p>The <code>dublincore()</code> function and its helper functions adds
-metadata as attributes to any R object The Dublin Core Elements are
+<p>The <code>dublincore()</code> function and its helper functions add
+metadata as attributes to any R object. The Dublin Core Elements were
 originally library standards that facilitate finding resources (files)
 in libraries. The RDF datacube definition, which aims to enable machines
 to connect datasets automatically, refers to a part of the Dublin Core
 definition —however, it is a good practice to add all Dublin Core
 elements to a dataset.</p>
-<p>The <code>datacite()</code> functions and its helper functions adds
+<p>The <code>datacite()</code> functions and its helper functions add
 mandatory and optional metadata from the DataCite standard, which is
 often preferred by open science data repositories aimed to a public
 storage of datasets. The DataCite standard is newer than Dublin Core,
@@ -643,166 +639,78 @@ reusing data. It greatly overlaps with Dublin Core but contains further
 information that is particularly useful for datasets (for example,
 estimated dataset object size in memory or data storage.)</p>
 <p>Both the Dublin Core Metadata Elements definition 1.1 and DataCite
-Metadata Scheme 4.4 refer to standard information elements, properties,
+Metadata Scheme 4.4 refer to standard information elements properties,
 for example, the ISO standard of describing the size of an object in
-computers, or the ISO standard of describing reference time or reference
+computers or the ISO standard of describing reference time or reference
 geographical areas for the data collection. Some of the helper functions
 of <code>dublincore_add()</code> and <code>datacite_add()</code> already
-validate the correct formatting of this information, some will be added
+validate the correct formatting of this information; some will be added
 in later versions.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>iris_datacite  <span class="ot">&lt;-</span> <span class="fu">datacite_add</span>(</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> <span class="fu">dataset</span>(iris, <span class="at">Measures =</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>), <span class="at">Attributes =</span> <span class="st">&quot;Species&quot;</span>),</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">Title =</span> <span class="st">&quot;Iris Dataset&quot;</span>,</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">Creator =</span> <span class="fu">person</span>(<span class="st">&quot;Anderson&quot;</span>, <span class="st">&quot;Edgar&quot;</span>, <span class="at">role =</span> <span class="st">&quot;aut&quot;</span>),</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">Publisher =</span> <span class="st">&quot;American Iris Society&quot;</span>,</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">Identifier =</span> <span class="st">&quot;https://doi.org/10.1111/j.1469-1809.1936.tb02137.x&quot;</span>,</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">PublicationYear =</span> <span class="dv">1935</span>,</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">Description =</span> <span class="st">&quot;This famous (Fisher&#39;s or Anderson&#39;s) iris data set gives the measurements in centimeters of the variables sepal length and width and petal length and width, respectively, for 50 flowers from each of 3 species of iris. The species are Iris setosa, versicolor, and virginica.&quot;</span>,</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">Language =</span> <span class="st">&quot;en&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>iris_datacite  <span class="ot">&lt;-</span> <span class="fu">datacite</span>(</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>  <span class="at">Title =</span> <span class="st">&quot;Iris Dataset&quot;</span>,</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>  <span class="at">Creator =</span> <span class="fu">person</span>(<span class="st">&quot;Anderson&quot;</span>, <span class="st">&quot;Edgar&quot;</span>, <span class="at">role =</span> <span class="st">&quot;aut&quot;</span>),</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>  <span class="at">Publisher =</span> <span class="st">&quot;American Iris Society&quot;</span>,</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>  <span class="at">Identifier =</span> <span class="st">&quot;https://doi.org/10.1111/j.1469-1809.1936.tb02137.x&quot;</span>,</span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>  <span class="at">PublicationYear =</span> <span class="dv">1935</span>,</span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>  <span class="at">Description =</span> <span class="st">&quot;This famous (Fisher&#39;s or Anderson&#39;s) iris data set gives the measurements in centimeters of the variables sepal length and width and petal length and width, respectively, for 50 flowers from each of 3 species of iris. The species are Iris setosa, versicolor, and virginica.&quot;</span>,</span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>  <span class="at">Language =</span> <span class="st">&quot;en&quot;</span>)</span></code></pre></div>
 <p>In R, objects can have arbitrary attributes. For example, a
 data.frame has a class attribute that tells functions to treat the
 object as a data.frame.Under the hood, you still keep your data frame
 object of choice, the good old base r ?data.frame, or the more modern
 data.table or tibble.</p>
 <p>We add descriptive metadata conforming the Dublin Core and <a href="https://schema.datacite.org/">DataCite standard</a> as data frame
-attributes, because they must clearly describe the dataset. The
-dataset-level attributes do not interfere with the tidy data concept,
+attributes because they must clearly describe the dataset. The
+dataset-level attributes do not interfere with the tidy data concept
 because the tidy data concept relates to the contents of the data
 frame.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">datacite</span>(iris_datacite)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $names</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Sepal.Length&quot; &quot;Sepal.Width&quot;  &quot;Petal.Length&quot; &quot;Petal.Width&quot;  &quot;Species&quot;     </span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $dimensions</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] names       class       isDefinedBy codeList   </span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; &lt;0 rows&gt; (or 0-length row.names)</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $measures</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                     names   class                       isDefinedBy</span></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Sepal.Length Sepal.Length numeric https://purl.org/linked-data/cube</span></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Sepal.Width   Sepal.Width numeric https://purl.org/linked-data/cube</span></span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Petal.Length Petal.Length numeric https://purl.org/linked-data/cube</span></span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Petal.Width   Petal.Width numeric https://purl.org/linked-data/cube</span></span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                    codeListe</span></span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Sepal.Length not yet defined</span></span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Sepal.Width  not yet defined</span></span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Petal.Length not yet defined</span></span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Petal.Width  not yet defined</span></span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $attributes</span></span>
-<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;           names  class</span></span>
-<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Species Species factor</span></span>
-<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                                                                                                                                                    isDefinedBy</span></span>
-<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Species https://purl.org/linked-data/cube|https://raw.githubusercontent.com/UKGovLD/publishing-statistical-data/master/specs/src/main/vocab/sdmx-attribute.ttl</span></span>
-<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;               codeListe</span></span>
-<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Species not yet defined</span></span>
-<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $Type</span></span>
-<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $Type$resourceType</span></span>
-<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Dataset&quot;</span></span>
-<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $Type$resourceTypeGeneral</span></span>
-<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Dataset&quot;</span></span>
-<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $Description</span></span>
-<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;This famous (Fisher&#39;s or Anderson&#39;s) iris data set gives the measurements in centimeters of the variables sepal length and width and petal length and width, respectively, for 50 flowers from each of 3 species of iris. The species are Iris setosa, versicolor, and virginica.&quot;</span></span>
-<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $Size</span></span>
-<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;17.42 kB [17.01 KiB]&quot;</span></span>
-<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $Date</span></span>
-<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;2023-03-18&quot;</span></span>
-<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $Title</span></span>
-<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $Title$Title</span></span>
-<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Iris Dataset&quot;</span></span>
-<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $Creator</span></span>
-<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Anderson Edgar [aut]&quot;</span></span>
-<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $Identifier</span></span>
-<span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;https://doi.org/10.1111/j.1469-1809.1936.tb02137.x&quot;</span></span>
-<span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $Publisher</span></span>
-<span id="cb3-58"><a href="#cb3-58" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;American Iris Society&quot;</span></span>
-<span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $Issued</span></span>
-<span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 1935</span></span>
-<span id="cb3-62"><a href="#cb3-62" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb3-63"><a href="#cb3-63" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $publication_year</span></span>
-<span id="cb3-64"><a href="#cb3-64" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 1935</span></span>
-<span id="cb3-65"><a href="#cb3-65" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb3-66"><a href="#cb3-66" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $Geolocation</span></span>
-<span id="cb3-67"><a href="#cb3-67" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] NA</span></span>
-<span id="cb3-68"><a href="#cb3-68" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb3-69"><a href="#cb3-69" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $Language</span></span>
-<span id="cb3-70"><a href="#cb3-70" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;eng&quot;</span></span>
-<span id="cb3-71"><a href="#cb3-71" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb3-72"><a href="#cb3-72" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $Rights</span></span>
-<span id="cb3-73"><a href="#cb3-73" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] NA</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">print</span>(iris_datacite, <span class="st">&quot;Bibtex&quot;</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="co">#&gt; @Misc{,</span></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co">#&gt;   title = {Iris Dataset},</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co">#&gt;   author = {Anderson Edgar},</span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co">#&gt;   identifier = {https://doi.org/10.1111/j.1469-1809.1936.tb02137.x},</span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="co">#&gt;   publisher = {American Iris Society},</span></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="co">#&gt;   year = {1935},</span></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="co">#&gt;   date = {:tba},</span></span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="co">#&gt;   language = {en},</span></span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="co">#&gt;   alternateidentifier = {:unas},</span></span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a><span class="co">#&gt;   relatedidentifier = {:unas},</span></span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a><span class="co">#&gt;   format = {:tba},</span></span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a><span class="co">#&gt;   rights = {:tba},</span></span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a><span class="co">#&gt;   description = {This famous (Fisher&#39;s or Anderson&#39;s) iris data set gives the measurements in centimeters of the variables sepal length and width and petal length and width, respectively, for 50 flowers from each of 3 species of iris. The species are Iris setosa, versicolor, and virginica.},</span></span>
+<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a><span class="co">#&gt;   geolocation = {:unas},</span></span>
+<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a><span class="co">#&gt;   fundingreference = {:unas},</span></span>
+<span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a><span class="co">#&gt; }</span></span></code></pre></div>
 </div>
 <div id="linked-data-from-dataset-to-rdf" class="section level2">
 <h2>Linked Data: From dataset To RDF</h2>
 <p>The assumption of third normal form (3NF), or a more precise form of
 tidiness, is that each observation has a primary key locally, i.e. in
 the dataset, is insufficient. For updating a dataset, i.e. joining new
-observations, or new columns, we need to work with globally universal
+observations or new columns, we need to work with globally universal
 observation identifiers, or URIs. (Otherwise, we must map the various
 locally unique keys to each other, i.e. we need to know various database
 schemas.) The idea of linked data, or RDF, is to reduce the data to a
 triple, and move all metadata, including referential or structural
 metadata into this triple.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>my_dataset_uri <span class="ot">&lt;-</span> <span class="fu">dataset_uri</span>(my_dataset, </span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>                              <span class="at">prefix =</span> <span class="st">&quot;https:://example.org/my_iris&quot;</span>, </span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>                              <span class="at">keep_local_id =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>my_dataset_uri</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                                      URI time geo sex value unit freq</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1  https:://example.org/my_iristime=2019 2019  NL   F     1   NR    A</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2  https:://example.org/my_iristime=2020 2020  NL   F     3   NR    A</span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3  https:://example.org/my_iristime=2021 2021  NL   F     2   NR    A</span></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4  https:://example.org/my_iristime=2022 2022  NL   F     4   NR    A</span></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5  https:://example.org/my_iristime=2019 2019  NL   M     2   NR    A</span></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6  https:://example.org/my_iristime=2020 2020  NL   M     3   NR    A</span></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 7  https:://example.org/my_iristime=2021 2021  NL   M     1   NR    A</span></span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 8  https:://example.org/my_iristime=2022 2022  NL   M     5   NR    A</span></span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 9  https:://example.org/my_iristime=2019 2019  BE   F    NA   NR    A</span></span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 10 https:://example.org/my_iristime=2020 2020  BE   F     4   NR    A</span></span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 11 https:://example.org/my_iristime=2021 2021  BE   F     3   NR    A</span></span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 12 https:://example.org/my_iristime=2022 2022  BE   F     2   NR    A</span></span>
-<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 13 https:://example.org/my_iristime=2019 2019  BE   M     1   NR    A</span></span>
-<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 14 https:://example.org/my_iristime=2020 2020  BE   M    NA   NR    A</span></span>
-<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 15 https:://example.org/my_iristime=2021 2021  BE   M     2   NR    A</span></span>
-<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 16 https:://example.org/my_iristime=2022 2022  BE   M     5   NR    A</span></span></code></pre></div>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>nq_file <span class="ot">&lt;-</span> <span class="fu">file.path</span>(<span class="fu">tempdir</span>(), <span class="st">&quot;triple_file.nq&quot;</span>)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>my_triple <span class="ot">&lt;-</span> <span class="fu">subset</span>(my_dataset_uri, <span class="at">select =</span> <span class="fu">c</span>(<span class="st">&quot;URI&quot;</span>, <span class="st">&quot;value&quot;</span>, <span class="st">&quot;unit&quot;</span>))</span></code></pre></div>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rdflib)</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>rdf <span class="ot">&lt;-</span> <span class="fu">rdf</span>()</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ( i <span class="cf">in</span> <span class="fu">seq_len</span>(<span class="fu">nrow</span>(my_triple))) {</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rdf_add</span>(<span class="at">rdf =</span> rdf, </span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>          <span class="at">subject =</span> <span class="st">&quot;&quot;</span>, </span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>          <span class="at">predicate =</span> my_triple<span class="sc">$</span>URI[i], </span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>          <span class="at">object =</span> my_triple<span class="sc">$</span>value[i])</span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="fu">rdf_serialize</span>(rdf, <span class="at">doc =</span> nq_file)</span></code></pre></div>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rdf_parse</span>(nq_file) </span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Total of 16 triples, stored in hashes</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; -------------------------------</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; _:r1679134876r7401r7 &lt;https:://example.org/my_iristime=2021&gt; &quot;1&quot;^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .</span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; _:r1679134876r7401r1 &lt;https:://example.org/my_iristime=2019&gt; &quot;1&quot;^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .</span></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; _:r1679134876r7401r5 &lt;https:://example.org/my_iristime=2019&gt; &quot;2&quot;^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .</span></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; _:r1679134876r7401r13 &lt;https:://example.org/my_iristime=2022&gt; &quot;2&quot;^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .</span></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; _:r1679134876r7401r6 &lt;https:://example.org/my_iristime=2020&gt; &quot;3&quot;^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .</span></span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; _:r1679134876r7401r17 &lt;https:://example.org/my_iristime=2021&gt; &quot;2&quot;^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .</span></span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; _:r1679134876r7401r3 &lt;https:://example.org/my_iristime=2021&gt; &quot;2&quot;^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .</span></span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; _:r1679134876r7401r8 &lt;https:://example.org/my_iristime=2022&gt; &quot;5&quot;^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .</span></span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; _:r1679134876r7401r14 &lt;https:://example.org/my_iristime=2019&gt; &quot;1&quot;^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .</span></span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; _:r1679134876r7401r4 &lt;https:://example.org/my_iristime=2022&gt; &quot;4&quot;^^&lt;http://www.w3.org/2001/XMLSchema#decimal&gt; .</span></span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ... with 6 more triples</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>my_dataset_uri <span class="ot">&lt;-</span> <span class="fu">dataset_uri</span>(my_dataset, </span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>                              <span class="at">prefix =</span> <span class="st">&quot;https:://example.org/my_iris&quot;</span>, </span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>                              <span class="at">keep_local_id =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>my_dataset_uri</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>nq_file <span class="ot">&lt;-</span> <span class="fu">file.path</span>(<span class="fu">tempdir</span>(), <span class="st">&quot;triple_file.nq&quot;</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>my_triple <span class="ot">&lt;-</span> <span class="fu">subset</span>(my_dataset_uri, <span class="at">select =</span> <span class="fu">c</span>(<span class="st">&quot;URI&quot;</span>, <span class="st">&quot;value&quot;</span>, <span class="st">&quot;unit&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">library</span>(rdflib)</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>rdf <span class="ot">&lt;-</span> <span class="fu">rdf</span>()</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="cf">for</span> ( i <span class="cf">in</span> <span class="fu">seq_len</span>(<span class="fu">nrow</span>(my_triple))) {</span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>  <span class="fu">rdf_add</span>(<span class="at">rdf =</span> rdf, </span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>          <span class="at">subject =</span> <span class="st">&quot;&quot;</span>, </span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>          <span class="at">predicate =</span> my_triple<span class="sc">$</span>URI[i], </span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>          <span class="at">object =</span> my_triple<span class="sc">$</span>value[i])</span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a>}</span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a></span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a><span class="fu">rdf_serialize</span>(rdf, <span class="at">doc =</span> nq_file)</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">rdf_parse</span>(nq_file) </span></code></pre></div>
 <p>For a more comprehensive <a href="https://dataset.dataobservatory.eu/articles/RDF.html">From dataset
 To RDF</a>, which in turn heavily borrows from <a href="https://cran.r-project.org/package=rdflib/vignettes/rdf_intro.html">A
 tidyverse lover’s intro to RDF</a> by Carl Boettiger.</p>
@@ -822,51 +730,50 @@ package that harmonizes data from different surveys.</p>
 <p>Our real goal is to facilitate efficient reproducible research
 workflows that perform flawlessly tasks that most R users, even
 scientific researchers, are unfamiliar with—or if they are familiar with
-them, they find it boring, because they will usually not get credited
-for it as analyst or researchers.</p>
+them, they find it boring because they will usually not get credited for
+it as analysts or researchers.</p>
 <p>Our <a href="https://dataset.dataobservatory.eu/reference/dataset.html">datasets</a>:</p>
 <ul class="task-list">
-<li><input type="checkbox" disabled checked></input>
-contain Dublin Core or DataCite (or both) metadata that makes the
-findable and easier accessible via online libraries</li>
-<li><input type="checkbox" disabled checked></input>
-are easily reduced to linked open data formats to be serialized to, or
-synchronized with semantic web applications</li>
-<li><input type="checkbox" disabled checked></input>
-follow the datacube model of the Statistical Data and Metadata eXchange,
-therefore allowing easy refreshing with new data from the source of the
-analytical work</li>
-<li><input type="checkbox" disabled checked></input>
-contain processing metadata that greatly enhance the reproducibility of
-the results, and the reviewability of the contents of the dataset,
-including metadata defined by the [DDI]</li>
-<li><input type="checkbox" disabled checked></input>
-relatively lightweight in dependencies and easily works with data.frame,
-tibble or data.table R objects.</li>
+<li><input type="checkbox" checked></input>contain Dublin Core or DataCite
+(or both) metadata that makes the findable and easier accessible via
+online libraries</li>
+<li><input type="checkbox" checked></input>are easily reduced to linked
+open data formats to be serialized to or synchronized with semantic web
+applications</li>
+<li><input type="checkbox" checked></input>follow the datacube model of the
+Statistical Data and Metadata eXchange, therefore allowing easy
+refreshing with new data from the source of the analytical work</li>
+<li><input type="checkbox" checked></input>contain processing metadata that
+greatly enhance the reproducibility of the results, and the
+reviewability of the contents of the dataset, including metadata defined
+by the [DDI]</li>
+<li><input type="checkbox" checked></input>relatively lightweight in
+dependencies and easily works with data.frame, tibble or data.table R
+objects.</li>
 </ul>
-<p>The datacube model is used by the W3C consortium for describing
-datasets, tabular data resources that can be easily connected via the
-internet infrastructure. RDF , Because the SDMX standards pre-date the
-definition of RDF, it took a long time sufficiently harmonize RDF and
-SDMX to become a standard for statistical data that can be easily
-exchanged by humans and computers alike, therefore making it ideal for
-reproducible research.</p>
+<p>The W3C consortium uses the datacube model for describing datasets or
+tabular data resources that can be easily connected via the internet
+infrastructure. RDF, Because the SDMX standards pre-date the definition
+of RDF, it took a long time to sufficiently harmonize RDF and SDMX to
+become a standard for statistical data that can be easily exchanged by
+humans and computers alike, therefore making it ideal for reproducible
+research.</p>
 <p>We also aim to replace the <code>survey</code> in the <a href="https://retroharmonize.dataobservatory.eu/">retroharmonize</a>
 survey harmonization package to an inherited dataset that is optimized
 to contain social sciences survey data.</p>
 <p>The connecting <a href="https://statcodelists.dataobservatory.eu/">statcodelists</a>
-packages facilitates further reproducibility with standardized, natural
-language independent codelists for categorical variables. Such
+packages facilitate further reproducibility with standardized, natural
+language-independent codelists for categorical variables. Such
 categorical variables are correctly interpreted in a wide array of
 statistical applications and can be easily joined with data from many
-countries irrespective of the primary sources’ language.</p>
+countries, irrespective of the primary sources’ language.</p>
 <p>See: <a href="https://csarven.ca/linked-sdmx-data">Linked SDMX
 Data</a></p>
 </div>
 <div id="references" class="section level2">
 <h2>References</h2>
 <p>Baker, Monya. 2016. “1,500 Scientists Lift the Lid on
-reproducibility.” <em>Nature</em> 533 (7604): 452–54. <a href="https://doi.org/10.1038/533452a" class="uri">https://doi.org/10.1038/533452a</a>.</p>
+reproducibility.” <em>Nature</em> 533 (7604): 452–54. <a href="https://www.nature.com/articles/533452a.epdf" class="uri">https://www.nature.com/articles/533452a.epdf</a>.</p>
 <p>Capadisli, Sarven, Sören Auer, and Axel-Cyrille Ngonga Ngomo. 2015.
 “Linked SDMX Data: Path to High Fidelity Statistical Linked Data.”
 <em>Semantic Web</em> 6 (2): 105–12. <a href="https://doi.org/10.3233/SW-130123" class="uri">https://doi.org/10.3233/SW-130123</a>.</p>

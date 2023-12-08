@@ -8,7 +8,6 @@
 #' @param schemeURI  See \href{https://support.datacite.org/docs/datacite-metadata-schema-v44-recommended-and-optional-properties#12d-schemeuri}{schemeURI}.
 #' @param schemeType  See \href{https://support.datacite.org/docs/datacite-metadata-schema-v44-recommended-and-optional-properties#12e-schemetype}{schemeType}.
 #' @param resourceTypeGeneral The general type of a resource or file.
-#' See \code{\link{resource_type_general}} for allowed values and validation.
 #' @param Volume The volume of the related item (optional).
 #' @param Issue The issue number of the related item (optional).
 #' @param Edition The edition of the related item (optional).
@@ -30,7 +29,8 @@
 #' @export
 
 related_item <- function(Identifier,
-                         Creator, Title,
+                         Creator,
+                         Title,
                          relatedIdentifierType,
                          relationType,
                          schemeURI = NA_character_,
@@ -39,7 +39,8 @@ related_item <- function(Identifier,
                          PublicationYear = NULL,
                          Volume = NULL,
                          Issue = NULL,
-                         Number = NULL, numberType = NULL,
+                         Number = NULL,
+                         numberType = NULL,
                          firstPage = NULL, lastPage = NULL,
                          Publisher = NULL,
                          Edition = NULL,
@@ -83,8 +84,6 @@ related_item_identifier <- function(Identifier,
                                      relationType = relationType,
                                      schemeURI = schemeURI,
                                      schemeType = schemeType)
-
-  resource_type_general(relitem_identifier) <- resourceTypeGeneral
 
   relitem_identifier
 

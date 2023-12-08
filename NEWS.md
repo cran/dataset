@@ -1,3 +1,25 @@
+# dataset 0.2.7 
+
+* Release candidate for CRAN
+
+The devel branch contains new code that is not is validated, but as a whole the package is not working consistently.
+
+# dataset 0.2.6
+* All tests are passing, all examples are running.
+
+# dataset 0.2.5 
+* `datacite()` has a new interface and an  `as_datacite()` retrieval version. See the `Working with DataCite Metadata` vignette.
+* `dublincore()` has a new interface and an  `as_dublincore()` version. See the `Working with Dublin Core Metadata` vignette.
+
+# dataset 0.2.4
+All tests are passing but documentation is not rewritten yet.
+
+# dataset 0.2.3 
+new subject class for recording subjects
+
+# dataset 0.2.2 
+New s3 classes for DataCite and Dublin Core bibliographic entries.
+
 # dataset 0.2.1
 
 A minor correction to avoid vignettes downloading data from the Eurostat data warehouse on CRAN. Small readability improvements in the vignette articles.

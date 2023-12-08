@@ -10,12 +10,11 @@ publisher(x)
 publisher(x, overwrite = TRUE) <- value
 }
 \arguments{
-\item{x}{An R object, such as a data.frame, a tibble, or a data.table.}
+\item{x}{A dataset object created with \code{dataset::\link{dataset}}.}
 
-\item{overwrite}{If the attributes should be overwritten. In case it is set to \code{FALSE},
-it gives a message with the current \code{Publisher} property instead of overwriting it.
-Defaults to \code{TRUE} when the attribute is set to \code{value} regardless of previous
-setting.}
+\item{overwrite}{If the attributes should be overwritten. In case it is set
+to \code{FALSE},it gives a warning with the current \code{publisher}
+property instead of overwriting it. Defaults to \code{FALSE}.}
 
 \item{value}{The \code{Publisher} as a character set.}
 }
@@ -36,14 +35,13 @@ code, use the property Contributor/contributorType/ hostingInstitution for the c
 repository.
 }
 \examples{
-iris_dataset <- iris
 publisher(iris_dataset) <- "American Iris Society"
 publisher(iris_dataset)
 }
 \seealso{
 Other Reference metadata functions: 
 \code{\link{creator}()},
-\code{\link{dataset_source}()},
+\code{\link{datasource}()},
 \code{\link{description}()},
 \code{\link{geolocation}()},
 \code{\link{identifier}()},

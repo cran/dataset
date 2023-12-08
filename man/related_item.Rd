@@ -35,8 +35,7 @@ or for all versions. Similar to \code{dct:title} in \code{\link{dublincore}}.}
 priority order. To supply multiple creators, repeat this property.}
 
 \item{Title}{The name(s) or title(s) by which a resource is known. May be the title of a dataset
-or the name of a piece of software. Similar to \href{https://purl.org/dc/elements/1.1/title}{dct:title}.\cr
-See \code{\link{dataset_title}} for adding further titles.}
+or the name of a piece of software. Similar to \href{https://purl.org/dc/elements/1.1/title}{dct:title}.\cr}
 
 \item{relatedIdentifierType}{See \href{https://support.datacite.org/docs/datacite-metadata-schema-v44-recommended-and-optional-properties#12a-relatedidentifiertype}{relatedIdentifierType}.}
 
@@ -46,8 +45,7 @@ See \code{\link{dataset_title}} for adding further titles.}
 
 \item{schemeType}{See \href{https://support.datacite.org/docs/datacite-metadata-schema-v44-recommended-and-optional-properties#12e-schemetype}{schemeType}.}
 
-\item{resourceTypeGeneral}{The general type of a resource or file.
-See \code{\link{resource_type_general}} for allowed values and validation.}
+\item{resourceTypeGeneral}{The general type of a resource or file.}
 
 \item{PublicationYear}{The year when the data was or will be made publicly available in
 \code{YYYY} format.See \code{\link{publication_year}}.}
@@ -68,7 +66,7 @@ See \code{\link{resource_type_general}} for allowed values and validation.}
 distributes, releases, issues, or produces the resource. This property will be used to
 formulate the citation, so consider the prominence of the role.
 For software, use Publisher for the code repository. Mandatory in DataCite, and similar to
-dct:publisher. See \code{\link{publisher}}.}
+\code{dct:publisher}. See \code{\link{publisher}}.}
 
 \item{Edition}{The edition of the related item (optional).}
 

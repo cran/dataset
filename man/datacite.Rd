@@ -2,27 +2,25 @@
 % Please edit documentation in R/datacite.R
 \name{datacite}
 \alias{datacite}
-\alias{datacite_add}
-\title{Add DataCite metadata to an object}
+\alias{as_datacite}
+\alias{is.datacite}
+\alias{is.datacite.datacite}
+\title{Add or get DataCite metadata}
 \source{
 \href{https://support.datacite.org/docs/schema-mandatory-properties-v43}{DataCite 4.3 Mandatory Properties} and
 \href{https://support.datacite.org/docs/schema-optional-properties-v43}{DataCite 4.3 Optional Properties}
 }
 \usage{
-datacite(x)
-
-datacite_add(
-  x,
+datacite(
   Title,
-  titleType = NULL,
   Creator,
   Identifier = NULL,
   Publisher = NULL,
-  PublicationYear = "THIS",
+  PublicationYear = NULL,
   Subject = NULL,
   Type = "Dataset",
   Contributor = NULL,
-  Date = NULL,
+  DateList = NULL,
   Language = NULL,
   AlternateIdentifier = NULL,
   RelatedIdentifier = NULL,
@@ -31,20 +29,18 @@ datacite_add(
   Rights = NULL,
   Description = NULL,
   Geolocation = NULL,
-  FundingReference = NULL,
-  overwrite = TRUE
+  FundingReference = NULL
 )
+
+as_datacite(x, type = "bibentry", ...)
+
+is.datacite(x)
+
+\method{is.datacite}{datacite}(x)
 }
 \arguments{
-\item{x}{An R object of type data.frame, or inherited data.table, tibble; alternatively a well
-structured R list.}
-
 \item{Title}{The name(s) or title(s) by which a resource is known. May be the title of a dataset
-or the name of a piece of software. Similar to \href{https://purl.org/dc/elements/1.1/title}{dct:title}.\cr
-See \code{\link{dataset_title}} for adding further titles.}
-
-\item{titleType}{For a single \code{Title} defaults to \code{NULL}. Otherwise you can add
-a Subtitle, an Alternative Title and an Other Title. See \code{\link{dataset_title}}.}
+or the name of a piece of software. Similar to \href{https://purl.org/dc/elements/1.1/title}{dct:title}.\cr}
 
 \item{Creator}{The main researchers involved in producing the data, or the authors of the publication, in
 priority order. To supply multiple creators, repeat this property.}
@@ -58,7 +54,7 @@ or for all versions. Similar to \code{dct:title} in \code{\link{dublincore}}.}
 distributes, releases, issues, or produces the resource. This property will be used to
 formulate the citation, so consider the prominence of the role.
 For software, use Publisher for the code repository. Mandatory in DataCite, and similar to
-dct:publisher. See \code{\link{publisher}}.}
+\code{dct:publisher}. See \code{\link{publisher}}.}
 
 \item{PublicationYear}{The year when the data was or will be made publicly available in
 \code{YYYY} format.See \code{\link{publication_year}}.}
@@ -72,17 +68,22 @@ and create structured Subject objects with \code{\link{subject_create}}.}
 The DataCite resourceType definition refers back to
 \href{https://www.dublincore.org/specifications/dublin-core/dcmi-terms/#https://purl.org/dc/elements/1.1/type}{dcm:type}.
 The \code{Type$resourceTypeGeneral} is set to  \code{Dataset}, while the user can set a more
-specific \code{Type$resourceType} value. See \code{\link{resource_type}}.}
+specific \code{Type$resourceType} value.}
 
 \item{Contributor}{Recommended for discovery. The institution or person responsible for collecting, managing, distributing, or otherwise contributing to the development of the resource.}
 
-\item{Date}{Recommended for discovery in DataCite. Similar to \href{https://purl.org/dc/elements/1.1/date}{dct:date} in
-\code{\link{dublincore}}.}
+\item{DateList}{DataCite 4.4 allows to set multiple dates to a resource, they should
+be added as a list. See:
+\href{https://support.datacite.org/docs/datacite-metadata-schema-v44-recommended-and-optional-properties#8-date}{datacite:Date}.}
 
 \item{Language}{The primary language of the resource. Allowed values are taken from
 IETF BCP 47, ISO 639-1 language code. See \code{\link{language}}.}
 
-\item{AlternateIdentifier}{An identifier or identifiers other than the primary Identifier applied to the resource being registered. This may be any alphanumeric string which is unique within its domain of issue. May be used for local identifiers. AlternateIdentifier should be used for another identifier of the same instance (same location, same file).}
+\item{AlternateIdentifier}{An identifier or identifiers other than the primary
+Identifier applied to the resource being registered. This may be any
+alphanumeric string unique within its domain of issue. It may be used for
+local identifiers. \code{AlternateIdentifier} should be used for another
+identifier of the same instance (same location, same file).}
 
 \item{RelatedIdentifier}{Recommended for discovery. Similar to \href{https://purl.org/dc/elements/1.1/relation}{dct:relation}.}
 
@@ -94,7 +95,7 @@ IETF BCP 47, ISO 639-1 language code. See \code{\link{language}}.}
 Free text. See \code{\link{rights}}.}
 
 \item{Description}{Recommended for discovery. All additional information that does not
-fit in any of the other categories. May be used for technical information. A free text.
+fit in any of the other categories. It may be used for technical information—a free text.
 Similar to \href{https://purl.org/dc/elements/1.1/description}{dct:description}.}
 
 \item{Geolocation}{Recommended for discovery. Spatial region or named place where the data was gathered
@@ -103,35 +104,35 @@ or about which the data is focused. See \code{\link{geolocation}}.}
 \item{FundingReference}{Information about financial support (funding) for the resource
 being registered.}
 
-\item{overwrite}{If pre-existing metadata properties should be overwritten,
-defaults to \code{TRUE}.}
+\item{x}{An object that is tested if it has a class "datacite".}
+
+\item{type}{A DataCite 4.4  metadata can be returned as a \code{type="list"},
+a \code{type="dataset"}, or a \code{type="bibentry"} (default).}
+
+\item{...}{Optional parameters to add to a \code{datacite} object.
+\code{author=person("Jane", "Doe")} adds an author to the citation
+object if \code{type="dataset"}.}
 }
 \value{
-An R object with at least the mandatory DataCite attributes.
+A \code{utils::\link[utils]{bibentry}} object DataCite attributes.
+\code{as_datacite} returns the existing metadata of a dataset object.
 }
 \description{
-Add metadata conforming the \href{https://schema.datacite.org/}{DataCite Metadata Schema}
-to datasets, i.e. structured R data.frame or list objects, for an accurate and consistent identification
-of a resource for citation and retrieval purposes.
+Add or retrieve metadata conforming
+the \href{https://schema.datacite.org/}{DataCite Metadata Schema}.
 }
 \details{
 DataCite is a leading global non-profit organisation that provides persistent identifiers
-(DOIs) for research data and other research outputs. Organizations within the research
+(DOIs) for research data and other research outputs. Organisations within the research
 community join DataCite as members to be able to assign DOIs to all their research
-outputs. This way, their outputs become discoverable and associated metadata is made
-available to the community.\cr
-DataCite then develops additional services to improve the DOI management experience,
-making it easier for our members to connect and share their DOIs with the broader
-research ecosystem and to assess the use of their DOIs within that ecosystem.
-DataCite is an active participant in the research community and promotes data sharing
-and citation through community-building efforts and outreach activities.
+outputs. This way, their outputs become discoverable, and associated metadata is made.
+available to the community.
 
 The \code{ResourceType} property will be by definition "Dataset".
 The \code{Size} attribute (e.g. bytes, pages, inches, etc.) will automatically added to the dataset.
 }
 \examples{
-my_iris <- datacite_add(
-   x = iris,
+datacite(
    Title = "Iris Dataset",
    Creator = person(family = "Anderson", given = "Edgar", role = "aut"),
    Publisher = "American Iris Society",
@@ -139,7 +140,7 @@ my_iris <- datacite_add(
    Geolocation = "US",
    Language = "en")
 
-datacite(my_iris)
+as_datacite(iris_dataset, type="dataset")
 }
 \seealso{
 Other metadata functions: 

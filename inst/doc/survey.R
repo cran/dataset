@@ -1,4 +1,4 @@
-## ---- include = FALSE---------------------------------------------------------
+## ----include = FALSE----------------------------------------------------------
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
@@ -8,11 +8,12 @@ knitr::opts_chunk$set(
 library(dataset)
 library(declared)
 
-## ---- eval=FALSE--------------------------------------------------------------
+## ----eval=FALSE---------------------------------------------------------------
 #  remotes::install_github('dusadrian/declared')
 
 ## ----vectordefinition---------------------------------------------------------
-obs_id <- c("Saschia Iemand", "Jane Doe", "Jack Doe", "Pim Iemand", "Matti Virtanen" )
+obs_id <- c("Saschia Iemand", "Jane Doe", 
+            "Jack Doe", "Pim Iemand", "Matti Virtanen" )
 sex <- declared ( c(1,1,0,-1,1), 
                   labels = c(Male = 0, Female = 1, DK = -1), 
                   na_values = -1)
@@ -44,16 +45,15 @@ raw_survey <- data.frame (
 )
 
 survey_dataset  <- dataset( x= raw_survey,
-                            Dimensions = "geo", 
-                            Measures = c("listen_spotify", "sex",
-                                         "age_exact", "difficulty_bills"), 
-                            Attributes = NULL, 
-                            sdmx_attributes = "geo", 
-                            Title = "Tiny Survey", 
-                            Creator = person("Jane", "Doe"))
+                            title = "Tiny Survey", 
+                            author = person("Jane", "Doe")
+                            )
 
-## ----dublincore---------------------------------------------------------------
-dublincore(survey_dataset)
+## ----bibentry-----------------------------------------------------------------
+dataset_bibentry(survey_dataset)
+
+## ----dublincore, eval=FALSE---------------------------------------------------
+#  dublincore(survey_dataset)
 
 ## -----------------------------------------------------------------------------
 # This is not valied in declared
@@ -75,18 +75,17 @@ c(listen_spotify, declared(
 ## ----summarizedeclared--------------------------------------------------------
 summary(listen_spotify)
 
-## ----dataciteadataset---------------------------------------------------------
-survey_dataset <- dublincore_add(survey_dataset, 
-                               Title = "Tiny Survey", 
-                               Creator = person("Daniel", "Antal"), 
-                               Identifier = "https://doi.org/xxxx.yyyyy",
-                               Publisher = "Reprex", 
-                               Date = 2022, 
-                               Subject = "Surveys", 
-                               Language = "en")
+## ----print-dublincore-metadata------------------------------------------------
+dc_tiny_survey <- dublincore(
+  title = "Tiny Survey", 
+  creator = person("Daniel", "Antal"), 
+  identifier = 'example-1', 
+  publisher = "Example Publishing", 
+  subject = "Surveys", 
+  language = "en")
 
-## ----showdublincore-----------------------------------------------------------
-dublincore(survey_dataset)
+## ----showdublincore, results="asis"-------------------------------------------
+print(dc_tiny_survey, "Bibtex")
 
 ## ----summarizedataset---------------------------------------------------------
 summary(survey_dataset)
