@@ -27,7 +27,7 @@ R object.
 }
 \details{
 \code{Rights} corresponds to
-\href{https://purl.org/dc/elements/1.1/rights}{dct:rights} and
+\href{https://www.dublincore.org/specifications/dublin-core/dcmi-terms/elements11/rights/}{dct:rights} and
 \code{\link{datacite}} Rights. Information about rights held in and over the resource.
 Typically, rights information includes a statement about various property rights associated with the resource,
 including intellectual property rights.
@@ -39,7 +39,7 @@ rights(iris_dataset)
 \seealso{
 Other Reference metadata functions: 
 \code{\link{creator}()},
-\code{\link{datasource}()},
+\code{\link{datasource_get}()},
 \code{\link{description}()},
 \code{\link{geolocation}()},
 \code{\link{identifier}()},

@@ -9,7 +9,7 @@ as_dataset <- function(x,
                        identifier = NULL,
                        description = NULL,
                        version = NULL,
-                       subject = NULL,
+                       datasubject = NULL,
                        language = NULL,
                        datasource = NULL,
                        rights = NULL) {
@@ -27,10 +27,12 @@ as_dataset.data.frame <- function(x,
                                   identifier = NULL,
                                   description = NULL,
                                   version = NULL,
-                                  subject = NULL,
+                                  datasubject = NULL,
                                   language = NULL,
                                   datasource = NULL,
                                   rights = NULL) {
+
+  start_time <- Sys.time()
 
   DataBibentry  <- as_bibentry(bibtype="Misc",
                                title = title,
@@ -45,10 +47,16 @@ as_dataset.data.frame <- function(x,
                                datasource = datasource,
                                rights = rights)
 
-  if (is.null(subject)) subject <- new_Subject("")
+  if (is.null(datasubject)) datasubject <- new_Subject("")
+
+  end_time <- Sys.time()
+  provenance <- provenance_add(start_time=start_time,
+                               end_time=end_time,
+                               informed_by = datasource)
 
   new_dataset(x,
               DataBibentry = DataBibentry,
-              subject = subject)
+              datasubject  = datasubject,
+              provenance   = provenance)
 
 }

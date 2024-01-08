@@ -6,12 +6,14 @@
 <!-- badges: start -->
 
 [![lifecycle](https://lifecycle.r-lib.org/articles/figures/lifecycle-experimental.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![Project Status:
+WIP](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/dataset)](https://cran.r-project.org/package=dataset)
 [![CRAN_time_from_release](https://www.r-pkg.org/badges/ago/dataset)](https://cran.r-project.org/package=dataset)
 [![Status at rOpenSci Software Peer
 Review](https://badges.ropensci.org/553_status.svg)](https://github.com/ropensci/software-review/issues/553)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7440192.svg)](https://zenodo.org/record/6950435#.YukDAXZBzIU)
-[![devel-version](https://img.shields.io/badge/devel%20version-0.2.6-blue.svg)](https://github.com/dataobservatory-eu/dataset)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.10396853.svg)](https://zenodo.org/record/6950435#.YukDAXZBzIU)
+[![devel-version](https://img.shields.io/badge/devel%20version-0.2.8-blue.svg)](https://github.com/dataobservatory-eu/dataset)
 [![dataobservatory](https://img.shields.io/badge/ecosystem-dataobservatory.eu-3EA135.svg)](https://dataobservatory.eu/)
 [![Codecov test
 coverage](https://codecov.io/gh/dataobservatory-eu/dataset/branch/master/graph/badge.svg)](https://app.codecov.io/gh/dataobservatory-eu/dataset?branch=master)
@@ -21,18 +23,43 @@ status](https://ci.appveyor.com/api/projects/status/github/dataobservatory-eu/da
 [![R-CMD-check](https://github.com/dataobservatory-eu/dataset/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/dataobservatory-eu/dataset/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-The primary aim of dataset is create well-referenced, well-described,
-interoperable datasets from data.frames, tibbles or data.tables that
-translate well into the W3C DataSet definition within the [Data Cube
-Vocabulary](https://www.w3.org/TR/vocab-data-cube/) in a reproducible
-manner. The data cube model in itself is is originated in the
-*Statistical Data and Metadata eXchange*, and it is almost fully
-harmonized with the Resource Description Framework (RDF), the standard
-model for data interchange on the web[^1].
+The dataset package extension to the R statistical environment aims to
+ensure that the most important R object that contains a dataset, i.e. a
+[data.frame](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/data.frame)
+or an inherited
+[tibble](https://tibble.tidyverse.org/reference/tibble.html),
+[tsibble](https://tsibble.tidyverts.org/) or
+[data.table](https://rdatatable.gitlab.io/data.table/) contains
+important metadata for the reuse and validation of the dataset contents.
+We aim to offer a novel solution to support individuals or small groups
+of data scientists working in various business, academic or policy
+research functions who cannot count on the support of librarians,
+knowledge engineers, and extensive documentation processes.
 
-The development version of the `dataset` package is very significantly
-different from the CRAN release. The documentation has not been
-rewritten yet! You can follow the discussion of this package on
+The dataset package extends the concept of tidy data and adds further,
+standardized semantic information to the user’s dataset to increase the
+(re-)use value of the data object.
+
+- [x] More descriptive information about the dataset as a creation, its
+  authors, contributors, reuse rights and other metadata to make it
+  easier to find and use.
+- [x] More standardized and linked metadata, such as standard variable
+  definitions and code lists, enable the data owner to gather far more
+  information from third parties or for third parties to understand and
+  use the data correctly.
+- [x] More information about the data provenance makes the quality
+  assessment easier and reduces the need for time-consuming and
+  unnecessary re-processing steps.
+- [x] More structural information about the data makes it more
+  accessible to reuse and join with new information, making it less
+  error-prone for logical errors.
+
+<!---
+&#10;The primary aim of dataset is create well-referenced, well-described, interoperable datasets from data.frames, tibbles or data.tables that translate well into the W3C DataSet definition within the [Data Cube Vocabulary](https://www.w3.org/TR/vocab-data-cube/) in a reproducible manner. The data cube model in itself is is originated in the _Statistical Data and Metadata eXchange_, and it is almost fully harmonized with the Resource Description Framework (RDF), the standard model for data interchange on the web^[RDF Data Cube Vocabulary, W3C Recommendation 16 January 2014  <https://www.w3.org/TR/vocab-data-cube/>, Introduction to SDMX data modeling <https://www.unescap.org/sites/default/files/Session_4_SDMX_Data_Modeling_%20Intro_UNSD_WS_National_SDG_10-13Sep2019.pdf>].
+&#10;--->
+
+The current version of the `dataset` package is in an early,
+experimental stage. You can follow the discussion of this package on
 [rOpenSci](https://github.com/ropensci/software-review/issues/553).
 
 ``` r
@@ -63,7 +90,7 @@ implements further methods in the attributes of the original object.
 
 ``` r
 summary(iris_ds)
-#> Anderson E (2023). "Iris Dataset."
+#> Anderson E (2024). "Iris Dataset."
 #> Further metadata: describe(iris_ds)
 #>   Sepal.Length    Sepal.Width     Petal.Length    Petal.Width   
 #>  Min.   :4.300   Min.   :2.000   Min.   :1.000   Min.   :0.100  
@@ -105,13 +132,13 @@ has many printing options (see `?bibentry`).
 ``` r
 mybibentry <- dataset_bibentry(iris_ds)
 print(mybibentry, "text")
-#> Anderson E (2023). "Iris Dataset."
+#> Anderson E (2024). "Iris Dataset."
 print(mybibentry, "Bibtex")
 #> @Misc{,
 #>   title = {Iris Dataset},
 #>   author = {Edgar Anderson},
 #>   publisher = {American Iris Society},
-#>   year = {2023},
+#>   year = {2024},
 #>   resourcetype = {Dataset},
 #>   identifier = {:tba},
 #>   version = {0.1.0},
@@ -149,8 +176,3 @@ Guide](https://contributing.ropensci.org/) - *A guide to help people
 find ways to contribute to rOpenSci* is also applicable, because
 `dataset` is under software review for potential inclusion in
 [rOpenSci](https://github.com/ropensci/software-review/issues/553).
-
-[^1]: RDF Data Cube Vocabulary, W3C Recommendation 16 January 2014
-    <https://www.w3.org/TR/vocab-data-cube/>, Introduction to SDMX data
-    modeling
-    <https://www.unescap.org/sites/default/files/Session_4_SDMX_Data_Modeling_%20Intro_UNSD_WS_National_SDG_10-13Sep2019.pdf>

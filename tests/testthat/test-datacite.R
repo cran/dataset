@@ -6,8 +6,6 @@ iris_datacite <- datacite(
    Geolocation = "US",
    Language = "en")
 
-
-
 test_that("datacite() works", {
   expect_true(is.datacite(iris_datacite))
   expect_equal(iris_datacite$language, 'en')
@@ -26,4 +24,9 @@ test_that("as_datacite() works", {
                person("Jane", "Doe")
 )
   expect_equal(as_datacite(iris_dataset, type="dataset")$FundingReference, ':unas')
+})
+
+
+test_that("as_datacite() gives warning", {
+  expect_warning(as_datacite(iris_dataset, type = "character"))
 })

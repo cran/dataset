@@ -1,7 +1,7 @@
 Package: dataset
 Title: Create Data Frames that are Easier to Exchange and Reuse
-Date: 2023-12-08
-Version: 0.2.7
+Date: 2024-01-08
+Version: 0.3.0
 Authors@R: 
     c(person(given = "Daniel", family = "Antal", 
            email = "daniel.antal@dataobservatory.eu", 
@@ -32,14 +32,15 @@ LazyData: true
 Imports: assertthat, ISOcodes, stats, utils
 Suggests: dataspice, covr, declared, dplyr, eurostat, here, kableExtra,
         knitr, rdflib, readxl, rmarkdown, spelling, statcodelists,
-        testthat (>= 3.0.0), tidyr
+        testthat (>= 3.0.0), tidyr, tibble, nycflights13, tsibble,
+        data.table
 VignetteBuilder: knitr
 Config/testthat/edition: 3
-Language: en-US
+Language: en-GB
 NeedsCompilation: no
-Packaged: 2023-12-08 14:49:23 UTC; antal
+Packaged: 2024-01-08 16:04:12 UTC; antal
 Author: Daniel Antal [aut, cre] (<https://orcid.org/0000-0001-7513-6760>),
   Marcelo Perlin [rev] (<https://orcid.org/0000-0002-9839-4268>)
 Maintainer: Daniel Antal <daniel.antal@dataobservatory.eu>
 Repository: CRAN
-Date/Publication: 2023-12-08 15:30:02 UTC
+Date/Publication: 2024-01-08 23:30:06 UTC
