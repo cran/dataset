@@ -7,8 +7,9 @@
 \alias{xsd_convert.tibble}
 \alias{xsd_convert.character}
 \alias{xsd_convert.numeric}
+\alias{xsd_convert.haven_labelled_defined}
 \alias{xsd_convert.integer}
-\alias{xsd_convert.boolean}
+\alias{xsd_convert.logical}
 \alias{xsd_convert.factor}
 \alias{xsd_convert.POSIXct}
 \alias{xsd_convert.Date}
@@ -26,9 +27,11 @@ xsd_convert(x, idcol, ...)
 
 \method{xsd_convert}{numeric}(x, idcol = NULL, ...)
 
+\method{xsd_convert}{haven_labelled_defined}(x, idcol = NULL, ...)
+
 \method{xsd_convert}{integer}(x, idcol = NULL, ...)
 
-\method{xsd_convert}{boolean}(x, idcol = NULL, ...)
+\method{xsd_convert}{logical}(x, idcol = NULL, ...)
 
 \method{xsd_convert}{factor}(x, idcol = NULL, ...)
 
@@ -37,15 +40,16 @@ xsd_convert(x, idcol, ...)
 \method{xsd_convert}{Date}(x, idcol = NULL, ...)
 }
 \arguments{
-\item{x}{An R object that contains the data of the dataset (a data.frame or
-inherited from \code{\link[base:data.frame]{data.frame}}), for example,
-\code{\link[tibble:tibble]{tibble::tibble()}}, \code{\link[tsibble:tsibble]{tsibble::tsibble()}}, \code{\link[data.table:data.table]{data.table::data.table()}}.}
+\item{x}{An object to be coerced to an XLM Schema defined string format.}
 
 \item{idcol}{The name or position of the column that contains the row
 (observation) identifiers. If \code{NULL}, it will make a new \code{idcol}
 from \code{\link[=row.names]{row.names()}}.}
 
 \item{...}{Further optional parameters for generic method.}
+}
+\value{
+A serialisation of an R vector or data frame (dataset) in XML.
 }
 \description{
 Convert the numeric, boolean and Date/time columns of a dataset
@@ -58,7 +62,8 @@ xsd_convert(head(iris))
 
 # Convert dataset to XML Schema Definition
 xsd_convert(head(iris_dataset))
-}
-\seealso{
-\code{\link[=dataset]{dataset()}}
+# Convert integers or doubles, numbers:
+xsd_convert(1:3)
+# Convert logical values:
+xsd_convert(TRUE)
 }

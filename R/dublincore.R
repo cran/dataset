@@ -85,22 +85,27 @@
 #' \href{https://www.dublincore.org/specifications/dublin-core/dcmi-terms/elements11/language/}{DCMI: Language}.
 #' @importFrom utils person bibentry
 #' @source \href{https://www.dublincore.org/specifications/dublin-core/dcmi-terms/terms/format/}{	DCMI Metadata Terms}.
-#' @family metadata functions
-#' @return The Dublin Core Metadata elements of the dataset in a \code{utils::\link[utils]{bibentry}} object.
-#' @export
+#' @family bibentry functions
+#' @return \code{dublincore()} creates a \code{utils::\link[utils]{bibentry}} object
+#' extended with standard Dublin Core bibliographical metadata, \code{as_dublincore()}
+#' retrieves the contents of this bibentry object of a dataset_df from its
+#' attributes, and returns the contents as list, dataset_df, or bibentry object.
 #' @examples
-#' dublincore(
-#'   title = "Iris Dataset",
-#'   creator = person("Edgar", "Anderson", role = "aut"),
-#'   publisher = "American Iris Society",
-#'   datasource = "https://doi.org/10.1111/j.1469-1809.1936.tb02137.x",
-#'   date = 1935,
-#'   language = "en",
-#'   description = "This famous (Fisher's or Anderson's) iris data set gives the
-#'   measurements in centimeters of the variables sepal length and width and petal length
-#'   and width, respectively, for 50 flowers from each of 3 species of iris.
-#'   The species are Iris setosa, versicolor, and virginica."
-#' )
+#' my_bibentry <- dublincore(
+#'    title = "Iris Dataset",
+#'    creator = person("Edgar", "Anderson", role = "aut"),
+#'    publisher = "American Iris Society",
+#'    datasource = "https://doi.org/10.1111/j.1469-1809.1936.tb02137.x",
+#'    date = 1935,
+#'    language = "en",
+#'    description = "This famous (Fisher's or Anderson's) iris data set gives the
+#'    measurements in centimeters of the variables sepal length and width and petal length
+#'    and width, respectively, for 50 flowers from each of 3 species of iris.
+#'    The species are Iris setosa, versicolor, and virginica."
+#'   )
+#'
+#' as_dublincore(iris_dataset, type="list")
+#' @export
 
 dublincore <- function(
     title,
@@ -119,10 +124,10 @@ dublincore <- function(
     description = NULL,
     coverage = NULL) {
 
-  date <- ifelse (is.null(date), ":tba", as.character(date))
+  date       <- ifelse (is.null(date), ":tba", as.character(date))
   identifier <- ifelse (is.null(identifier), ":tba", as.character(identifier))
-  format <- ifelse (is.null(format), ":tba", as.character(format))
-  relation <- ifelse (is.null(relation), ":unas", relation)
+  format     <- ifelse (is.null(format), ":tba", as.character(format))
+  relation   <- ifelse (is.null(relation), ":unas", relation)
   format <- ifelse (is.null(relation), ":unas", relation)
   rights <- ifelse (is.null(rights), ":tba", as.character(rights))
   coverage <- ifelse (is.null(coverage), ":unas", as.character(coverage))
@@ -172,20 +177,22 @@ as_dublincore <- function(x, type = "bibentry", ...) {
     type <- 'bibentry'
   }
 
-  ds_bibentry <- dataset_bibentry(x)
+  ds_bibentry     <- get_bibentry(x)
   dataset_title   <- ds_bibentry$title
   dataset_creator <- ds_bibentry$author
 
   if (! is_person(dataset_creator)) {
-    stop('attr(x, "DataBibentry")$author is not a person object.')
+    stop('attr(x, "dataset_bibentry")$author is not a person object.')
   }
 
   if (!is.null(ds_bibentry$year)) {
-    if(!is.null(ds_bibentry$year)) {
-      dataset_date <- ":tba"
-    } else {
+    if(is.null(ds_bibentry$dataset_date)) {
       dataset_date <- as.character(ds_bibentry$year)
+    } else {
+      dataset_date <- as.character(ds_bibentry$date)
     }
+  } else {
+    dataset_date <- ":tba"
   }
 
   dataset_relation <- ifelse (is.null(ds_bibentry$relation), ":unas", as.character(ds_bibentry$relation))
@@ -198,25 +205,25 @@ as_dublincore <- function(x, type = "bibentry", ...) {
   dataset_coverage  <- ifelse (is.null(ds_bibentry$coverage), ":unas", as.character(ds_bibentry$coverage))
   datasource <- ifelse (is.null(ds_bibentry$datasource), ":unas", as.character(ds_bibentry$datasource))
   dataset_contributor <- ifelse (is.null(ds_bibentry$contributor), "", as.character(ds_bibentry$contributor))
-  dataset_subject <- ifelse (is.null(ds_bibentry$subject), "", as.character(ds_bibentry$subject))
+  dataset_subject   <- ifelse (is.null(ds_bibentry$subject), "", as.character(ds_bibentry$subject))
   dataset_publisher <- ifelse (is.null(ds_bibentry$publisher), "", as.character(ds_bibentry$publisher))
 
   if (type == "bibentry") {
-    new_dublincore(title = dataset_title,
-                   creator = dataset_creator,
-                   identifier = dataset_identifier,
-                   publisher = dataset_publisher,
-                   subject = dataset_subject,
+    new_dublincore(title       = dataset_title,
+                   creator     = dataset_creator,
+                   identifier  = dataset_identifier,
+                   publisher   = dataset_publisher,
+                   subject     = dataset_subject,
                    type = "DCMITYPE:Dataset",
                    contributor = dataset_contributor,
-                   date = dataset_date,
-                   language = dataset_language,
-                   relation = dataset_relation,
-                   format = dataset_format,
-                   rights = dataset_rights,
-                   datasource = datasource,
+                   date        = dataset_date,
+                   language    = dataset_language,
+                   relation    = dataset_relation,
+                   format      = dataset_format,
+                   rights      = dataset_rights,
+                   datasource  = datasource,
                    description = dataset_description,
-                   coverage = dataset_coverage)
+                   coverage    = dataset_coverage)
   } else if (type== "list") {
     if (dataset_contributor == "") dataset_contributor <- NULL
     if (dataset_subject == "") dataset_subject <- NULL
@@ -258,7 +265,7 @@ as_dublincore <- function(x, type = "bibentry", ...) {
       all(properties)==1, msg= "In as_dublincore() not all properties have a length 1 to export into datataset (data.frame)."
     )
 
-    dataset (
+    dataset_df(
       data.frame(title = dataset_title,
                  creator = as.character(dataset_creator),
                  identifier = dataset_identifier,
@@ -274,10 +281,12 @@ as_dublincore <- function(x, type = "bibentry", ...) {
                  datasource = datasource,
                  description = dataset_description,
                  coverage = dataset_coverage),
-      title = paste0("The Dublin Core Metadata of `", ds_bibentry$title, "'"),
-      author = citation_author,
-      year = substr(as.character(Sys.Date()),1,4)
-    )
+      reference = list(
+        title = paste0("The Dublin Core Metadata of `", ds_bibentry$title, "'"),
+        author = citation_author,
+        year = substr(as.character(Sys.Date()),1,4)
+
+      ))
   }
 }
 
@@ -318,7 +327,6 @@ new_dublincore <- function (title,
   dublincore_object
 }
 
-
 #' @rdname dublincore
 is.dublincore <- function(x) {
   UseMethod("is.dublincore", x)
@@ -326,5 +334,7 @@ is.dublincore <- function(x) {
 
 #' @rdname dublincore
 #' @param x An object that is tested if it has a class "dublincore".
+#' @return A logical value, if the bibliographic entries are listed according to the
+#' Dublin Core specification.
 #' @exportS3Method
 is.dublincore.dublincore <- function(x) inherits(x, "dublincore")

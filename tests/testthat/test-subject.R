@@ -1,42 +1,47 @@
-irissubject <- subject_create (term  = "Irises (plants)",
-                               schemeURI = "http://id.loc.gov/authorities/subjects",
-                               valueURI = "https://id.loc.gov/authorities/subjects/sh85068079",
-                               subjectScheme = "LCCH",
-                               prefix = "lcch:")
-subject(iris_dataset,
-        overwrite = TRUE) <- subject_create(
-                                  term  = "Irises (plants)",
-                                  schemeURI = "http://id.loc.gov/authorities/subjects",
-                                  valueURI = "https://id.loc.gov/authorities/subjects/sh85068079",
-                                  subjectScheme = "LCCH",
-                                  prefix = "lcch:")
+
+test_that("subject_create() <- works", {
+  default_subject <- subject_create(
+    term = "data sets",
+    subjectScheme = "Library of Congress Subject Headings (LCSH)",
+    schemeURI = "https://id.loc.gov/authorities/subjects.html",
+    valueURI = "http://id.loc.gov/authorities/subjects/sh2018002256")
+  expect_equal(default_subject$term, "data sets")
+  expect_true(is.subject(default_subject))
+  expect_equal(subject_create(term=NULL)$term, ":tba")
+})
+
+test_that("subject_create() <- works", {
+  tested_1 <- new_Subject(term="dataset",
+                          subjectScheme = "LCCH",
+                          schemeURI =  "http://id.loc.gov/authorities/subjects",
+                          valueURI="https://id.loc.gov/authorities/subjects/sh85068079")
+  expect_equal(tested_1$term, "dataset")
+  expect_equal(tested_1$subjectScheme, "LCCH")
+  expect_equal(tested_1$schemeURI, "http://id.loc.gov/authorities/subjects")
+  expect_equal(tested_1$valueURI, "https://id.loc.gov/authorities/subjects/sh85068079")
+  expect_equal(tested_1$classificationCode, NULL)
+  tested_2 <- new_Subject(term="dataset",
+                          classificationCode = "test")
+  expect_equal(tested_2$classificationCode, "test")
+  expect_error(subject(iris_dataset) <- 2)
+})
+
+test_that("subject() <- works", {
+  iris_dataset_2 <- iris_dataset
+  subject(x=iris_dataset_2) <- NULL
+  expect_equal(subject(iris_dataset_2)$term, ":tba")
+  expect_equal(subject(iris_dataset_2)$prefix, "")
+  a <- new_Subject(term = c("test1", "test2"))
+  expect_equal(new_Subject(term = c("test1", "test2"))$term, c("test1", "test2"))
+  subject(x=iris_dataset_2) <- "iris"
+  expect_equal(subject(iris_dataset_2)$term, "iris")
+  expect_equal(subject(iris_dataset_2)$subjectScheme, "")
+  expect_equal(subject(iris_dataset_2)$schemeURI, "")
+  expect_equal(subject(iris_dataset_2)$valueURI, "")
+})
 
 subject(iris_dataset)
-test_that("subject_create works as a constructor", {
-  expect_true(is.subject(x=irissubject))
-  expect_equal(irissubject$prefix, "lcch:")
-  expect_equal(irissubject$valueURI, "https://id.loc.gov/authorities/subjects/sh85068079")
-})
 
 
-myiris <- iris_dataset
-subject(myiris) <- subject_create(term  = "Irises (plants)",
-                                  schemeURI = "http://id.loc.gov/authorities/subjects",
-                                  valueURI = "https://id.loc.gov/authorities/subjects/sh85068079",
-                                  subjectScheme = "LCCH",
-                                  prefix = "lcch:")
-
-test_that("subject() works", {
-  expect_true(is.subject(subject(myiris)))
-  expect_equal(subject(myiris)$prefix, "lcch:")
-  expect_equal(subject(myiris)$valueURI, "https://id.loc.gov/authorities/subjects/sh85068079")
-})
 
 
-subject(myiris) <- "Iris"
-
-test_that("subject <- assignment works with a string", {
-  expect_true(is.subject(subject(myiris)))
-  expect_equal(subject(myiris)$prefix, "")
-  expect_equal(subject(myiris)$term, "Iris")
-})

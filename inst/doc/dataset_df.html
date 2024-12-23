@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Create Datasets that are Easy to Share Exchange and Extend</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Create Datasets that are Easy to Share
+Exchange and Extend</h1>
+
+
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(dataset)</span></code></pre></div>
+<p>The aim of the <code>dataset_df</code> is to create semantically
+richer datasets.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>small_country_dataset <span class="ot">&lt;-</span> <span class="fu">dataset_df</span>(</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>  <span class="at">country_name =</span> <span class="fu">defined</span>(</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>    <span class="fu">c</span>(<span class="st">&quot;AD&quot;</span>, <span class="st">&quot;LI&quot;</span>),</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>    <span class="at">label =</span> <span class="st">&quot;Country name&quot;</span>,</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>    <span class="at">definition =</span> <span class="st">&quot;http://data.europa.eu/bna/c_6c2bb82d&quot;</span>, </span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>    <span class="at">namespace =</span> <span class="st">&quot;https://www.geonames.org/countries/$1/&quot;</span>), </span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>  <span class="at">gdp =</span> <span class="fu">defined</span>(</span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>    <span class="fu">c</span>(<span class="dv">3897</span>, <span class="dv">7365</span>), </span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>    <span class="at">label =</span> <span class="st">&quot;Gross Domestic Product&quot;</span>, </span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a>    <span class="at">unit =</span> <span class="st">&quot;million dollars&quot;</span>, </span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a>    <span class="at">definition =</span> <span class="st">&quot;http://data.europa.eu/83i/aa/GDP&quot;</span>),</span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a>  <span class="at">dataset_bibentry =</span> <span class="fu">dublincore</span>(</span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Small Country Dataset&quot;</span>, </span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a>    <span class="at">creator =</span> <span class="fu">person</span>(<span class="st">&quot;Jane&quot;</span>, <span class="st">&quot;Doe&quot;</span>), </span>
+<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a>    <span class="at">publisher =</span> <span class="st">&quot;Example Inc.&quot;</span>)</span>
+<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a>  )</span></code></pre></div>
+<p>The <code>defined</code> class columns retain the important semantic
+information about the label, exact definition link, and the unit of
+measure:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">var_label</span>(small_country_dataset<span class="sc">$</span>gdp)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Gross Domestic Product&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">var_unit</span>(small_country_dataset<span class="sc">$</span>gdp)</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="co">#&gt; [1] &quot;million dollars&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">var_definition</span>(small_country_dataset<span class="sc">$</span>gdp)</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="co">#&gt; [1] &quot;http://data.europa.eu/83i/aa/GDP&quot;</span></span></code></pre></div>
+<p>And the <code>dataset_df</code> object has a the important semantic
+information about the dataset as a whole, with pre-filled default values
+for not yes assigned or announced information. The metadata of the
+entire dataset conforms to the two most universally used definitions,
+Dublin Core (DCTERMS) and DataCite (DataCite).</p>
+<p>Each standard Dublinc Core/DataCite metadata field has a simple
+interface function, for example, you can add the language of the dataset
+with the following assignment command:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">language</span>(small_country_dataset) <span class="ot">&lt;-</span> <span class="st">&quot;en&quot;</span></span></code></pre></div>
+<p>And to review the descriptive data of the entire dataset as a
+whole:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">get_bibentry</span>(small_country_dataset), <span class="st">&quot;bibtex&quot;</span> )</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="co">#&gt; @Misc{,</span></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="co">#&gt;   title = {Small Country Dataset},</span></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="co">#&gt;   author = {Jane Doe},</span></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="co">#&gt;   identifier = {:tba},</span></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="co">#&gt;   publisher = {Example Inc.},</span></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="co">#&gt;   year = {:tba},</span></span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a><span class="co">#&gt;   relation = {:unas},</span></span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a><span class="co">#&gt;   format = {:unas},</span></span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a><span class="co">#&gt;   rights = {:tba},</span></span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a><span class="co">#&gt;   type = {DCMITYPE:Dataset},</span></span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a><span class="co">#&gt;   datasource = {:unas},</span></span>
+<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a><span class="co">#&gt;   coverage = {:unas},</span></span>
+<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a><span class="co">#&gt;   language = {eng},</span></span>
+<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a><span class="co">#&gt; }</span></span></code></pre></div>
+<div id="wikidata" class="section level2">
+<h2>Wikidata</h2>
+<p>The <a href="https://wbdataset.dataobservatory.eu/">wbdataset
+package</a> is an extension of the dataset, which in turn is an R
+package that helps to exchange, publish and combine datasets more easily
+by improving their semantics. The <em>wbdataset</em> extends the
+usability of dataset by connecting the Wikibase API with the R
+statistical environment. It is in an early, exploratory stage, and it is
+not yet on CRAN.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;dataobservatory-eu/wbdataset&quot;</span>)</span></code></pre></div>
+<pre><code># Select the following country profiles from Wikidata:
+wikidata_countries &lt;- c(
+  &quot;http://www.wikidata.org/entity/Q756617&quot;, &quot;http://www.wikidata.org/entity/Q347&quot;,
+  &quot;http://www.wikidata.org/entity/Q3908&quot;,   &quot;http://www.wikidata.org/entity/Q1246&quot;)
+  
+# Retrieve their labels into a dataset called &#39;European countries&#39;:
+wikidata_countries_df &lt;- get_item(qid = wikidata_countries,
+                                  language =&quot;en&quot;,
+                                  title = &quot;European countries&quot;,
+                                  creator = person(&quot;Daniel&quot;, &quot;Antal&quot;))
+                                  
+# Add properties from Wikidata as attributes and variables of this dataset:                             
+ds &lt;- wikidata_countries_df %&gt;%
+  left_join_column( 
+    label = &quot;ISO 3166-1 alpha-2 code&quot;, 
+    property = &quot;P297&quot; ) %&gt;%
+  left_join_column( 
+    property = &quot;P1566&quot;, 
+    label = &quot;Geonames ID&quot;,
+    namespace = &quot;https://www.geonames.org/&quot;) 
+    </code></pre>
+</div>
+<div id="further-data-platforms" class="section level2">
+<h2>Further data platforms</h2>
+<p>We are planning an extension of the <em>dataset</em> package to
+conform the datacube definition used by statistical data repositories
+and exchanges, which will require a management of the multi-dimensional
+datasets and the data structure definition of the Statistical Data and
+Metadata eXchange. This feature was part of the early release of
+dataset, but as reviewers pointed out, they were out of focus from the
+core functionality.</p>
+</div>
+<div id="serialise-to-rdf" class="section level2">
+<h2>Serialise to RDF</h2>
+<p>Our package is aiming to work seamlessly with the rOpenSci <a href="https://github.com/ropensci/rdflib">rdflib</a> package. For this
+purpose, we are working on a simple <a href="https://www.w3.org/TR/turtle/">turtle</a> package that writes the
+<a href="https://dataset.dataobservatory.eu/articles/bibentry.html">bibentry</a>
+about the dataset, and the dataset contents into an RDF-annotated text
+file, which can be then used or stored with <em>rdflib</em>.</p>
+<p>The tuRtle package is being co-developed with <em>dataset</em>, and
+will serialise the data and metadata of the <code>dataset_df</code>
+objects.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;dataobservatory-eu/tuRtle&quot;</span>, <span class="at">build =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="fu">library</span>(tuRtle)</span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>tdf <span class="ot">&lt;-</span> <span class="fu">data.frame</span> (<span class="at">s =</span> <span class="fu">c</span>(<span class="st">&quot;eg:01&quot;</span>,<span class="st">&quot;eg:02&quot;</span>,  <span class="st">&quot;eg:01&quot;</span>, <span class="st">&quot;eg:02&quot;</span>, <span class="st">&quot;eg:01&quot;</span> ),</span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>                   <span class="at">p =</span> <span class="fu">c</span>(<span class="st">&quot;a&quot;</span>, <span class="st">&quot;a&quot;</span>, <span class="st">&quot;eg-var:&quot;</span>, <span class="st">&quot;eg-var:&quot;</span>, <span class="st">&quot;rdfs:label&quot;</span>),</span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a>                   <span class="at">o =</span> <span class="fu">c</span>(<span class="st">&quot;qb:Observation&quot;</span>,</span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a>                         <span class="st">&quot;qb:Observation&quot;</span>,</span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a>                         <span class="st">&quot;</span><span class="sc">\&quot;</span><span class="st">1</span><span class="sc">\&quot;</span><span class="st">^^&lt;xs:decimal&gt;&quot;</span>,</span>
+<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a>                         <span class="st">&quot;</span><span class="sc">\&quot;</span><span class="st">2</span><span class="sc">\&quot;</span><span class="st">^^&lt;xs:decimal&gt;&quot;</span>, </span>
+<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a>                         <span class="st">&#39;&quot;Example observation&quot;&#39;</span>)</span>
+<span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a>                   )</span>
+<span id="cb11-10"><a href="#cb11-10" tabindex="-1"></a></span>
+<span id="cb11-11"><a href="#cb11-11" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(tdf)</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="left">s</th>
+<th align="left">p</th>
+<th align="left">o</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">eg:01</td>
+<td align="left">a</td>
+<td align="left"><a href="qb:Observation" class="uri">qb:Observation</a></td>
+</tr>
+<tr class="even">
+<td align="left">eg:02</td>
+<td align="left">a</td>
+<td align="left"><a href="qb:Observation" class="uri">qb:Observation</a></td>
+</tr>
+<tr class="odd">
+<td align="left">eg:01</td>
+<td align="left">eg-var:</td>
+<td align="left">“1”^^<xs:decimal></td>
+</tr>
+<tr class="even">
+<td align="left">eg:02</td>
+<td align="left">eg-var:</td>
+<td align="left">“2”^^<xs:decimal></td>
+</tr>
+<tr class="odd">
+<td align="left">eg:01</td>
+<td align="left">rdfs:label</td>
+<td align="left">“Example observation”</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>example_file<span class="ot">&lt;-</span> <span class="fu">file.path</span>(<span class="fu">tempdir</span>(), <span class="st">&quot;example_ttl.ttl&quot;</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="fu">ttl_write</span>(<span class="at">tdf=</span>tdf, <span class="at">ttl_namespace=</span><span class="cn">NULL</span>, <span class="at">file_path=</span>example_file)</span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a><span class="fu">readLines</span>(example_file)</span></code></pre></div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

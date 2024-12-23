@@ -8,8 +8,7 @@ dataset_to_triples(x, idcol = NULL)
 }
 \arguments{
 \item{x}{An R object that contains the data of the dataset (a data.frame or
-inherited from \code{\link[base:data.frame]{data.frame}}), for example, \code{\link[=dataset]{dataset()}}
-\code{\link[tibble:tibble]{tibble::tibble()}}, \code{\link[tsibble:tsibble]{tsibble::tsibble()}}, \code{\link[data.table:data.table]{data.table::data.table()}}.}
+inherited from \code{\link[base:data.frame]{data.frame}}), for example, \code{\link[=dataset_df]{dataset_df()}}.}
 
 \item{idcol}{The identifier column. If \code{idcol} is \code{NULL} it attempts to
 use the \code{row.names(df)} as an \code{idcol}.}
@@ -22,4 +21,7 @@ and class.
 The dataset is converted into a three-column long format with
 columns \code{s} for subject, \code{p} for predicate and \code{o} for
 object.
+}
+\examples{
+dataset_to_triples(iris_dataset)
 }

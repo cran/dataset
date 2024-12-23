@@ -1,3 +1,11 @@
+# dataset 0.3.4
+
+- New release candidate on CRAN.
+
+# dataset 0.3.2
+
+- [New Requirement](https://dataset.dataobservatory.eu/articles/new-requirements.html) setting for further works.
+
 # dataset 0.3.0
 
 - Released on CRAN.
