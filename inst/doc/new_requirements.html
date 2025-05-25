@@ -341,7 +341,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(dataset)</span></code></pre></div>
-<p>The first CRAN release and RopenSci review brought very useful
+<p>The first CRAN release and rOpenSci review brought very useful
 experience and feedback. The dataset package had been defined with a
 very broad requirement. While the very general requirement setting has
 advantages, a clear disadvantage is that without a specific use case, it
@@ -391,6 +391,229 @@ significant undertaking to ensure that all functionality works with
 data.frames, tibble and data.tables. Whenever this is possible, this
 should remain so, but new developments should only follow the modern
 tidyverse tibbles.</p>
+<div id="tidy-can-be-tidier" class="section level2">
+<h2>Tidy can be tidier</h2>
+<p>Most R-user data scientists are familiar with the term tidy data. It
+is data ready for tabular analysis and easy to understand. It places
+measurements (variables) in columns, dividing each observation into a
+row. Column names convey the meaning of the variable.</p>
+<p>You should wrangle your data in a tidy format because that is the
+prerequisite of most statistical analysis or visualisation with various
+algorithms, and it gives a logical place to each data point.</p>
+<p>Making your data tidy is like hoovering your room. It will make your
+environment neat, but if you leave for months, it will be full of
+dustballs, insects and spiders, and you will not remember where you left
+your slippers. To allow us to return to work after months or years or to
+pass on our work to others, we need to provide more meaning (semantics)
+about a tidy dataset.</p>
+<p>Consider the following simple data.frame:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">data.frame</span>(</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>  <span class="at">geo =</span> <span class="fu">c</span>(<span class="st">&quot;LI&quot;</span>, <span class="st">&quot;SM&quot;</span>),</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>  <span class="at">CPI =</span> <span class="fu">c</span>(<span class="st">&quot;0.8&quot;</span>, <span class="st">&quot;0.9&quot;</span>),</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>  <span class="at">GNI =</span> <span class="fu">c</span>(<span class="st">&quot;8976&quot;</span>, <span class="st">&quot;9672&quot;</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>)</span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="co">#&gt;   geo CPI  GNI</span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="co">#&gt; 1  LI 0.8 8976</span></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a><span class="co">#&gt; 2  SM 0.9 9672</span></span></code></pre></div>
+<p>This dataset is tidy. But it certainly could be improved!</p>
+<ul>
+<li><p><code>geo</code>: you may figure out that geo means something to
+do with geography (maybe countries, “LI” standing for Lichtenstein and
+“SM” for San Marino), but even that, who knows? If you add Greece,
+should use use “EL” like Eurostat or “GR” like the World Bank?</p></li>
+<li><p><code>CPI</code> can stand for “consumer price index” or
+“corruption perceptions index”. Or anything else!</p></li>
+<li><p><code>GNI</code> can stand for “Gross National Income” and
+“Global Nutrition Index”, often mentioned in the same context. If there
+are numbers, do they mean a physical quantity or a currency? Is the
+currency dollars or euros?</p></li>
+</ul>
+<p>Adding such definitions to the dataset makes them far more
+accessible, reusable, and even findable. Many people may be looking for
+GNI in US dollars; using a currency cue for searching may bring in a new
+user.</p>
+<p>Most researchers are familiar with the semantic needs to make a
+dataset findable; they may know how libraries or scientific repositories
+store authorship data or titles. Our package handles these types of
+metadata, too, but goes into the semantics of what’s inside the dataset.
+What does each column mean? What is the identity of the observations in
+the rows (if they are not anonymous)? Adding such information in a
+machine-readable way allows far greater findability because people can
+search for data expressed in euros or dollars only or any datasets that
+use CPI in the sense of the Corruption Perception Index instead of
+finding thousands of search hits for CPI as consumer price
+inflation.</p>
+<p>Further enriching the semantics of an already tidy dataset can
+increase findability and reusability. Even the same user may struggle
+months or years later with a saved tidy dataset that is missing the
+definitions or variables of observations, or the unit of measure.</p>
+</div>
+<div id="exchange-and-extend" class="section level2">
+<h2>Exchange and extend</h2>
+<p>Our dataset package focuses on an R user who would like to work on
+maintaining, extending or improving the same dataset for many months or
+years, potentially with several data managers and data sources under
+joint stewardship.</p>
+<ul>
+<li>Extending the rows means adding new observations which follow clear
+semantics on observation identification. In the previous example, if the
+observation units are countries, we need to make it clear how a user can
+add another country in a new row; and what happens if the same country
+is added with different measurements in different points of time. If you
+use two-letter country codes like “SM” and “LI”, then adding Brazil
+should use “BR” and not “BRA”. Eurostat abbreviates Greece as “EL”, but
+IMF uses the ISO-standard “GR”, so the taxonomy of abbreviations should
+be available.</li>
+<li>Extending the columns means adding new attributes or measured values
+for each observational unit in a way that they increase the usability of
+the dataset (and do not confuse it.) If you have a GDP and a population
+column, you can calculate a GDP/Capita, but only if you divide the GDP
+and the population from the same time period, and GDP measured in the
+same currency unit. Often it is important to know the exact formula of a
+new, mutated variable; for example, “GDP_mean” can mean a geometric or
+arithmetic or harmonic mean, too!</li>
+</ul>
+<p>The magic abbreviation FAIR data stands for findable, accessible,
+interoperable and reusable; F, A, and R mainly boil down to adding the
+correct metadata to the data. The European Interoperability Framework as
+a standard describes four layers of interoperability, so it is a far
+more elusive concept. In this standard, interoperability has a legal,
+organisational, semantic, and technical layers.</p>
+<p>Technical interoperability can be increased by releasing the dataset
+in a system-independent format such as JSON. Legal interoperability can
+be increased by adding a standard re-use rights statement and authorship
+information about the dataset itself to the release. But considering the
+R user’s workflows (organisational aspect) and communicating it in a
+meaningful way (semantic aspect) ensures that a new user can effectively
+improve the dataset (similarly to adding to the code base of an R
+package), or use the dataset in an entirely different job. Making sure
+that the “GNI” is about nutrition and not national income, the “CPI” is
+about inflation and not corruption is essential to place your dataset
+into a public health or a macroeconomic analysis workflow.</p>
+</div>
+<div id="placing-the-dataset-package-into-the-r-ecosystem" class="section level2">
+<h2>Placing the <code>dataset</code> package into the R ecosystem</h2>
+<p>Many R packages try to help FAIR qualities with different mindsets
+and tools. The dataset package differs from them and can work with many
+of them synergistically, magnifying the value added by other metadata
+packages.</p>
+<ul class="task-list">
+<li><label><input type="checkbox" checked></input>The
+<code>frictionless</code> R package family (), the rOpenSci
+<code>dataspice</code> and the rOpenSci ` rdflib allow you to serialise
+your data into a semantically rich format for different purposes.<br />
+</label></li>
+<li><label><input type="checkbox" checked></input>The
+<code>dataspice</code> creates HTML files that are easy to find on the
+internet with search engines; it relies heavily on the lightweight
+semantic ontology of Schema.org, which ensures that websites understand
+certain metadata the same way.</label></li>
+<li><label><input type="checkbox" checked></input>The <code>rdlib</code>
+package allows annotating with the World Wide Web RDF standard markup
+any three-column tidy dataset and saving it to every file format the W3C
+consortium defined for releasing interoperable data. It provides the
+widest interoperability in terms of importing and exporting data, but
+you can make the most out of it if you are familiar with ontologies and
+advanced metadata modelling; it is also restrictive in terms of using
+long-form data.</label></li>
+</ul>
+<p>The <code>frictionless</code> family is a bit of an alternative to
+<code>dataspace</code> and <code>rdflib</code>: it supports one
+serialisation format, JSON, it heavily relies on Schema.org, and it
+provides interoperability within the frictionless ecosystem. The <a href="https://github.com/frictionlessdata/frictionless-r">frictionless R
+package</a>. It works well in the ecosystems of the Open Knowledge
+Foundations data ecosystem.</p>
+<p>These packages help release or publish data and make it more findable
+and reusable for new users. Our <code>dataset</code> package can be seen
+as boosting the performance or usability of these packages, but it has a
+different interoperability platform in sight, the exchange of datasets
+themselves either among R users or with platforms that publish datasets
+themselves and not text about the contents of the dataset.</p>
+<p>While the aforementioned packages mainly help with exporting datasets
+from R to a different format, and a different system, and perhaps
+outside of the statistical community in HTML, JSON, or XML. The dataset
+package focuses on the R user’s data.frames, tibbles, potentially saved
+as rds or Rda files, and to collect and add as much well-designed
+metadata for interoperability and reuse as possible; of course, such
+metadata can be passed on to <code>dataspice</code>, <code>rdflib</code>
+or <code>frictionless</code> when leaving the R ecosytem.</p>
+<p>The <code>dataset</code> package does not want to make these packages
+explicit dependencies, so it offers NQuad serialisation besides CSV to
+export data outside of the R system; these Nquads can be translated to
+other standard formats with <code>rdflib</code>. We also recommend the
+use of <code>rdflib</code> for heavy-duty serialisation; but we offer a
+lightweight solution to avoid a hard dependency. The <code>rdflib</code>
+package is superior in exporting data from the R ecosystem to another
+statistical or other scientific use with the W3C standard RDF markup.
+For communicating among R users, it is an unnecessary translator that
+requires quiet advanced understanding of the RDF metadata language. It
+is unnecessary within the R ecosystem if we can convey the same
+information within an <code>.rds</code> or <code>.Rda</code> file.</p>
+<p>Similarly, if you want to communicate the contents of your dataset to
+non-R users or using visualisations and text, the <code>dataspice</code>
+package is a very good way to that. However, it is inferior for passing
+on an R object to another user, because it requires translation at
+exporting and re-translation at importing back to R; furthermore, a lot
+can be lost in translation as it hardcodes the Schema.org vocabulary
+that is not designed for statistical use, but for web publishing.</p>
+</div>
+<div id="a-focus-on-statistical-users-and-statistical-datasets" class="section level2">
+<h2>A focus on statistical users and statistical datasets</h2>
+<p>The <code>dataset</code> package focuses on the R ecosystem and R
+data.frames, and the R user who downloads data from different data
+sources like Eurostat, IMF, and World Bank and needs to join such data
+meaningful, add further derived own work, and save the result in .rda or
+.rds files.</p>
+<p>The <code>dataspice</code> and <code>frictionless</code> ecosystem
+focuses on data users; they are organised around Schema.org, which helps
+web content, such as a description of a dataset findable on a usual
+browser search.</p>
+<p>The <code>dataset</code> package focuses on data producers and is
+optimised for web queries on the web of data layer of the internet that
+connects databases. Therefore our default settings and the function
+interface focuses on the language of SDMX, the statistical data and
+metadata exchange standard, and DCTERMS, which is the main language of
+libraries and repositories. (We also support DataCite that is often
+preferred in European data repositories instead of the more generic
+DCTERMS.) These standards are not so good to find a description and a
+visualisation of a dataset with an web text search (Schema.org was
+designed for that purpose), but they are far superior for communicating
+the contents of a dataset to an other data producer, or somebody who may
+have a matching component to the contents of your dataset. Our package
+is not intended to those who want to effectively communicate about the
+interpretation of a dataset to fellow biologists or economist, but to
+users who want to communicate the contents of the dataset to fellow data
+collectors or producers.</p>
+<p>We are planning a family of dataset packages that help you with data
+exchanges (receiving, joining, republishing) in different data
+interoperability scenarios. h dataset package mainly changes the
+attributes system of R objects. e R users actively use the attributes;
+we created a reference function with sensible defaults for most
+statistical and open science standards.</p>
+<ul>
+<li><p>The planned <code>datacube</code> package will extend the
+<code>dataset</code> package to the full SDMX Datacube specification and
+allow you to exchange information or publish statistical data that are
+fully interoperable with Eurostat or IMF datasets on statistical data
+repositories, for example, on the EU Open Data Portal. On such exchanges
+we mean that the users download both the GDP dataset and the population
+dataset and send back their own GDP/population calculations in a new or
+updated dataset.</p></li>
+<li><p>The <code>wbdataset</code> package enables the exchange and
+publication of data on Wikidata or Wikibase instances, which offer the
+widest-used open data exchange platform for non-statistical data. It
+adds the main elements of the Wikibase Data Model that allow you to
+exchange information or publish on many open graphs (platforms that will
+enable connecting interoperable data sources.) A likely exchange
+scenario is that you download the biographical data of famous singers
+from a country and add back to some biographies that were not there, but
+you have collected them from non-interoperable sources.</p></li>
+<li><p>A similar extension to the <code>frictionless</code> ecosystem is
+possible, too; should there be a user demand to improve the R-side data
+production workflow of data primarily intended into this
+ecosystem.</p></li>
+</ul>
+</div>
 <div id="new-requirement-settings" class="section level2">
 <h2>New requirement settings</h2>
 <p>The new dataset package would be streamlined to provide a tidier
@@ -421,41 +644,45 @@ a formal persistent identifier such as a URI, but this is not a strict
 requirement.</li>
 </ul>
 <p>For example, when working with this small dataset:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">options</span>(<span class="at">sciphen=</span><span class="dv">4</span>)</span>
-<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>small_country_dataset <span class="ot">&lt;-</span> <span class="fu">dataset_df</span>(</span>
-<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>  <span class="at">country_name =</span> <span class="fu">defined</span>(</span>
-<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>    <span class="fu">c</span>(<span class="st">&quot;AD&quot;</span>, <span class="st">&quot;LI&quot;</span>),</span>
-<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>    <span class="at">definition =</span> <span class="st">&quot;http://data.europa.eu/bna/c_6c2bb82d&quot;</span>, </span>
-<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>    <span class="at">namespace =</span> <span class="st">&quot;https://www.geonames.org/countries/$1/&quot;</span>), </span>
-<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>  <span class="at">gdp =</span> <span class="fu">defined</span>(</span>
-<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>    <span class="fu">c</span>(<span class="dv">3897</span>, <span class="dv">7365</span>), </span>
-<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>    <span class="at">label =</span> <span class="st">&quot;Gross Domestic Product&quot;</span>, </span>
-<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a>    <span class="at">unit =</span> <span class="st">&quot;million dollars&quot;</span>, </span>
-<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a>    <span class="at">definition =</span> <span class="st">&quot;http://data.europa.eu/83i/aa/GDP&quot;</span>), </span>
-<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a>  <span class="at">population =</span> <span class="fu">defined</span>(</span>
-<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a>    <span class="fu">c</span>(<span class="dv">77543</span>, <span class="dv">40015</span>), </span>
-<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a>    <span class="at">label =</span> <span class="st">&quot;Population&quot;</span>,</span>
-<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a>    <span class="at">definition =</span> <span class="st">&quot;http://data.europa.eu/bna/c_f2b50efd&quot;</span>), </span>
-<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a>  <span class="at">dataset_bibentry =</span> <span class="fu">dublincore</span>(</span>
-<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a>        <span class="at">creator =</span> <span class="fu">person</span>(<span class="at">given=</span><span class="st">&quot;Jane&quot;</span>, <span class="at">family=</span><span class="st">&quot;Doe&quot;</span>), </span>
-<span id="cb2-18"><a href="#cb2-18" tabindex="-1"></a>        <span class="at">title =</span> <span class="st">&quot;Small Country Dataset&quot;</span>, </span>
-<span id="cb2-19"><a href="#cb2-19" tabindex="-1"></a>        <span class="at">publisher =</span> <span class="st">&quot;Reprex&quot;</span></span>
-<span id="cb2-20"><a href="#cb2-20" tabindex="-1"></a>  )</span>
-<span id="cb2-21"><a href="#cb2-21" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">options</span>(<span class="at">sciphen =</span> <span class="dv">4</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>small_country_dataset <span class="ot">&lt;-</span> <span class="fu">dataset_df</span>(</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>  <span class="at">country_name =</span> <span class="fu">defined</span>(</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>    <span class="fu">c</span>(<span class="st">&quot;AD&quot;</span>, <span class="st">&quot;LI&quot;</span>),</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>    <span class="at">concept =</span> <span class="st">&quot;http://data.europa.eu/bna/c_6c2bb82d&quot;</span>,</span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>    <span class="at">namespace =</span> <span class="st">&quot;https://www.geonames.org/countries/$1/&quot;</span></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>  ),</span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a>  <span class="at">gdp =</span> <span class="fu">defined</span>(</span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a>    <span class="fu">c</span>(<span class="dv">3897</span>, <span class="dv">7365</span>),</span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a>    <span class="at">label =</span> <span class="st">&quot;Gross Domestic Product&quot;</span>,</span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a>    <span class="at">unit =</span> <span class="st">&quot;million dollars&quot;</span>,</span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a>    <span class="at">concept =</span> <span class="st">&quot;http://data.europa.eu/83i/aa/GDP&quot;</span></span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a>  ),</span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a>  <span class="at">population =</span> <span class="fu">defined</span>(</span>
+<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a>    <span class="fu">c</span>(<span class="dv">77543</span>, <span class="dv">40015</span>),</span>
+<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a>    <span class="at">label =</span> <span class="st">&quot;Population&quot;</span>,</span>
+<span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a>    <span class="at">concept =</span> <span class="st">&quot;http://data.europa.eu/bna/c_f2b50efd&quot;</span></span>
+<span id="cb3-18"><a href="#cb3-18" tabindex="-1"></a>  ),</span>
+<span id="cb3-19"><a href="#cb3-19" tabindex="-1"></a>  <span class="at">dataset_bibentry =</span> <span class="fu">dublincore</span>(</span>
+<span id="cb3-20"><a href="#cb3-20" tabindex="-1"></a>    <span class="at">creator =</span> <span class="fu">person</span>(<span class="at">given =</span> <span class="st">&quot;Jane&quot;</span>, <span class="at">family =</span> <span class="st">&quot;Doe&quot;</span>),</span>
+<span id="cb3-21"><a href="#cb3-21" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Small Country Dataset&quot;</span>,</span>
+<span id="cb3-22"><a href="#cb3-22" tabindex="-1"></a>    <span class="at">publisher =</span> <span class="st">&quot;Reprex&quot;</span></span>
+<span id="cb3-23"><a href="#cb3-23" tabindex="-1"></a>  )</span>
+<span id="cb3-24"><a href="#cb3-24" tabindex="-1"></a>)</span></code></pre></div>
 <p>If you want to work with the data in the data.frame, you must know if
 the GDP is expressed in euros, dollars, thousands, millions or billions,
 in order to get to a meaningful GDP/capita figure.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">summary</span>(small_country_dataset<span class="sc">$</span>gdp)</span>
-<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="co">#&gt; Gross Domestic Product (million dollars)</span></span>
-<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co">#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span></span>
-<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co">#&gt;    3897    4764    5631    5631    6498    7365</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">summary</span>(small_country_dataset<span class="sc">$</span>gdp)</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="co">#&gt; Gross Domestic Product (million dollars)</span></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co">#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="co">#&gt;    3897    4764    5631    5631    6498    7365</span></span></code></pre></div>
 <p>Because the GDP is expressed in millions of dollars, we have to
 adjust the nominator to dollars to get the GDP per capita express in
 <em>dollars</em>.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>small_country_dataset<span class="sc">$</span>gdp_capita <span class="ot">&lt;-</span> <span class="fu">defined</span>(</span>
-<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>  small_country_dataset<span class="sc">$</span>gdp<span class="sc">*</span><span class="fl">1e6</span> <span class="sc">/</span> small_country_dataset<span class="sc">$</span>population, </span>
-<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>  <span class="at">unit =</span> <span class="st">&quot;dollar&quot;</span>, </span>
-<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>  <span class="at">label =</span> <span class="st">&quot;GDP Per Capita&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>small_country_dataset<span class="sc">$</span>gdp_capita <span class="ot">&lt;-</span> <span class="fu">defined</span>(</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>  small_country_dataset<span class="sc">$</span>gdp <span class="sc">*</span> <span class="fl">1e6</span> <span class="sc">/</span> small_country_dataset<span class="sc">$</span>population,</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>  <span class="at">unit =</span> <span class="st">&quot;dollar&quot;</span>,</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>  <span class="at">label =</span> <span class="st">&quot;GDP Per Capita&quot;</span></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>)</span></code></pre></div>
 <p>The <code>var_unit(small_country_dataset$gdp_capita)</code> command
 returns dollar and
 <code>var_label(small_country_dataset$gdp_capita)</code> returns GDP Per
@@ -484,22 +711,26 @@ definitions from a musicological context. While music from Andorra may
 share some semantic definitions of our tiny socio-economic dataset that
 observes Andorra’s GDP and population, it is unlikely that the
 observation and variable definition will lack a broad context.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>small_country_musicians <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>  <span class="at">qid =</span> <span class="fu">c</span>(<span class="st">&quot;Q275912&quot;</span>, <span class="st">&quot;Q116196078&quot;</span>),</span>
-<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>  <span class="at">artist_name =</span> <span class="fu">defined</span>(</span>
-<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>    <span class="fu">c</span>(<span class="st">&quot;Marta Roure&quot;</span>, <span class="st">&quot;wavvyboi&quot;</span>), </span>
-<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>    <span class="at">definition =</span> <span class="st">&quot;https://www.wikidata.org/wiki/Property:P2093&quot;</span>), </span>
-<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>  <span class="at">location =</span> <span class="fu">defined</span>(</span>
-<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>    <span class="fu">c</span>(<span class="st">&quot;Andorra&quot;</span>, <span class="st">&quot;Lichtenstein&quot;</span>), </span>
-<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>    <span class="at">definition =</span> <span class="st">&quot;https://www.wikidata.org/wiki/Property:P276&quot;</span>), </span>
-<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a>  <span class="at">date_of_birth =</span> <span class="fu">defined</span>(</span>
-<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a>    <span class="fu">c</span>(<span class="fu">as.Date</span>(<span class="st">&quot;1981-01-16&quot;</span>), <span class="fu">as.Date</span>(<span class="st">&quot;1998-04-28&quot;</span>)), </span>
-<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a>      <span class="at">definition =</span> <span class="st">&quot;https://www.wikidata.org/wiki/Property:P569&quot;</span>)</span>
-<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a>)</span>
-<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a></span>
-<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a>small_country_musicians<span class="sc">$</span>age <span class="ot">&lt;-</span> <span class="fu">defined</span>(</span>
-<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a>  <span class="dv">2024</span><span class="sc">-</span><span class="fu">as.integer</span>(<span class="fu">substr</span>(<span class="fu">as.character</span>(small_country_musicians<span class="sc">$</span>date_of_birth), <span class="dv">1</span>,<span class="dv">4</span>)), </span>
-<span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a>  <span class="at">label =</span> <span class="st">&quot;Age in 2024&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>small_country_musicians <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>  <span class="at">qid =</span> <span class="fu">c</span>(<span class="st">&quot;Q275912&quot;</span>, <span class="st">&quot;Q116196078&quot;</span>),</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>  <span class="at">artist_name =</span> <span class="fu">defined</span>(</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>    <span class="fu">c</span>(<span class="st">&quot;Marta Roure&quot;</span>, <span class="st">&quot;wavvyboi&quot;</span>),</span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>    <span class="at">concept =</span> <span class="st">&quot;https://www.wikidata.org/wiki/Property:P2093&quot;</span></span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>  ),</span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>  <span class="at">location =</span> <span class="fu">defined</span>(</span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>    <span class="fu">c</span>(<span class="st">&quot;Andorra&quot;</span>, <span class="st">&quot;Lichtenstein&quot;</span>),</span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a>    <span class="at">concept =</span> <span class="st">&quot;https://www.wikidata.org/wiki/Property:P276&quot;</span></span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a>  ),</span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a>  <span class="at">date_of_birth =</span> <span class="fu">defined</span>(</span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a>    <span class="fu">c</span>(<span class="fu">as.Date</span>(<span class="st">&quot;1981-01-16&quot;</span>), <span class="fu">as.Date</span>(<span class="st">&quot;1998-04-28&quot;</span>)),</span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a>    <span class="at">concept =</span> <span class="st">&quot;https://www.wikidata.org/wiki/Property:P569&quot;</span></span>
+<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a>  )</span>
+<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a>)</span>
+<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a></span>
+<span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a>small_country_musicians<span class="sc">$</span>age <span class="ot">&lt;-</span> <span class="fu">defined</span>(</span>
+<span id="cb6-18"><a href="#cb6-18" tabindex="-1"></a>  <span class="dv">2024</span> <span class="sc">-</span> <span class="fu">as.integer</span>(<span class="fu">substr</span>(<span class="fu">as.character</span>(small_country_musicians<span class="sc">$</span>date_of_birth), <span class="dv">1</span>, <span class="dv">4</span>)),</span>
+<span id="cb6-19"><a href="#cb6-19" tabindex="-1"></a>  <span class="at">label =</span> <span class="st">&quot;Age in 2024&quot;</span></span>
+<span id="cb6-20"><a href="#cb6-20" tabindex="-1"></a>)</span></code></pre></div>
 <p>Specifically, our first dataset’s general semantic context is about
 countries as observational units and statistical variables related to
 them, while the second contains individual musical recordings and
@@ -507,21 +738,22 @@ observed musicological values of such recordings, a general property of
 the dataset that can be applied to the entire dataset. Similarly,
 important provenance information, authorship, use rights, and so on,
 apply to the dataset, not to its specific cells.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">summary</span>(small_country_musicians)</span>
-<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="co">#&gt;      qid            artist_name          location         date_of_birth       </span></span>
-<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="co">#&gt;  Length:2           Length:2           Length:2           Min.   :1981-01-16  </span></span>
-<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="co">#&gt;  Class :character   Class :character   Class :character   1st Qu.:1985-05-12  </span></span>
-<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="co">#&gt;  Mode  :character   Mode  :character   Mode  :character   Median :1989-09-06  </span></span>
-<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="co">#&gt;                                                           Mean   :1989-09-06  </span></span>
-<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="co">#&gt;                                                           3rd Qu.:1994-01-01  </span></span>
-<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a><span class="co">#&gt;                                                           Max.   :1998-04-28  </span></span>
-<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a><span class="co">#&gt;       age       </span></span>
-<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a><span class="co">#&gt;  Min.   :26.00  </span></span>
-<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a><span class="co">#&gt;  1st Qu.:30.25  </span></span>
-<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a><span class="co">#&gt;  Median :34.50  </span></span>
-<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a><span class="co">#&gt;  Mean   :34.50  </span></span>
-<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a><span class="co">#&gt;  3rd Qu.:38.75  </span></span>
-<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a><span class="co">#&gt;  Max.   :43.00</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">summary</span>(small_country_musicians)</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="co">#&gt; Age in 2024</span></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="co">#&gt;      qid            artist_name          location         date_of_birth       </span></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="co">#&gt;  Length:2           Length:2           Length:2           Min.   :1981-01-16  </span></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="co">#&gt;  Class :character   Class :character   Class :character   1st Qu.:1985-05-12  </span></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="co">#&gt;  Mode  :character   Mode  :character   Mode  :character   Median :1989-09-06  </span></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="co">#&gt;                                                           Mean   :1989-09-06  </span></span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a><span class="co">#&gt;                                                           3rd Qu.:1994-01-01  </span></span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a><span class="co">#&gt;                                                           Max.   :1998-04-28  </span></span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a><span class="co">#&gt;       age       </span></span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a><span class="co">#&gt;  Min.   :26.00  </span></span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a><span class="co">#&gt;  1st Qu.:30.25  </span></span>
+<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a><span class="co">#&gt;  Median :34.50  </span></span>
+<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a><span class="co">#&gt;  Mean   :34.50  </span></span>
+<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a><span class="co">#&gt;  3rd Qu.:38.75  </span></span>
+<span id="cb7-16"><a href="#cb7-16" tabindex="-1"></a><span class="co">#&gt;  Max.   :43.00</span></span></code></pre></div>
 <p>The current version of dataset made efforts to record such
 information with applying two globally used metadata standards, the
 Dublin Core terms used by most librarians and perhaps the majority of
@@ -576,13 +808,15 @@ connection of various actionable, persistent identifiers. (Check out on
 the linked page for example: <em>sovereign microstate between France and
 Spain, in Western Europe</em>, or <a href="https://www.geonames.org/3041565/" class="uri">https://www.geonames.org/3041565/</a> or
 <code>https://isni.org/isni/000000012150090X/</code>.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co"># install.packages(&quot;devtools&quot;)</span></span>
-<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;dataobservatory-eu/wbdataset&quot;</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">library</span>(wbdataset)</span>
-<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="fu">get_item</span>(<span class="at">qid=</span><span class="fu">c</span>(<span class="st">&quot;Q228&quot;</span>, <span class="st">&quot;Q347&quot;</span>), </span>
-<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>         <span class="at">language=</span><span class="fu">c</span>(<span class="st">&quot;en&quot;</span>, <span class="st">&quot;nl&quot;</span>), </span>
-<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>         <span class="at">creator=</span><span class="fu">person</span>(<span class="st">&quot;Jane Doe&quot;</span>), </span>
-<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>         <span class="at">title=</span><span class="st">&quot;Small Countries&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="co"># install.packages(&quot;devtools&quot;)</span></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;dataobservatory-eu/wbdataset&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">library</span>(wbdataset)</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="fu">get_item</span>(</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>  <span class="at">qid =</span> <span class="fu">c</span>(<span class="st">&quot;Q228&quot;</span>, <span class="st">&quot;Q347&quot;</span>),</span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>  <span class="at">language =</span> <span class="fu">c</span>(<span class="st">&quot;en&quot;</span>, <span class="st">&quot;nl&quot;</span>),</span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>  <span class="at">creator =</span> <span class="fu">person</span>(<span class="st">&quot;Jane Doe&quot;</span>),</span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>  <span class="at">title =</span> <span class="st">&quot;Small Countries&quot;</span></span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a>)</span></code></pre></div>
 <p>With a <code>wbdataset</code> object, it is important that the key
 column is a QID. Following the notations of tidyverse, instead of the
 tibble::rowid_to_colum, we create a`wbdataset::qid_to_column function
@@ -596,20 +830,22 @@ Wikibase-created database. For example, <a href="https://www.wikidata.org/wiki/P
 the date of birth, and <a href="https://www.wikidata.org/wiki/Property:P276">P276</a> denotes a
 location (of the data subject), and <a href="https://www.wikidata.org/wiki/Property:P3629">P3629</a> the age of
 subject at event.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>small_country_musicians <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>  <span class="at">qid =</span> <span class="fu">c</span>(<span class="st">&quot;Q275912&quot;</span>, <span class="st">&quot;Q116196078&quot;</span>),</span>
-<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>  <span class="at">label =</span> <span class="fu">c</span>(<span class="st">&quot;Marta Roure&quot;</span>, <span class="st">&quot;wavvyboi&quot;</span>), </span>
-<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>  <span class="at">P276 =</span> <span class="fu">c</span>(<span class="st">&quot;Andorra&quot;</span>, <span class="st">&quot;Lichtenstein&quot;</span>), </span>
-<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>  <span class="at">P569 =</span> <span class="fu">c</span>(<span class="fu">as.Date</span>(<span class="st">&quot;1981-01-16&quot;</span>), <span class="fu">as.Date</span>(<span class="st">&quot;1998-04-28&quot;</span>))</span>
-<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>)</span>
-<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a></span>
-<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a><span class="do">## And the age</span></span>
-<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a>small_country_musicians<span class="sc">$</span>P3629 <span class="ot">&lt;-</span> <span class="dv">2024</span><span class="sc">-</span><span class="fu">as.integer</span>(<span class="fu">substr</span>(small_country_musicians<span class="sc">$</span>P569, <span class="dv">1</span>,<span class="dv">4</span>))</span>
-<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a></span>
-<span id="cb9-11"><a href="#cb9-11" tabindex="-1"></a>small_country_musicians</span>
-<span id="cb9-12"><a href="#cb9-12" tabindex="-1"></a><span class="co">#&gt;          qid       label         P276       P569 P3629</span></span>
-<span id="cb9-13"><a href="#cb9-13" tabindex="-1"></a><span class="co">#&gt; 1    Q275912 Marta Roure      Andorra 1981-01-16    43</span></span>
-<span id="cb9-14"><a href="#cb9-14" tabindex="-1"></a><span class="co">#&gt; 2 Q116196078    wavvyboi Lichtenstein 1998-04-28    26</span></span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>small_country_musicians <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>  <span class="at">qid =</span> <span class="fu">c</span>(<span class="st">&quot;Q275912&quot;</span>, <span class="st">&quot;Q116196078&quot;</span>),</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>  <span class="at">label =</span> <span class="fu">c</span>(<span class="st">&quot;Marta Roure&quot;</span>, <span class="st">&quot;wavvyboi&quot;</span>),</span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>  <span class="at">P276 =</span> <span class="fu">c</span>(<span class="st">&quot;Andorra&quot;</span>, <span class="st">&quot;Lichtenstein&quot;</span>),</span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>  <span class="at">P569 =</span> <span class="fu">c</span>(<span class="fu">as.Date</span>(<span class="st">&quot;1981-01-16&quot;</span>), <span class="fu">as.Date</span>(<span class="st">&quot;1998-04-28&quot;</span>))</span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>)</span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a></span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a><span class="do">## And the age</span></span>
+<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a>small_country_musicians<span class="sc">$</span>P3629 <span class="ot">&lt;-</span> <span class="dv">2024</span> <span class="sc">-</span> <span class="fu">as.integer</span>(</span>
+<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a>  <span class="fu">substr</span>(small_country_musicians<span class="sc">$</span>P569, <span class="dv">1</span>, <span class="dv">4</span>)</span>
+<span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a>)</span>
+<span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a></span>
+<span id="cb10-13"><a href="#cb10-13" tabindex="-1"></a>small_country_musicians</span>
+<span id="cb10-14"><a href="#cb10-14" tabindex="-1"></a><span class="co">#&gt;          qid       label         P276       P569 P3629</span></span>
+<span id="cb10-15"><a href="#cb10-15" tabindex="-1"></a><span class="co">#&gt; 1    Q275912 Marta Roure      Andorra 1981-01-16    43</span></span>
+<span id="cb10-16"><a href="#cb10-16" tabindex="-1"></a><span class="co">#&gt; 2 Q116196078    wavvyboi Lichtenstein 1998-04-28    26</span></span></code></pre></div>
 <p>Recalling the tidy data definition, the cell values may be numbers or
 “strings for qualitative information”. We extend the possibilities to
 further options following the RDF standards:</p>
@@ -634,29 +870,31 @@ xs:time.</li>
 <li>Well-defined concepts should contain a URI, or a curie (a shortened
 version of the URI) should be serialised as xs:anyURI.</li>
 </ul>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>small_country_musicians <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>  <span class="at">qid =</span> <span class="fu">c</span>(<span class="st">&quot;Q275912&quot;</span>, <span class="st">&quot;Q116196078&quot;</span>),</span>
-<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>  <span class="at">label =</span> <span class="fu">c</span>(<span class="st">&quot;Marta Roure&quot;</span>, <span class="st">&quot;wavvyboi&quot;</span>), </span>
-<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>  <span class="at">P276 =</span> <span class="fu">c</span>(<span class="st">&quot;Q228&quot;</span>, <span class="st">&quot;Q347&quot;</span>), </span>
-<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>  <span class="at">P569 =</span> <span class="fu">c</span>(<span class="fu">as.Date</span>(<span class="st">&quot;1981-01-16&quot;</span>), <span class="fu">as.Date</span>(<span class="st">&quot;1998-04-28&quot;</span>))</span>
-<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>)</span>
-<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a></span>
-<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a><span class="do">## And the age</span></span>
-<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a>small_country_musicians<span class="sc">$</span>P3629 <span class="ot">&lt;-</span> <span class="dv">2024</span><span class="sc">-</span><span class="fu">as.integer</span>(<span class="fu">substr</span>(small_country_musicians<span class="sc">$</span>P569, <span class="dv">1</span>,<span class="dv">4</span>))</span>
-<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a></span>
-<span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a>small_country_musicians<span class="sc">$</span>P569 <span class="ot">&lt;-</span> dataset<span class="sc">::</span><span class="fu">xsd_convert</span>(small_country_musicians<span class="sc">$</span>P569)</span>
-<span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a>small_country_musicians<span class="sc">$</span>P3629 <span class="ot">&lt;-</span> dataset<span class="sc">::</span><span class="fu">xsd_convert</span>(small_country_musicians<span class="sc">$</span>P3629)</span>
-<span id="cb10-13"><a href="#cb10-13" tabindex="-1"></a></span>
-<span id="cb10-14"><a href="#cb10-14" tabindex="-1"></a>small_country_musicians</span>
-<span id="cb10-15"><a href="#cb10-15" tabindex="-1"></a><span class="co">#&gt;          qid       label P276                    P569              P3629</span></span>
-<span id="cb10-16"><a href="#cb10-16" tabindex="-1"></a><span class="co">#&gt; 1    Q275912 Marta Roure Q228 &quot;1981-01-16&quot;^^&lt;xs:date&gt; &quot;43&quot;^^&lt;xs:decimal&gt;</span></span>
-<span id="cb10-17"><a href="#cb10-17" tabindex="-1"></a><span class="co">#&gt; 2 Q116196078    wavvyboi Q347 &quot;1998-04-28&quot;^^&lt;xs:date&gt; &quot;26&quot;^^&lt;xs:decimal&gt;</span></span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>small_country_musicians <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>  <span class="at">qid =</span> <span class="fu">c</span>(<span class="st">&quot;Q275912&quot;</span>, <span class="st">&quot;Q116196078&quot;</span>),</span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>  <span class="at">label =</span> <span class="fu">c</span>(<span class="st">&quot;Marta Roure&quot;</span>, <span class="st">&quot;wavvyboi&quot;</span>),</span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a>  <span class="at">P276 =</span> <span class="fu">c</span>(<span class="st">&quot;Q228&quot;</span>, <span class="st">&quot;Q347&quot;</span>),</span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a>  <span class="at">P569 =</span> <span class="fu">c</span>(<span class="fu">as.Date</span>(<span class="st">&quot;1981-01-16&quot;</span>), <span class="fu">as.Date</span>(<span class="st">&quot;1998-04-28&quot;</span>))</span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a>)</span>
+<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a></span>
+<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a><span class="do">## And the age</span></span>
+<span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a>small_country_musicians<span class="sc">$</span>P3629 <span class="ot">&lt;-</span> <span class="dv">2024</span> <span class="sc">-</span> <span class="fu">as.integer</span>(</span>
+<span id="cb11-10"><a href="#cb11-10" tabindex="-1"></a>  <span class="fu">substr</span>(small_country_musicians<span class="sc">$</span>P569, <span class="dv">1</span>, <span class="dv">4</span>)</span>
+<span id="cb11-11"><a href="#cb11-11" tabindex="-1"></a>)</span>
+<span id="cb11-12"><a href="#cb11-12" tabindex="-1"></a></span>
+<span id="cb11-13"><a href="#cb11-13" tabindex="-1"></a>small_country_musicians<span class="sc">$</span>P569 <span class="ot">&lt;-</span> dataset<span class="sc">::</span><span class="fu">xsd_convert</span>(small_country_musicians<span class="sc">$</span>P569)</span>
+<span id="cb11-14"><a href="#cb11-14" tabindex="-1"></a>small_country_musicians<span class="sc">$</span>P3629 <span class="ot">&lt;-</span> dataset<span class="sc">::</span><span class="fu">xsd_convert</span>(small_country_musicians<span class="sc">$</span>P3629)</span>
+<span id="cb11-15"><a href="#cb11-15" tabindex="-1"></a></span>
+<span id="cb11-16"><a href="#cb11-16" tabindex="-1"></a>small_country_musicians</span>
+<span id="cb11-17"><a href="#cb11-17" tabindex="-1"></a><span class="co">#&gt;          qid       label P276                    P569              P3629</span></span>
+<span id="cb11-18"><a href="#cb11-18" tabindex="-1"></a><span class="co">#&gt; 1    Q275912 Marta Roure Q228 &quot;1981-01-16&quot;^^&lt;xs:date&gt; &quot;43&quot;^^&lt;xs:decimal&gt;</span></span>
+<span id="cb11-19"><a href="#cb11-19" tabindex="-1"></a><span class="co">#&gt; 2 Q116196078    wavvyboi Q347 &quot;1998-04-28&quot;^^&lt;xs:date&gt; &quot;26&quot;^^&lt;xs:decimal&gt;</span></span></code></pre></div>
 <p>We can also add the prefix to any concepts that are well-defined:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>small_country_musicians<span class="sc">$</span>P276 <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;https://www.wikidata.org/wiki/&quot;</span>, small_country_musicians<span class="sc">$</span>P276)</span>
-<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>small_country_musicians[, <span class="dv">2</span><span class="sc">:</span><span class="dv">4</span>]</span>
-<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a><span class="co">#&gt;         label                               P276                    P569</span></span>
-<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a><span class="co">#&gt; 1 Marta Roure https://www.wikidata.org/wiki/Q228 &quot;1981-01-16&quot;^^&lt;xs:date&gt;</span></span>
-<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a><span class="co">#&gt; 2    wavvyboi https://www.wikidata.org/wiki/Q347 &quot;1998-04-28&quot;^^&lt;xs:date&gt;</span></span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>small_country_musicians<span class="sc">$</span>P276 <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;https://www.wikidata.org/wiki/&quot;</span>, small_country_musicians<span class="sc">$</span>P276)</span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>small_country_musicians[, <span class="dv">2</span><span class="sc">:</span><span class="dv">4</span>]</span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a><span class="co">#&gt;         label                               P276                    P569</span></span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a><span class="co">#&gt; 1 Marta Roure https://www.wikidata.org/wiki/Q228 &quot;1981-01-16&quot;^^&lt;xs:date&gt;</span></span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a><span class="co">#&gt; 2    wavvyboi https://www.wikidata.org/wiki/Q347 &quot;1998-04-28&quot;^^&lt;xs:date&gt;</span></span></code></pre></div>
 </div>
 <div id="the-future-datacube-package" class="section level3">
 <h3>The future datacube package</h3>

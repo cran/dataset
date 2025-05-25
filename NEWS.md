@@ -1,6 +1,40 @@
+# dataset 0.3.4027
+
+- The new `bibrecord()` class is handles is the superclass of the `dublincore` and
+`datacite()` classes; these classes have a new print method and they are conforming
+the current library standard DCTERMS and current repository standard DataCite;
+unlike `utils::bibentry()`, they handle contributors and their roles, identifiers, 
+and many other attributes.
+- Breaking change: the `definition` metadata field in the `defined()` class is 
+changed to the more understandable `concept` name.
+- The `defined()` vectors print nicely, and the `dataset_df()` class is more 
+readable, too.
+- The missing examples are present, including examples on the use of the 
+semantically richer `orange_df` example dataset.
+- Many code quality improvements and new tests.
+
+# dataset 0.3.4023
+
+- Changed `iris_df` to `orange_df` in all examples
+- `xsd_convert()` handles difftime classes and edge cases
+- Small errors fixed in examples
+- Test coverage increased
+
+# dataset 0.3.4021
+
+- Added support for generic vector methods: `length()`, `head()`, `tail()`, `as.vector()`, `as.list()`, and subsetting (`[`, `[[`).
+- Implemented comparison methods (`==`, `<`, `>`, etc.) that operate on the underlying data while maintaining semantic integrity.
+- Introduced custom `print()` and `format()` methods that summarise metadata (label, unit, definition) in a concise and human-readable manner.
+- Improved the `summary()` method for `defined` vectors to display variable metadata and integrate seamlessly with base R statistics.
+- Enhanced the `c()` method to validate compatibility across all semantic attributes (`label`, `unit`, `definition`, `namespace`) before concatenation.
+- Extended vignette with richer examples and explanations of semantic validation, namespaces, and metadata access.
+- `compare_creators()` internal function to add all creators to joined datasets.
+
+This update significantly improves the usability and robustness of semantically enriched vectors in both interactive and programmatic workflows.
+
 # dataset 0.3.4
 
-- New release candidate on CRAN.
+- New release on CRAN.
 
 # dataset 0.3.2
 
@@ -84,7 +118,7 @@ A minor correction to avoid vignettes downloading data from the Eurostat data wa
 
 # dataset 0.1.3.
 
-* Vignette articles started to develop and consult the development plan of the project. See  [From dataset To RDF](https://dataset.dataobservatory.eu/articles/RDF.html), _Export and Publish A dataset Object_, _Datasets with FAIR metadata_, all [comments](https://github.com/dataobservatory-eu/dataset/issues/) are welcome.
+* Vignette articles started to develop and consult the development plan of the project. See  [From dataset To RDF](https://dataset.dataobservatory.eu/articles/rdf.html), _Export and Publish A dataset Object_, _Datasets with FAIR metadata_, all [comments](https://github.com/dataobservatory-eu/dataset/issues/) are welcome.
 * New functions: `download_dataset()`, `datacite()`, and the `dataset()` constructor.
 
 # dataset 0.1.2.
@@ -96,4 +130,4 @@ A minor correction to avoid vignettes downloading data from the Eurostat data wa
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.6703765.svg)](https://doi.org/10.5281/zenodo.6703765) First development version release.
 
-* Added the [Motivation of the dataset package](https://dataset.dataobservatory.eu/articles/motivation.html) vignette article.
+* Added the [Motivation of the dataset package](https://dataset.dataobservatory.eu/articles/Motivation.html) vignette article.

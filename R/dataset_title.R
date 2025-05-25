@@ -9,13 +9,13 @@
 #' a dataset object with the changed (main) title.
 #' @family Bibliographic reference functions
 #' @examples
-#' dataset_title(iris_dataset)
-#' dataset_title(iris_dataset, overwrite = TRUE) <-"The Famous Iris Dataset"
-#' dataset_title(iris_dataset)
+#' dataset_title(orange_df)
+#' dataset_title(orange_df, overwrite = TRUE) <- "The Growth of Orange Trees"
+#' dataset_title(orange_df)
 #' @export
 
 dataset_title <- function(x) {
-  if(!is.dataset_df(x)) {
+  if (!is.dataset_df(x)) {
     stop("dataset_title(x) must be a dataset object created with dataset() or as_dataset_df().")
   }
 
@@ -29,9 +29,8 @@ dataset_title <- function(x) {
 #' property instead of overwriting it. Defaults to \code{FALSE}.
 #' @importFrom stats setNames
 #' @export
-`dataset_title<-` <- function(x,  overwrite = FALSE, value) {
-
-  if(!is.dataset_df(x)) {
+`dataset_title<-` <- function(x, overwrite = FALSE, value) {
+  if (!is.dataset_df(x)) {
     stop("title(x) <- x must be a dataset object created with dataset() or as_dataset_df().")
   }
 
@@ -43,25 +42,12 @@ dataset_title <- function(x) {
     return(x)
   }
 
-  if ( any(c("character", "factor") %in% class(value)) ) {
-    if (length(value)>1) {
+  if (inherits(value, "factor") || inherits(value, "character")) {
+    if (length(value) > 1) {
       stop("title(x) <- value: if you have multiple titles, use dataset_title_create()")
-    } else {
-      #value <- dataset_title_create(Title = value,
-      #                             titleType = "Title")
-    }
-  }
+    }}
 
-  #if (! inherits(value, 'list')) {
-  #  stop("title(x) <- value: value must be a character, a factor, or a list object.")
-  #}
-
-  #if (! all(names(value) %in%  c("Title", "AlternativeTitle", "Subtitle", "TranslatedTitle", "Other"))) {
-  #  stop("title(x) <- value: value must be a list object with a'Title' and optional 'AlternativeTitle', `Subtitle`, `TranslatedTitle` and `Other` columns.")
-  #}
-
-
-  if (! ds_bibentry$title %in% c(":unas", ":tba", "") & ! overwrite ) {
+  if (!ds_bibentry$title %in% c(":unas", ":tba", "") && !overwrite) {
     warning("The dataset already has a title: ", ds_bibentry$title)
   } else {
     ds_bibentry$title <- value

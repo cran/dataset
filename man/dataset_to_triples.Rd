@@ -8,14 +8,15 @@ dataset_to_triples(x, idcol = NULL)
 }
 \arguments{
 \item{x}{An R object that contains the data of the dataset (a data.frame or
-inherited from \code{\link[base:data.frame]{data.frame}}), for example, \code{\link[=dataset_df]{dataset_df()}}.}
+inherited from \code{\link[base:data.frame]{data.frame}}), for example,
+\code{\link[=dataset_df]{dataset_df()}}.}
 
-\item{idcol}{The identifier column. If \code{idcol} is \code{NULL} it attempts to
-use the \code{row.names(df)} as an \code{idcol}.}
+\item{idcol}{The identifier column. If \code{idcol} is \code{NULL} it
+attempts to use the \code{row.names(df)} as an \code{idcol}.}
 }
 \value{
-The long form version of the original dataset, retaining the attributes
-and class.
+The long form version of the original dataset, retaining the
+attributes and class.
 }
 \description{
 The dataset is converted into a three-column long format with
@@ -23,5 +24,5 @@ columns \code{s} for subject, \code{p} for predicate and \code{o} for
 object.
 }
 \examples{
-dataset_to_triples(iris_dataset)
+dataset_to_triples(orange_df)
 }

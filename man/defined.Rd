@@ -3,7 +3,6 @@
 \name{defined}
 \alias{defined}
 \alias{is.defined}
-\alias{as.character.haven_labelled_defined}
 \alias{summary.haven_labelled_defined}
 \title{Create a semantically well-defined, labelled vector}
 \usage{
@@ -12,13 +11,12 @@ defined(
   labels = NULL,
   label = NULL,
   unit = NULL,
-  definition = NULL,
-  namespace = NULL
+  concept = NULL,
+  namespace = NULL,
+  ...
 )
 
 is.defined(x)
-
-\method{as.character}{haven_labelled_defined}(x, ...)
 
 \method{summary}{haven_labelled_defined}(object, ...)
 }
@@ -26,41 +24,58 @@ is.defined(x)
 \item{x}{A vector to label. Must be either numeric (integer or double) or
 character.}
 
-\item{labels}{A named vector or \code{NULL}. The vector should be the same type
-as \code{x}. Unlike factors, labels don't need to be exhaustive: only a fraction
-of the values might be labelled.}
+\item{labels}{A named vector or \code{NULL}. The vector should be the same type as
+\code{x}. Unlike factors, labels don't need to be exhaustive: only a fraction of
+the values might be labelled.}
 
 \item{label}{A short, human-readable description of the vector or \code{NULL}.}
 
-\item{unit}{A character string of length one containing the
-unit of measure or \code{NULL}.}
+\item{unit}{A character string of length one containing the unit of measure
+or \code{NULL}.}
 
-\item{definition}{A character string of length one containing a
-linked definition or \code{NULL}.}
+\item{concept}{A character string of length one containing a linked
+concept or \code{NULL}.}
 
-\item{namespace}{A namespace for individual observations or categories or \code{NULL}.}
+\item{namespace}{A namespace for individual observations or categories or
+\code{NULL}.}
 
 \item{...}{Further parameters for inheritance, not in use.}
 
 \item{object}{An R object to be summarised.}
 }
 \value{
-The constructor \code{defined} returns a vector with defined
-value labels, a variable label, an optional unit of measurement and linked
-definition.\cr
-\code{is.defined} returns a logical value, stateing if the object is of
-class \code{defined}.
+The constructor \code{defined} returns a vector with defined value
+labels, a variable label, an optional unit of measurement and linked
+concept.\cr \code{is.defined} returns a logical value, stating if the
+object is of class \code{defined}.
 }
 \description{
-The \code{defined} constructor creates the objects of this class, which
-are semantically extended vectors inherited from
+Creates a semantically well-defined vector enriched with metadata.
+\code{defined()} is an S3 constructor that extends numeric or character vectors
+with a human-readable label, unit of measurement, linked concept,
+and optional namespace. These objects preserve semantics while behaving
+like standard vectors in comparisons, printing, and subsetting.
+The \code{defined} constructor creates the objects of this
+class, which are semantically extended vectors inherited from
 \code{\link[haven:labelled]{haven::labelled}}.
 }
 \details{
-\code{as.character} coerces a defined vector into a character vector.\cr
-\code{summary} summarises the \code{defined} vector.\cr
-For more details, please check the \code{vignette("defined", package = "dataset")}
-vignette.
+A \code{defined} vector is an extension of a base vector with additional
+semantic metadata:
+\itemize{
+\item A \strong{label} (\code{label}): a short human-readable description
+\item A \strong{unit} (\code{unit}): e.g., "kg", "hours", "USD"
+\item A \strong{concept} (\code{concept}): a URI or textual reference
+\item A \strong{namespace} (\code{namespace}): for URI-based observation or value identifiers
+}
+
+The class inherits from \code{haven::labelled}, supports typical vector
+operations (subsetting, comparisons, printing), and integrates with
+tibbles and tidy workflows via custom \code{format()}, \code{print()}, and
+\code{as.vector()} methods.
+
+Use \code{is.defined()} to test if an object is of class \code{defined}.
+Use \code{as_numeric()} and \code{as_character()} to coerce to base types.
 }
 \examples{
 
@@ -68,20 +83,20 @@ gdp_vector <- defined(
   c(3897, 7365, 6753),
   label = "Gross Domestic Product",
   unit = "million dollars",
-  definition = "http://data.europa.eu/83i/aa/GDP"
- )
+  concept = "http://data.europa.eu/83i/aa/GDP"
+)
 
- # To check the s3 class of the vector:
- is.defined(gdp_vector)
+# To check the s3 class of the vector:
+is.defined(gdp_vector)
 
- # To print the defined vector:
- print(gdp_vector)
+# To print the defined vector:
+print(gdp_vector)
 
- # To summarise the defined vector:
- summary(gdp_vector)
+# To summarise the defined vector:
+summary(gdp_vector)
 
- # Subsetting work as expected:
- gdp_vector[1:2]
+# Subsetting work as expected:
+gdp_vector[1:2]
 }
 \seealso{
 Other defined metadata methods and functions: 

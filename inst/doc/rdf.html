@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>From R to RDF</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">From R to RDF</h1>
+
+
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(dataset)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(rdflib)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="co">#&gt; Warning: package &#39;rdflib&#39; was built under R version 4.4.1</span></span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="fu">library</span>(jsonld)</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="co">#&gt; Warning: package &#39;jsonld&#39; was built under R version 4.4.3</span></span></code></pre></div>
+<p>The <strong>RDF</strong> (Resource Description Framework) annotation
+significantly enhances the interoperability and exchangeability of
+datasets in data repositories by leveraging a standardised,
+machine-readable format for describing and linking data. This vignette
+shows how to leverage the capabilities of the <em>dataset</em> package
+with <a href="https://docs.ropensci.org/rdflib/index.html">rdflib</a>,
+an R-user-friendly wrapper on rOpenSci to work with the <em>redland</em>
+Python library for performing common tasks on rdf data, such as parsing
+and converting between formats including rdfxml, turtle, nquads,
+ntriples, and trig, creating rdf graphs, and performing SPARQL
+queries.</p>
+<div id="standardised-semantic-framework" class="section level2">
+<h2>Standardised Semantic Framework</h2>
+<p>RDF provides a common framework to describe resources and their
+relationships using triples (subject-predicate-object). This
+standardisation ensures that data from different systems can be
+understood in a unified way, regardless of the original source or
+format. Notice that this format is a stricter version of the tidy
+dataset concept, where not only on every observation is in a row, but
+there are always strictly three columns.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">data</span>(orange_df)</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>orange_df[<span class="dv">1</span>, ]</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="co">#&gt; Draper-Smith (1998): Growth of Orange Trees [dataset], https://doi.org/10.5281/zenodo.14917851</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="co">#&gt;   rowid     tree      age       circumference </span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="co">#&gt;   &lt;defined&gt; &lt;defined&gt; &lt;defined&gt; &lt;defined&gt;    </span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="co">#&gt; 1 orange:1  2 [1]     118       30</span></span></code></pre></div>
+<p>Instead of placing the relevant measurement of an observed flower
+into the intersection of columns and rows, in the triple format we put
+them next to each other:</p>
+<ul>
+<li>the first tree’s age is 118 days.</li>
+<li>the first tree’s circumference is 30 mm.</li>
+</ul>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">dataset_to_triples</span>(orange_df[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, ])[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, ]</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="co">#&gt;   s     p        o</span></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co">#&gt; 1 1 rowid orange:1</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co">#&gt; 2 2 rowid orange:2</span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co">#&gt; 3 1  tree        2</span></span></code></pre></div>
+<p>We describe the <code>dataset_df</code> datasets in such triplets,
+where each triplet is a semantic statement: it connects a single
+observation unit with a single measurement.</p>
+</div>
+<div id="enhanced-interoperability" class="section level2">
+<h2>Enhanced Interoperability</h2>
+<p>RDF uses globally unique identifiers (URIs) for resources, ensuring
+that different datasets can reference the same entities unambiguously.
+This allows seamless data integration and querying across repositories,
+even if the datasets come from diverse domains.</p>
+<p>Our <code>defined</code> class supports this enhanced
+interoperability. In the example below, an application can look up that
+the numeric values in your table conform the statistical definition of
+GDP, and they are expressed in millions of dollars; meaning that you
+have to multiply them by 1000 if you want to join them with different
+data expressed in thousands of dollars.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>gdp_vector <span class="ot">&lt;-</span> <span class="fu">defined</span>(</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>  <span class="fu">c</span>(<span class="dv">3897</span>, <span class="dv">7365</span>, <span class="dv">6753</span>),</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>  <span class="at">label =</span> <span class="st">&quot;Gross Domestic Product&quot;</span>,</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>  <span class="at">unit =</span> <span class="st">&quot;https://rdf.vegdata.no/V440/v440-doc/v440-brudata-owl-doc/unit_MillionUSD.html&quot;</span>,</span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>  <span class="at">concept =</span> <span class="st">&quot;http://data.europa.eu/83i/aa/GDP&quot;</span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>)</span></code></pre></div>
+<p>There are several ways to add permanent identifiers to observational
+units, variable definitions, and specific observed values. The simplest
+(but certainly not the easiest to read for a human eye) standard format
+for writing them into a plain text file that you can share online is the
+<a href="https://www.w3.org/TR/n-triples/">RDF 1.1 N-Triples</a>
+format.The NTriple format creates URIs (similarly formatted as URLs) for
+the definitions that can be looked up in an online resource. This can be
+combined with literal strings that may also include information if they
+should be read back to a system as strings, doubles, integers, dates or
+date-time variables.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">n_triple</span>(</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>  <span class="at">s =</span> <span class="st">&quot;https://doi.org/10.5281/zenodo.10396807&quot;</span>, <span class="co"># permanent, global ID of the dataset</span></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>  <span class="at">p =</span> <span class="st">&quot;http://purl.org/dc/terms/description&quot;</span>, <span class="co"># library definition of &#39;description&#39;</span></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>  <span class="at">o =</span> <span class="st">&quot;The famous (Fisher&#39;s or Anderson&#39;s) iris data set.&quot;</span></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>) <span class="co"># literal string</span></span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a><span class="co">#&gt; [1] &quot;&lt;https://doi.org/10.5281/zenodo.10396807&gt; &lt;http://purl.org/dc/terms/description&gt; \&quot;The famous (Fisher&#39;s or Anderson&#39;s) iris data set.\&quot;^^&lt;http://www.w3.org/2001/XMLSchema#string&gt; .&quot;</span></span></code></pre></div>
+</div>
+<div id="richer-metaadata" class="section level2">
+<h2>Richer metaadata</h2>
+<p>RDF supports linking datasets through shared URIs, enabling the
+creation of interconnected knowledge graphs. Linked Data principles help
+relate datasets in meaningful ways, making it easier to discover,
+navigate, and integrate information. RDF annotations allow datasets to
+include detailed metadata about their structure, provenance, usage
+rights, and content. This metadata provides critical context, enabling
+automated tools to interpret and process the data effectively.</p>
+<p>Most scientific researchers are familiar with data
+<em>findability</em>, <em>accessibility</em>, <em>interoperability</em>,
+and <em>reuse</em>. Your dataset’s properties will significantly improve
+if you add standard metadata used by libraries globally (according to
+the Dublin Core standards) or the DataCite data repository standards.
+Such standards use globally shared definitions on how a title or a
+subtitle should be added to your dataset or how you can add with IRIs
+keywords that any user interprets the same way in the world, even if
+they do not speak English or your language.</p>
+<p>RDF supports the use of ontologies and controlled vocabularies (e.g.,
+DataCite, Dublin Core, Schema.org), allowing datasets to be described
+consistently within and across domains.</p>
+<p>The <code>as_dublincore</code> function allows the export of your
+dataset’s data in the Dublin Core format, and <code>as_datacite</code>
+in the DataCite format. Some of the metadata are generated behind the
+scenes, for example, timestamps or size measurements.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">as_dublincore</span>(iris_dataset, <span class="at">type =</span> <span class="st">&quot;ntriples&quot;</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="co">#&gt;  [1] &quot;&lt;https://doi.org/10.5281/zenodo.10396807&gt; &lt;http://purl.org/dc/terms/title&gt; \&quot;Iris Dataset\&quot;^^&lt;http://www.w3.org/2001/XMLSchema#string&gt; .&quot;                                            </span></span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="co">#&gt;  [2] &quot;&lt;https://doi.org/10.5281/zenodo.10396807&gt; &lt;http://purl.org/dc/terms/description&gt; \&quot;The famous (Fisher&#39;s or Anderson&#39;s) iris data set.\&quot;^^&lt;http://www.w3.org/2001/XMLSchema#string&gt; .&quot;</span></span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="co">#&gt;  [3] &quot;&lt;https://doi.org/10.5281/zenodo.10396807&gt; &lt;http://purl.org/dc/terms/creator&gt; &lt;https://viaf.org/viaf/http://viaf.org/viaf/6440526&gt; .&quot;                                                 </span></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="co">#&gt;  [4] &quot;&lt;https://doi.org/10.5281/zenodo.10396807&gt; &lt;http://purl.org/dc/terms/publisher&gt; \&quot;American Iris Society\&quot;^^&lt;http://www.w3.org/2001/XMLSchema#string&gt; .&quot;                               </span></span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="co">#&gt;  [5] &quot;&lt;https://doi.org/10.5281/zenodo.10396807&gt; &lt;http://purl.org/dc/terms/identifier&gt; &lt;https://doi.org/10.5281/zenodo.10396807&gt; .&quot;                                                         </span></span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="co">#&gt;  [6] &quot;&lt;https://doi.org/10.5281/zenodo.10396807&gt; &lt;http://purl.org/dc/terms/subject&gt; \&quot;\&quot;^^&lt;http://www.w3.org/2001/XMLSchema#string&gt; .&quot;                                                      </span></span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a><span class="co">#&gt;  [7] &quot;&lt;https://doi.org/10.5281/zenodo.10396807&gt; &lt;http://purl.org/dc/terms/type&gt; &lt;http://purl.org/dc/terms/DCMITypeDataset&gt; .&quot;                                                              </span></span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a><span class="co">#&gt;  [8] &quot;&lt;https://doi.org/10.5281/zenodo.10396807&gt; &lt;http://purl.org/dc/terms/contributor&gt; \&quot;\&quot;^^&lt;http://www.w3.org/2001/XMLSchema#string&gt; .&quot;                                                  </span></span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a><span class="co">#&gt;  [9] &quot;&lt;https://doi.org/10.5281/zenodo.10396807&gt; &lt;http://purl.org/dc/terms/language&gt; \&quot;en\&quot;^^&lt;http://www.w3.org/2001/XMLSchema#string&gt; .&quot;                                                   </span></span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a><span class="co">#&gt; [10] &quot;&lt;https://doi.org/10.5281/zenodo.10396807&gt; &lt;http://purl.org/dc/terms/source&gt; &lt;https://doi.org/10.1111/j.1469-1809.1936.tb02137.x&gt; .&quot;                                                  </span></span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a><span class="co">#&gt; [11] &quot;&lt;https://doi.org/10.5281/zenodo.10396807&gt; &lt;http://purl.org/dc/terms/coverage&gt; \&quot;:unas\&quot;^^&lt;http://www.w3.org/2001/XMLSchema#string&gt; .&quot;</span></span></code></pre></div>
+<p>Interoperability and reusability can further increase if the next
+user can trust your dataset, and has to perform less checks on it; or
+the next user can reproduce what you did. Data provenance is the
+metadata that provides a comprehensive record of the origins, history,
+and transformations of data throughout its lifecycle. Our
+<code>provenance</code> functions records some of this data
+automatically, and allow you to add more information, for example, about
+your data sources, the R packages used, the persons involved in the
+creation and review process, or the statistical transformations carried
+out.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">provenance</span>(iris_dataset)</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="co">#&gt; [1] &quot;&lt;http://example.com/dataset_prov.nt&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/ns/prov#Bundle&gt; .&quot;                      </span></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="co">#&gt; [2] &quot;&lt;http://example.com/dataset#&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/ns/prov#Entity&gt; .&quot;                             </span></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="co">#&gt; [3] &quot;&lt;http://example.com/dataset#&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://purl.org/linked-data/cube#DataSet&gt; .&quot;                     </span></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="co">#&gt; [4] &quot;&lt;http://viaf.org/viaf/6440526&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/ns/prov#Agent&gt; .&quot;                             </span></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="co">#&gt; [5] &quot;&lt;https://doi.org/10.32614/CRAN.package.dataset&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/ns/prov#SoftwareAgent&gt; .&quot;    </span></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="co">#&gt; [6] &quot;&lt;http://example.com/creation&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/ns/prov#Activity&gt; .&quot;                           </span></span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a><span class="co">#&gt; [7] &quot;&lt;http://example.com/creation&gt; &lt;http://www.w3.org/ns/prov#generatedAtTime&gt; \&quot;2025-05-22T23:19:44Z\&quot;^^&lt;http://www.w3.org/2001/XMLSchema#dateTime&gt; .&quot;</span></span></code></pre></div>
+</div>
+<div id="adding-your-dataset-into-an-rdf-triplestore" class="section level2">
+<h2>Adding your dataset into an RDF triplestore</h2>
+<p>RDF data can be stored in triple stores and queried using SPARQL, a
+powerful query language. This makes it easier to retrieve specific
+subsets of data or infer new information based on existing
+annotations</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="co"># initialise an rdf triplestore:</span></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>dataset_describe <span class="ot">&lt;-</span> <span class="fu">rdf</span>()</span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="co"># open a temporary file:</span></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>temp_prov <span class="ot">&lt;-</span> <span class="fu">tempfile</span>()</span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a><span class="co"># describe the dataset in temporary file:</span></span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a><span class="fu">describe</span>(iris_dataset, temp_prov)</span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a></span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a><span class="co"># parse temporary file into the RDF triplestore;</span></span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a><span class="fu">rdf_parse</span>(<span class="at">rdf =</span> dataset_describe, <span class="at">doc =</span> temp_prov, <span class="at">format =</span> <span class="st">&quot;ntriples&quot;</span>)</span>
+<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a><span class="co">#&gt; Total of 18 triples, stored in hashes</span></span>
+<span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a><span class="co">#&gt; -------------------------------</span></span>
+<span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a><span class="co">#&gt; &lt;http://example.com/creation&gt; &lt;http://www.w3.org/ns/prov#generatedAtTime&gt; &quot;2025-05-22T23:19:44Z&quot;^^&lt;http://www.w3.org/2001/XMLSchema#dateTime&gt; .</span></span>
+<span id="cb8-15"><a href="#cb8-15" tabindex="-1"></a><span class="co">#&gt; &lt;https://doi.org/10.32614/CRAN.package.dataset&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/ns/prov#SoftwareAgent&gt; .</span></span>
+<span id="cb8-16"><a href="#cb8-16" tabindex="-1"></a><span class="co">#&gt; &lt;http://viaf.org/viaf/6440526&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/ns/prov#Agent&gt; .</span></span>
+<span id="cb8-17"><a href="#cb8-17" tabindex="-1"></a><span class="co">#&gt; &lt;https://doi.org/10.5281/zenodo.10396807&gt; &lt;http://purl.org/dc/terms/creator&gt; &lt;https://viaf.org/viaf/http://viaf.org/viaf/6440526&gt; .</span></span>
+<span id="cb8-18"><a href="#cb8-18" tabindex="-1"></a><span class="co">#&gt; &lt;https://doi.org/10.5281/zenodo.10396807&gt; &lt;http://purl.org/dc/terms/identifier&gt; &lt;https://doi.org/10.5281/zenodo.10396807&gt; .</span></span>
+<span id="cb8-19"><a href="#cb8-19" tabindex="-1"></a><span class="co">#&gt; &lt;http://example.com/dataset_prov.nt&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/ns/prov#Bundle&gt; .</span></span>
+<span id="cb8-20"><a href="#cb8-20" tabindex="-1"></a><span class="co">#&gt; &lt;https://doi.org/10.5281/zenodo.10396807&gt; &lt;http://purl.org/dc/terms/publisher&gt; &quot;American Iris Society&quot;^^&lt;http://www.w3.org/2001/XMLSchema#string&gt; .</span></span>
+<span id="cb8-21"><a href="#cb8-21" tabindex="-1"></a><span class="co">#&gt; &lt;http://example.com/dataset#&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://purl.org/linked-data/cube#DataSet&gt; .</span></span>
+<span id="cb8-22"><a href="#cb8-22" tabindex="-1"></a><span class="co">#&gt; &lt;http://example.com/dataset#&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/ns/prov#Entity&gt; .</span></span>
+<span id="cb8-23"><a href="#cb8-23" tabindex="-1"></a><span class="co">#&gt; &lt;https://doi.org/10.5281/zenodo.10396807&gt; &lt;http://purl.org/dc/terms/coverage&gt; &quot;:unas&quot;^^&lt;http://www.w3.org/2001/XMLSchema#string&gt; .</span></span>
+<span id="cb8-24"><a href="#cb8-24" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-25"><a href="#cb8-25" tabindex="-1"></a><span class="co">#&gt; ... with 8 more triples</span></span>
+<span id="cb8-26"><a href="#cb8-26" tabindex="-1"></a></span>
+<span id="cb8-27"><a href="#cb8-27" tabindex="-1"></a><span class="co"># show RDF triples:</span></span>
+<span id="cb8-28"><a href="#cb8-28" tabindex="-1"></a>dataset_describe</span>
+<span id="cb8-29"><a href="#cb8-29" tabindex="-1"></a><span class="co">#&gt; Total of 18 triples, stored in hashes</span></span>
+<span id="cb8-30"><a href="#cb8-30" tabindex="-1"></a><span class="co">#&gt; -------------------------------</span></span>
+<span id="cb8-31"><a href="#cb8-31" tabindex="-1"></a><span class="co">#&gt; &lt;http://example.com/creation&gt; &lt;http://www.w3.org/ns/prov#generatedAtTime&gt; &quot;2025-05-22T23:19:44Z&quot;^^&lt;http://www.w3.org/2001/XMLSchema#dateTime&gt; .</span></span>
+<span id="cb8-32"><a href="#cb8-32" tabindex="-1"></a><span class="co">#&gt; &lt;https://doi.org/10.32614/CRAN.package.dataset&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/ns/prov#SoftwareAgent&gt; .</span></span>
+<span id="cb8-33"><a href="#cb8-33" tabindex="-1"></a><span class="co">#&gt; &lt;http://viaf.org/viaf/6440526&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/ns/prov#Agent&gt; .</span></span>
+<span id="cb8-34"><a href="#cb8-34" tabindex="-1"></a><span class="co">#&gt; &lt;https://doi.org/10.5281/zenodo.10396807&gt; &lt;http://purl.org/dc/terms/creator&gt; &lt;https://viaf.org/viaf/http://viaf.org/viaf/6440526&gt; .</span></span>
+<span id="cb8-35"><a href="#cb8-35" tabindex="-1"></a><span class="co">#&gt; &lt;https://doi.org/10.5281/zenodo.10396807&gt; &lt;http://purl.org/dc/terms/identifier&gt; &lt;https://doi.org/10.5281/zenodo.10396807&gt; .</span></span>
+<span id="cb8-36"><a href="#cb8-36" tabindex="-1"></a><span class="co">#&gt; &lt;http://example.com/dataset_prov.nt&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/ns/prov#Bundle&gt; .</span></span>
+<span id="cb8-37"><a href="#cb8-37" tabindex="-1"></a><span class="co">#&gt; &lt;https://doi.org/10.5281/zenodo.10396807&gt; &lt;http://purl.org/dc/terms/publisher&gt; &quot;American Iris Society&quot;^^&lt;http://www.w3.org/2001/XMLSchema#string&gt; .</span></span>
+<span id="cb8-38"><a href="#cb8-38" tabindex="-1"></a><span class="co">#&gt; &lt;http://example.com/dataset#&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://purl.org/linked-data/cube#DataSet&gt; .</span></span>
+<span id="cb8-39"><a href="#cb8-39" tabindex="-1"></a><span class="co">#&gt; &lt;http://example.com/dataset#&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/ns/prov#Entity&gt; .</span></span>
+<span id="cb8-40"><a href="#cb8-40" tabindex="-1"></a><span class="co">#&gt; &lt;https://doi.org/10.5281/zenodo.10396807&gt; &lt;http://purl.org/dc/terms/coverage&gt; &quot;:unas&quot;^^&lt;http://www.w3.org/2001/XMLSchema#string&gt; .</span></span>
+<span id="cb8-41"><a href="#cb8-41" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-42"><a href="#cb8-42" tabindex="-1"></a><span class="co">#&gt; ... with 8 more triples</span></span></code></pre></div>
+<p>By using RDF, datasets can be exchanged as interoperable graphs
+(e.g., in formats like RDF/XML, Turtle, or JSON-LD).</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">options</span>(<span class="at">rdf_print_format =</span> <span class="st">&quot;jsonld&quot;</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>dataset_describe</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="co">#&gt; Total of 18 triples, stored in hashes</span></span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a><span class="co">#&gt; -------------------------------</span></span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a><span class="co">#&gt; {</span></span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a><span class="co">#&gt;   &quot;@graph&quot;: [</span></span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a><span class="co">#&gt;     {</span></span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a><span class="co">#&gt;       &quot;@id&quot;: &quot;http://example.com/creation&quot;,</span></span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a><span class="co">#&gt;       &quot;@type&quot;: &quot;http://www.w3.org/ns/prov#Activity&quot;,</span></span>
+<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a><span class="co">#&gt;       &quot;http://www.w3.org/ns/prov#generatedAtTime&quot;: {</span></span>
+<span id="cb9-11"><a href="#cb9-11" tabindex="-1"></a><span class="co">#&gt;         &quot;@type&quot;: &quot;http://www.w3.org/2001/XMLSchema#dateTime&quot;,</span></span>
+<span id="cb9-12"><a href="#cb9-12" tabindex="-1"></a><span class="co">#&gt;         &quot;@value&quot;: &quot;2025-05-22T23:19:44Z&quot;</span></span>
+<span id="cb9-13"><a href="#cb9-13" tabindex="-1"></a><span class="co">#&gt;       }</span></span>
+<span id="cb9-14"><a href="#cb9-14" tabindex="-1"></a><span class="co">#&gt;     },</span></span>
+<span id="cb9-15"><a href="#cb9-15" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb9-16"><a href="#cb9-16" tabindex="-1"></a><span class="co">#&gt; ... with 8 more triples</span></span></code></pre></div>
+</div>
+<div id="make-the-entire-dataset-interoperable" class="section level2">
+<h2>Make the entire dataset interoperable</h2>
+<p>Eventually you can make the entire dataset interoperable, with making
+every observation, every statement independent of R, your computer, your
+OS, and to a large extent the natural language that you use. <em>This
+will be further developed until we can express in a semantically correct
+way an entire dataset automatically</em></p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="fu">n_triples</span>(<span class="fu">dataset_to_triples</span>(iris[<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>, ]))</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="co">#&gt;    s            p      o</span></span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="co">#&gt; 1  1 Sepal.Length    5.1</span></span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="co">#&gt; 2  2 Sepal.Length    4.9</span></span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a><span class="co">#&gt; 3  3 Sepal.Length    4.7</span></span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a><span class="co">#&gt; 4  4 Sepal.Length    4.6</span></span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a><span class="co">#&gt; 5  1  Sepal.Width    3.5</span></span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a><span class="co">#&gt; 6  2  Sepal.Width      3</span></span>
+<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a><span class="co">#&gt; 7  3  Sepal.Width    3.2</span></span>
+<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a><span class="co">#&gt; 8  4  Sepal.Width    3.1</span></span>
+<span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a><span class="co">#&gt; 9  1 Petal.Length    1.4</span></span>
+<span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a><span class="co">#&gt; 10 2 Petal.Length    1.4</span></span>
+<span id="cb10-13"><a href="#cb10-13" tabindex="-1"></a><span class="co">#&gt; 11 3 Petal.Length    1.3</span></span>
+<span id="cb10-14"><a href="#cb10-14" tabindex="-1"></a><span class="co">#&gt; 12 4 Petal.Length    1.5</span></span>
+<span id="cb10-15"><a href="#cb10-15" tabindex="-1"></a><span class="co">#&gt; 13 1  Petal.Width    0.2</span></span>
+<span id="cb10-16"><a href="#cb10-16" tabindex="-1"></a><span class="co">#&gt; 14 2  Petal.Width    0.2</span></span>
+<span id="cb10-17"><a href="#cb10-17" tabindex="-1"></a><span class="co">#&gt; 15 3  Petal.Width    0.2</span></span>
+<span id="cb10-18"><a href="#cb10-18" tabindex="-1"></a><span class="co">#&gt; 16 4  Petal.Width    0.2</span></span>
+<span id="cb10-19"><a href="#cb10-19" tabindex="-1"></a><span class="co">#&gt; 17 1      Species setosa</span></span>
+<span id="cb10-20"><a href="#cb10-20" tabindex="-1"></a><span class="co">#&gt; 18 2      Species setosa</span></span>
+<span id="cb10-21"><a href="#cb10-21" tabindex="-1"></a><span class="co">#&gt; 19 3      Species setosa</span></span>
+<span id="cb10-22"><a href="#cb10-22" tabindex="-1"></a><span class="co">#&gt; 20 4      Species setosa</span></span></code></pre></div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

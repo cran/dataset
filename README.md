@@ -1,12 +1,10 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# The dataset R Package <a href='https://dataset.dataobservatory.eu/'><img src='man/figures/logo.png' align="right" /></a>
+# The dataset R Package <a href='https://dataset.dataobservatory.eu/'><img src="man/figures/logo.png" align="right"/></a>
 
 <!-- badges: start -->
 
-[![Codecov test
-coverage](https://codecov.io/gh/dataobservatory-eu/dataset/graph/badge.svg)](https://app.codecov.io/gh/dataobservatory-eu/dataset)
 [![rhub](https://github.com/dataobservatory-eu/dataset/actions/workflows/rhub.yaml/badge.svg)](https://github.com/dataobservatory-eu/dataset/actions/workflows/rhub.yaml)
 [![lifecycle](https://lifecycle.r-lib.org/articles/figures/lifecycle-experimental.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![Project Status:
@@ -15,256 +13,175 @@ WIP](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.o
 [![CRAN_time_from_release](https://www.r-pkg.org/badges/ago/dataset)](https://cran.r-project.org/package=dataset)
 [![Status at rOpenSci Software Peer
 Review](https://badges.ropensci.org/553_status.svg)](https://github.com/ropensci/software-review/issues/553)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14537352.svg)](https://zenodo.org/record/6950435#.YukDAXZBzIU)\]
-[![devel-version](https://img.shields.io/badge/devel%20version-0.3.4-blue.svg)](https://github.com/dataobservatory-eu/dataset)
+[![DOI](https://zenodo.org/badge/DOI/10.32614/CRAN.package.dataset.svg)](https://zenodo.org/record/6950435#.YukDAXZBzIU)
+[![devel-version](https://img.shields.io/badge/devel%20version-0.3.9-blue.svg)](https://github.com/dataobservatory-eu/dataset)
 [![dataobservatory](https://img.shields.io/badge/ecosystem-dataobservatory.eu-3EA135.svg)](https://dataobservatory.eu/)
+[![Codecov test
+coverage](https://codecov.io/gh/dataobservatory-eu/dataset/graph/badge.svg)](https://app.codecov.io/gh/dataobservatory-eu/dataset)
+
 <!-- badges: end -->
 
-The aim of the *dataset* package is to make tidy datasets easier to
-release, exchange and reuse. It organizes and formats data frame R
-objects into well-referenced, well-described, interoperable datasets
-into release and reuse ready form.
+# dataset: Semantic Metadata for Datasets in R
 
-1.  Offer a way to better utilise the `utils:bibentry` bibliographic
-    entry objects by extending them with the fields of the Dublin Core
-    and DataCite tenders, and making them detachable from the data. This
-    extension aims to work with a
-    [data.frame](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/data.frame)
-    or an inherited
-    [tibble](https://tibble.tidyverse.org/reference/tibble.html),
-    [tsibble](https://tsibble.tidyverts.org/) or
-    [data.table](https://rdatatable.gitlab.io/data.table/). See for more
-    information the [Bibentry for FAIR
-    datasets](https://dataset.dataobservatory.eu/articles/bibentry.html)
-    vignette.
-2.  Extending the `haven_labelled` class of the `tidyverse` for
-    consistently labelled categorical variables with linked (standard)
-    definitions and units of measures in our
-    [defined](https://dataset.dataobservatory.eu/articles/defined.html)
-    class.
-3.  Offering a new data frame format, `dataset_df` that extends tibbles
-    with semantically rich metadata, ready to be shared on open data
-    exchange platforms and in data repositories. This s3 class is aimed
-    at developers and we are working on several packages that provide
-    interoperability with SDMX statistical data exchange platforms,
-    Wikidata, or the EU Open Data portal. Read more in the [Create
-    Datasets that are Easy to Share Exchange and
-    Extend](https://dataset.dataobservatory.eu/articles/dataset_df.html)
-    vignette.
+The `dataset` package provides tools to create semantically rich and
+interoperable datasets in R. It improves metadata handling by
+introducing new S3 classes—`defined()`, `dataset_df()`, and
+`bibrecord()`—that enhance the behaviour of `labelled`, `tibble`, and
+`bibentry` objects to meet the requirements of:
 
-<!---
-&#10;The primary aim of dataset is create well-referenced, well-described, interoperable datasets from data.frames, tibbles or data.tables that translate well into the W3C DataSet definition within the [Data Cube Vocabulary](https://www.w3.org/TR/vocab-data-cube/) in a reproducible manner. The data cube model in itself is is originated in the _Statistical Data and Metadata eXchange_, and it is almost fully harmonized with the Resource Description Framework (RDF), the standard model for data interchange on the web^[RDF Data Cube Vocabulary, W3C Recommendation 16 January 2014  <https://www.w3.org/TR/vocab-data-cube/>, Introduction to SDMX data modeling <https://www.unescap.org/sites/default/files/Session_4_SDMX_Data_Modeling_%20Intro_UNSD_WS_National_SDG_10-13Sep2019.pdf>].
-&#10;--->
+- **Statistical Data and Metadata eXchange (SDMX)** standards,
+- **Open Science** metadata practices,
+- **Library and archive metadata** conventions (Dublin Core, DataCite).
 
-Further development plans for peer-review are added in till 5 November
-2024 here: [New
-Requirement](https://dataset.dataobservatory.eu/articles/new-requirements.html)
-setting.
+## Motivation
 
-You can install the development version of dataset with
-`remotes::install_github()`:
+Many tools exist to help document, describe, or publish datasets in R,
+but most separate the metadata from the data itself. This separation
+increases the risk of losing metadata, misaligning it with the data, or
+making documentation hard to maintain.
 
-``` r
-remotes::install_github("dataobservatory-eu/dataset", build = FALSE)
-```
+The `dataset` package addresses this by storing all metadata directly in
+R object attributes. This preserves semantic information as data is
+transformed, combined, or exported, preventing the loss of vital
+documentation and improving reproducibility.
 
-The current version of the `dataset` package is in an early,
-experimental stage. You can follow the discussion of this package on
-[rOpenSci](https://github.com/ropensci/software-review/issues/553).
+## Key Features
 
-## Semantically richer data frames
+### `defined()`
+
+An extended version of `labelled()` vectors. Adds support for:
+
+- Variable labels
+- Units of measure (e.g. “million euros”)
+- Concept URIs (standardized definitions)
+- Namespaces (to support URI expansion)
 
 ``` r
 library(dataset)
-iris_ds <- dataset_df(
-  x = iris,
-  dataset_bibentry = dublincore(
-    title = "Iris Dataset",
-    creator = person("Edgar", "Anderson", role = "aut"),
-    publisher = "American Iris Society",
-    datasource = "https://doi.org/10.1111/j.1469-1809.1936.tb02137.x",
-    date = 1935,
-    language = "en",
-    description = "This famous (Fisher's or Anderson's) iris data set."
+```
+
+``` r
+data(orange_df)
+print(orange_df$age)
+#> orange_df$age: The age of the tree
+#> Measured in days since 1968/12/31 
+#>  [1]  118  484  664 1004 1231 1372 1582  118  484  664 1004 1231 1372 1582  118
+#> [16]  484  664 1004 1231 1372 1582  118  484  664 1004 1231 1372 1582  118  484
+#> [31]  664 1004 1231 1372 1582
+```
+
+This ensures that, for example, “GDP” is always associated with a
+precise concept and unit, avoiding ambiguity across analyses and
+publications. See [Semantically Enriched Vectors with
+`defined()`](https://dataset.dataobservatory.eu/articles/defined.html)
+
+### `bibrecord()`
+
+An extension of R’s built-in `bibentry()` class, with support for:
+
+- Dublin Core Terms (`dcterms`)
+- DataCite metadata
+- Contributor roles (e.g. creator, publisher, data manager)
+- Subject tagging and geolocation
+
+``` r
+as_dublincore(orange_df)
+#> Dublin Core Metadata Record
+#> --------------------------
+#> Title:        Growth of Orange Trees 
+#> Creator(s):   N.R. Draper [cre] (http://viaf.org/viaf/84585260); H Smith [cre] 
+#> Contributor(s):  :unas 
+#> Publisher:    Wiley 
+#> Year:         1998 
+#> Language:     en 
+#> Description:  The Orange data frame has 35 rows and 3 columns of records of the growth of orange trees.
+```
+
+This makes it easier to produce citations and metadata suitable for
+repositories like [Zenodo](https://zenodo.org/) or
+[Dataverse](https://dataverse.org/). See more in the [Modernising
+Citation Metadata in R: Introducing
+`bibrecord`](https://dataset.dataobservatory.eu/articles/bibrecord.html)
+
+### `dataset_df()`
+
+A semantic wrapper around `data.frame` or `tibble`, aligning with SDMX’s
+**data cube** model:
+
+- Variables (columns) can have units, labels, and definitions.
+- Observations (rows) can be assigned unique identifiers.
+- Datasets can carry complete metadata inline (title, creator,
+  description, etc.)
+- Output can be serialized to linked data formats (N-Triples, RDF, etc.)
+
+See more in the [Why Semantics Matter for R Data
+Frames](https://dataset.dataobservatory.eu/articles/dataset_df.html)
+
+## Why Use This?
+
+- **Machine-readability**: Your data and metadata are tightly coupled
+  and structured for reuse.
+- **Preservation**: Data exported from R retains its full descriptive
+  context.
+- **Publication-ready**: Integration with modern repository standards
+  (DataCite, DC Terms).
+- **Tidy + semantic**: Extends tidy principles with semantic rigor.
+
+## Example
+
+``` r
+my_data <- dataset_df(
+  country = defined(
+    c("AD", "LI"), 
+    concept =  "http://data.europa.eu/bna/c_6c2bb82d"),
+  gdp = defined(c(3897, 7365), 
+                label = "GDP", 
+                unit = "million euros"),
+  dataset_bibentry = datacite(
+    Title = "GDP Data for Small Countries",
+    Description = "Example Dataset for the dataset package",
+    Creator = person("Jane", "Doe"),
+    Publisher = "Open Data Institute",
+    Rights = "CC0", 
+    Language = "en"
   )
 )
-```
 
-It is mandatory to add a `title`, `author` to a dataset, and if the
-`date` is not specified, the current date will be added.
-
-As the `dataset_df` at this point is just created, if it is not
-published yet, the `identifer` receives the default `:tba` value, a
-`version` of 0.1.0 and the `:unas` (unassigned) `publisher` field.
-
-The `dataset_df` behaves as expected from a data.frame-like object. See
-more information about the enhanced semantic capabilities of these data
-frames in the vignette article [Create Datasets that are Easy to Share
-Exchange and
-Extend](https://dataset.dataobservatory.eu/articles/dataset_df.html)
-
-``` r
-summary(iris_ds)
-#> Anderson E (1935). "Iris Dataset."
-#>    x.Sepal.Length        x.Sepal.Width       x.Petal.Length        x.Petal.Width          x.Species     
-#>  Min.   :4.300000     Min.   :2.000000     Min.   :1.000        Min.   :0.1000000    setosa    :50      
-#>  1st Qu.:5.100000     1st Qu.:2.800000     1st Qu.:1.600        1st Qu.:0.3000000    versicolor:50      
-#>  Median :5.800000     Median :3.000000     Median :4.350        Median :1.3000000    virginica :50      
-#>  Mean   :5.843333     Mean   :3.057333     Mean   :3.758        Mean   :1.1993333    NA                 
-#>  3rd Qu.:6.400000     3rd Qu.:3.300000     3rd Qu.:5.100        3rd Qu.:1.8000000    NA                 
-#>  Max.   :7.900000     Max.   :4.400000     Max.   :6.900        Max.   :2.5000000    NA
-```
-
-The dataset_df A brief description of the extended metadata attributes:
-
-``` r
-print(get_bibentry(iris_ds), "Bibtex")
-#> @Misc{,
-#>   title = {Iris Dataset},
-#>   author = {Edgar Anderson},
-#>   identifier = {:tba},
-#>   publisher = {American Iris Society},
-#>   year = {1935},
-#>   language = {en},
-#>   relation = {:unas},
-#>   format = {:unas},
-#>   rights = {:tba},
-#>   description = {This famous (Fisher's or Anderson's) iris data set.},
-#>   type = {DCMITYPE:Dataset},
-#>   datasource = {https://doi.org/10.1111/j.1469-1809.1936.tb02137.x},
-#>   coverage = {:unas},
-#> }
+head(my_data)
+#> 
+#> 
+#>   rowid      country    gdp        
+#>   <hvn_lbl_> <hvn_lbl_> <hvn_lbl_>
+#> 1 eg:1       AD         3897      
+#> 2 eg:2       LI         7365
 ```
 
 ``` r
-paste0("Publisher:", publisher(iris_ds))
-#> [1] "Publisher:American Iris Society"
-paste0("Rights:", rights(iris_ds))
-#> [1] "Rights::tba"
+as_datacite(my_data)
+#> DataCite Metadata Record
+#> --------------------------
+#> Title:         GDP Data for Small Countries 
+#> Creator(s):    Jane Doe 
+#> Contributor(s): :unas 
+#> Identifier:    :tba 
+#> Publisher:     Open Data Institute 
+#> Year:          :tba 
+#> Language:      en 
+#> Description:  Example Dataset for the dataset package
 ```
 
-The descriptive metadata are added to a `utils::bibentry` object which
-has many printing options (see `?bibentry`). (The `utils` package is
-installed by default with every R system, so working with utils is not
-an extra dependency.)
+## 🧪 Contributing
 
-## Semantically richer data frame columns
+We welcome contributions and discussion!
 
-It is important to see that we do not only increase the semantics of the
-dataset as a whole, but also the semantics of each variable. R users
-often have a problem with the reusability of their data frames because,
-by default, a variable is only described by a programmatically usable
-name label; for example, in the famous `iris` dataset, the length of the
-sepal for each observation (row) is in the `iris$Sepal.Length` column.
-If we would like to add rows to this dataset, it is essential to know if
-the numbers in the `iris$Sepal.Length` are measured in millimetres
-centimetres or inches.
+- Please see our
+  [CONTRIBUTING.md](https://github.com/dataobservatory-eu/dataset/blob/main/CONTRIBUTING.md)
+  guide.
+- Ideas, bug reports, and feedback are welcome via [GitHub
+  issues](https://github.com/dataobservatory-eu/dataset/issues).
 
-When working with datasets that receive their components from different
-linked open data sources, it is particularly important to have a more
-precise semantic definition and description of each variable.
+## 📜 Code of Conduct
 
-``` r
-gdp_1 = defined(
-    c(3897, 7365), 
-    label = "Gross Domestic Product", 
-    unit = "million dollars", 
-    definition = "http://data.europa.eu/83i/aa/GDP")
-
-# Summarise this semantically better defined vector:
-summary(gdp_1)
-#> Gross Domestic Product (million dollars)
-#>    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-#>    3897    4764    5631    5631    6498    7365
-
-# See its attributes under the hood:
-attributes(gdp_1)
-#> $label
-#> [1] "Gross Domestic Product"
-#> 
-#> $class
-#> [1] "haven_labelled_defined" "haven_labelled"         "vctrs_vctr"            
-#> [4] "double"                
-#> 
-#> $unit
-#> [1] "million dollars"
-#> 
-#> $definition
-#> [1] "http://data.europa.eu/83i/aa/GDP"
-```
-
-The *dataset* package contains a semantically enriched version of the
-`iris` dataset (which is installed with every R system.)
-
-``` r
-data("iris_dataset")
-
-# Print the dataset_df object:
-print(iris_dataset)
-#> Anderson E (1935). "Iris Dataset."
-#>    rowid      Sepal.Length Petal.Length Sepal.Width Petal.Width Species   
-#>    <hvn_lbl_> <hvn_lbl_>   <hvn_lbl_>   <hvn_lbl_>  <hvn_lbl_>  <hvn_lbl_>
-#>  1 #1         5.1          1.4          3.5         0.2         1 [setosa]
-#>  2 #2         4.9          1.4          3           0.2         1 [setosa]
-#>  3 #3         4.7          1.3          3.2         0.2         1 [setosa]
-#>  4 #4         4.6          1.5          3.1         0.2         1 [setosa]
-#>  5 #5         5            1.4          3.6         0.2         1 [setosa]
-#>  6 #6         5.4          1.7          3.9         0.4         1 [setosa]
-#>  7 #7         4.6          1.4          3.4         0.3         1 [setosa]
-#>  8 #8         5            1.5          3.4         0.2         1 [setosa]
-#>  9 #9         4.4          1.4          2.9         0.2         1 [setosa]
-#> 10 #10        4.9          1.5          3.1         0.1         1 [setosa]
-#> # ℹ 140 more rows
-
-# Summarise the Sepal.Length variable:
-summary(iris_dataset$Sepal.Length)
-#> Length of the sepal in cm (centimeter)
-#>    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-#>   4.300   5.100   5.800   5.843   6.400   7.900
-
-# Check the attributes of this variable:
-attributes(iris_dataset$Sepal.Length)
-#> $label
-#> [1] "Length of the sepal in cm"
-#> 
-#> $class
-#> [1] "haven_labelled_defined" "haven_labelled"         "vctrs_vctr"            
-#> [4] "double"                
-#> 
-#> $unit
-#> [1] "centimeter"
-#> 
-#> $definition
-#> [1] "https://www.wikidata.org/wiki/Property:P2043"
-```
-
-## Dataset Provenance
-
-The constructor of the `dataset_df` objects also records the most
-important processes that created or modified the dataset. This
-experimental feature has not been fully developed in the current
-*dataset* version. The aim is to provide a standard way of describing
-the processes that help to understand what happened with your data using
-the W3C [PROV-O](https://www.w3.org/TR/prov-o/) provenance ontology and
-the [RDF 1.1 N-Triples](https://www.w3.org/TR/n-triples/) W3C standard
-for describing these processes in a flat file.
-
-``` r
-provenance(iris_dataset)
-#> [1] "<https://doi.org/10.5281/zenodo.10396807> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.org/linked-data/cube#DataSet> ."
-#> [2] "<https://orcid.org/0000-0001-7513-6760> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/prov#Agent> ."           
-#> [3] "<https://doi.org/10.5281/zenodo.6703764.> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/prov#SoftwareAgent> ."
-```
-
-## Code of Conduct
-
-Please note that the `dataset` package is released with a [Contributor
-Code of
-Conduct](https://contributor-covenant.org/version/2/1/CODE_OF_CONDUCT.html).
-By contributing to this project, you agree to abide by its terms.
-
-Furthermore, [rOpenSci Community Contributing
-Guide](https://contributing.ropensci.org/) - *A guide to help people
-find ways to contribute to rOpenSci* is also applicable, because
-`dataset` is under software review for potential inclusion in
-[rOpenSci](https://github.com/ropensci/software-review/issues/553).
+This project adheres to the [rOpenSci Code of
+Conduct](https://ropensci.org/code-of-conduct/). By participating, you
+are expected to uphold these guidelines.

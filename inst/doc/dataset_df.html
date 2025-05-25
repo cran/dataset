@@ -12,7 +12,7 @@
 
 
 
-<title>Create Datasets that are Easy to Share Exchange and Extend</title>
+<title>Why Semantics Matter for R Data Frames</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -336,169 +336,161 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 
-<h1 class="title toc-ignore">Create Datasets that are Easy to Share
-Exchange and Extend</h1>
+<h1 class="title toc-ignore">Why Semantics Matter for R Data Frames</h1>
 
 
 
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(dataset)</span></code></pre></div>
-<p>The aim of the <code>dataset_df</code> is to create semantically
-richer datasets.</p>
+<p>R users love <code>data.frame</code>s and <code>tibble</code>s for
+tidy, rectangular data. But tidy data isn’t always <strong>meaningful
+data</strong>. What does a column labelled <code>gdp</code> actually
+represent? Euros? Millions? Per capita? Current prices? Constant 2010
+prices? These questions matter—especially in statistics, open data
+publishing, and knowledge graph integration.</p>
+<p>The <code>dataset_df</code> class extends the familiar
+<code>data.frame</code> structure with lightweight, semantically
+meaningful metadata. It’s built for:</p>
+<ul>
+<li><p><strong>Tidyverse lovers</strong> who want better documentation
+and safer analysis</p></li>
+<li><p><strong>Open science workflows</strong> that need interoperable
+metadata</p></li>
+<li><p><strong>Semantic web users</strong> who want to export structured
+RDF data from R</p></li>
+</ul>
+<p><code>dataset_df</code> helps you preserve the meaning of variables,
+units, identifiers, and dataset-level context.</p>
+<div id="from-tidy-to-meaningful-an-example" class="section level2">
+<h2>From Tidy to Meaningful: An Example</h2>
+<p>Let’s start with a basic data frame and upgrade it to a
+<code>dataset_df</code> with semantically enriched columns using
+<code>defined()</code>:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>small_country_dataset <span class="ot">&lt;-</span> <span class="fu">dataset_df</span>(</span>
-<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>  <span class="at">country_name =</span> <span class="fu">defined</span>(</span>
-<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>    <span class="fu">c</span>(<span class="st">&quot;AD&quot;</span>, <span class="st">&quot;LI&quot;</span>),</span>
-<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>    <span class="at">label =</span> <span class="st">&quot;Country name&quot;</span>,</span>
-<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>    <span class="at">definition =</span> <span class="st">&quot;http://data.europa.eu/bna/c_6c2bb82d&quot;</span>, </span>
-<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>    <span class="at">namespace =</span> <span class="st">&quot;https://www.geonames.org/countries/$1/&quot;</span>), </span>
-<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>  <span class="at">gdp =</span> <span class="fu">defined</span>(</span>
-<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>    <span class="fu">c</span>(<span class="dv">3897</span>, <span class="dv">7365</span>), </span>
-<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>    <span class="at">label =</span> <span class="st">&quot;Gross Domestic Product&quot;</span>, </span>
-<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a>    <span class="at">unit =</span> <span class="st">&quot;million dollars&quot;</span>, </span>
-<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a>    <span class="at">definition =</span> <span class="st">&quot;http://data.europa.eu/83i/aa/GDP&quot;</span>),</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>  <span class="at">country_name =</span> <span class="fu">defined</span>(<span class="fu">c</span>(<span class="st">&quot;AD&quot;</span>, <span class="st">&quot;LI&quot;</span>),</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>    <span class="at">label =</span> <span class="st">&quot;Country name&quot;</span>,</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>    <span class="at">concept =</span> <span class="st">&quot;http://data.europa.eu/bna/c_6c2bb82d&quot;</span>,</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>    <span class="at">namespace =</span> <span class="st">&quot;https://www.geonames.org/countries/$1/&quot;</span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>  ),</span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>  <span class="at">gdp =</span> <span class="fu">defined</span>(<span class="fu">c</span>(<span class="dv">3897</span>, <span class="dv">7365</span>),</span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>    <span class="at">label =</span> <span class="st">&quot;Gross Domestic Product&quot;</span>,</span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>    <span class="at">unit =</span> <span class="st">&quot;million dollars&quot;</span>,</span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a>    <span class="at">concept =</span> <span class="st">&quot;http://data.europa.eu/83i/aa/GDP&quot;</span></span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a>  ),</span>
 <span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a>  <span class="at">dataset_bibentry =</span> <span class="fu">dublincore</span>(</span>
-<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Small Country Dataset&quot;</span>, </span>
-<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a>    <span class="at">creator =</span> <span class="fu">person</span>(<span class="st">&quot;Jane&quot;</span>, <span class="st">&quot;Doe&quot;</span>), </span>
-<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a>    <span class="at">publisher =</span> <span class="st">&quot;Example Inc.&quot;</span>)</span>
-<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a>  )</span></code></pre></div>
-<p>The <code>defined</code> class columns retain the important semantic
-information about the label, exact definition link, and the unit of
-measure:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">var_label</span>(small_country_dataset<span class="sc">$</span>gdp)</span>
-<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Gross Domestic Product&quot;</span></span></code></pre></div>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">var_unit</span>(small_country_dataset<span class="sc">$</span>gdp)</span>
-<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="co">#&gt; [1] &quot;million dollars&quot;</span></span></code></pre></div>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">var_definition</span>(small_country_dataset<span class="sc">$</span>gdp)</span>
-<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="co">#&gt; [1] &quot;http://data.europa.eu/83i/aa/GDP&quot;</span></span></code></pre></div>
-<p>And the <code>dataset_df</code> object has a the important semantic
-information about the dataset as a whole, with pre-filled default values
-for not yes assigned or announced information. The metadata of the
-entire dataset conforms to the two most universally used definitions,
-Dublin Core (DCTERMS) and DataCite (DataCite).</p>
-<p>Each standard Dublinc Core/DataCite metadata field has a simple
-interface function, for example, you can add the language of the dataset
-with the following assignment command:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">language</span>(small_country_dataset) <span class="ot">&lt;-</span> <span class="st">&quot;en&quot;</span></span></code></pre></div>
-<p>And to review the descriptive data of the entire dataset as a
-whole:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">get_bibentry</span>(small_country_dataset), <span class="st">&quot;bibtex&quot;</span> )</span>
-<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="co">#&gt; @Misc{,</span></span>
-<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="co">#&gt;   title = {Small Country Dataset},</span></span>
-<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="co">#&gt;   author = {Jane Doe},</span></span>
-<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="co">#&gt;   identifier = {:tba},</span></span>
-<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="co">#&gt;   publisher = {Example Inc.},</span></span>
-<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="co">#&gt;   year = {:tba},</span></span>
-<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a><span class="co">#&gt;   relation = {:unas},</span></span>
-<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a><span class="co">#&gt;   format = {:unas},</span></span>
-<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a><span class="co">#&gt;   rights = {:tba},</span></span>
-<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a><span class="co">#&gt;   type = {DCMITYPE:Dataset},</span></span>
-<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a><span class="co">#&gt;   datasource = {:unas},</span></span>
-<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a><span class="co">#&gt;   coverage = {:unas},</span></span>
-<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a><span class="co">#&gt;   language = {eng},</span></span>
-<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a><span class="co">#&gt; }</span></span></code></pre></div>
-<div id="wikidata" class="section level2">
-<h2>Wikidata</h2>
-<p>The <a href="https://wbdataset.dataobservatory.eu/">wbdataset
-package</a> is an extension of the dataset, which in turn is an R
-package that helps to exchange, publish and combine datasets more easily
-by improving their semantics. The <em>wbdataset</em> extends the
-usability of dataset by connecting the Wikibase API with the R
-statistical environment. It is in an early, exploratory stage, and it is
-not yet on CRAN.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;dataobservatory-eu/wbdataset&quot;</span>)</span></code></pre></div>
-<pre><code># Select the following country profiles from Wikidata:
-wikidata_countries &lt;- c(
-  &quot;http://www.wikidata.org/entity/Q756617&quot;, &quot;http://www.wikidata.org/entity/Q347&quot;,
-  &quot;http://www.wikidata.org/entity/Q3908&quot;,   &quot;http://www.wikidata.org/entity/Q1246&quot;)
-  
-# Retrieve their labels into a dataset called &#39;European countries&#39;:
-wikidata_countries_df &lt;- get_item(qid = wikidata_countries,
-                                  language =&quot;en&quot;,
-                                  title = &quot;European countries&quot;,
-                                  creator = person(&quot;Daniel&quot;, &quot;Antal&quot;))
-                                  
-# Add properties from Wikidata as attributes and variables of this dataset:                             
-ds &lt;- wikidata_countries_df %&gt;%
-  left_join_column( 
-    label = &quot;ISO 3166-1 alpha-2 code&quot;, 
-    property = &quot;P297&quot; ) %&gt;%
-  left_join_column( 
-    property = &quot;P1566&quot;, 
-    label = &quot;Geonames ID&quot;,
-    namespace = &quot;https://www.geonames.org/&quot;) 
-    </code></pre>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Small Country Dataset&quot;</span>,</span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a>    <span class="at">creator =</span> <span class="fu">person</span>(<span class="st">&quot;Jane&quot;</span>, <span class="st">&quot;Doe&quot;</span>),</span>
+<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a>    <span class="at">publisher =</span> <span class="st">&quot;Example Inc.&quot;</span></span>
+<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a>  )</span>
+<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a>)</span></code></pre></div>
+<p>The <code>defined()</code> vectors attach metadata to each
+column:</p>
+<ul>
+<li><p><code>label</code>: a human-readable name</p></li>
+<li><p><code>unit</code>: an explicit measurement unit</p></li>
+<li><p><code>concept</code>: a URI identifying the concept
+measured</p></li>
+<li><p><code>namespace</code>: for generating full subject URIs when
+exporting to RDF</p></li>
+</ul>
+<p>The <code>dataset_df()</code> call also allows bibliographic
+metadata:</p>
+<ul>
+<li><code>dataset_bibentry</code>: Dublin Core metadata for citation,
+reuse, and provenance</li>
+</ul>
 </div>
-<div id="further-data-platforms" class="section level2">
-<h2>Further data platforms</h2>
-<p>We are planning an extension of the <em>dataset</em> package to
-conform the datacube definition used by statistical data repositories
-and exchanges, which will require a management of the multi-dimensional
-datasets and the data structure definition of the Statistical Data and
-Metadata eXchange. This feature was part of the early release of
-dataset, but as reviewers pointed out, they were out of focus from the
-core functionality.</p>
+<div id="why-units-matter" class="section level2">
+<h2>Why Units Matter</h2>
+<p>Many statistical errors begin with a silent assumption about units.
+In Eurostat data, it’s common to see:</p>
+<ul>
+<li><p><code>EUR</code>: Euros</p></li>
+<li><p><code>MIO_EUR</code>: Millions of euros</p></li>
+<li><p><code>PPS</code>: Purchasing Power Standards</p></li>
+</ul>
+<p>By making units explicit at the column level, you:</p>
+<ul>
+<li><p>Prevent decimal-scale mistakes (e.g., thousands vs
+millions)</p></li>
+<li><p>Avoid joining or averaging incompatible series</p></li>
+<li><p>Gain confidence in your data exports (CSV, RDF, JSON-LD,
+etc.)</p></li>
+</ul>
+<p>This is especially important in multi-currency and multi-country
+datasets such as those published by Eurostat, where harmonization is
+crucial.</p>
 </div>
-<div id="serialise-to-rdf" class="section level2">
-<h2>Serialise to RDF</h2>
-<p>Our package is aiming to work seamlessly with the rOpenSci <a href="https://github.com/ropensci/rdflib">rdflib</a> package. For this
-purpose, we are working on a simple <a href="https://www.w3.org/TR/turtle/">turtle</a> package that writes the
-<a href="https://dataset.dataobservatory.eu/articles/bibentry.html">bibentry</a>
-about the dataset, and the dataset contents into an RDF-annotated text
-file, which can be then used or stored with <em>rdflib</em>.</p>
-<p>The tuRtle package is being co-developed with <em>dataset</em>, and
-will serialise the data and metadata of the <code>dataset_df</code>
-objects.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;dataobservatory-eu/tuRtle&quot;</span>, <span class="at">build =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="fu">library</span>(tuRtle)</span>
-<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>tdf <span class="ot">&lt;-</span> <span class="fu">data.frame</span> (<span class="at">s =</span> <span class="fu">c</span>(<span class="st">&quot;eg:01&quot;</span>,<span class="st">&quot;eg:02&quot;</span>,  <span class="st">&quot;eg:01&quot;</span>, <span class="st">&quot;eg:02&quot;</span>, <span class="st">&quot;eg:01&quot;</span> ),</span>
-<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>                   <span class="at">p =</span> <span class="fu">c</span>(<span class="st">&quot;a&quot;</span>, <span class="st">&quot;a&quot;</span>, <span class="st">&quot;eg-var:&quot;</span>, <span class="st">&quot;eg-var:&quot;</span>, <span class="st">&quot;rdfs:label&quot;</span>),</span>
-<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a>                   <span class="at">o =</span> <span class="fu">c</span>(<span class="st">&quot;qb:Observation&quot;</span>,</span>
-<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a>                         <span class="st">&quot;qb:Observation&quot;</span>,</span>
-<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a>                         <span class="st">&quot;</span><span class="sc">\&quot;</span><span class="st">1</span><span class="sc">\&quot;</span><span class="st">^^&lt;xs:decimal&gt;&quot;</span>,</span>
-<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a>                         <span class="st">&quot;</span><span class="sc">\&quot;</span><span class="st">2</span><span class="sc">\&quot;</span><span class="st">^^&lt;xs:decimal&gt;&quot;</span>, </span>
-<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a>                         <span class="st">&#39;&quot;Example observation&quot;&#39;</span>)</span>
-<span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a>                   )</span>
-<span id="cb11-10"><a href="#cb11-10" tabindex="-1"></a></span>
-<span id="cb11-11"><a href="#cb11-11" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(tdf)</span></code></pre></div>
+<div id="a-final-structure-ready-for-export" class="section level2">
+<h2>A Final Structure, Ready for Export</h2>
+<p>The enriched <code>dataset_df</code> object can be serialized to RDF
+using:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>triples <span class="ot">&lt;-</span> <span class="fu">dataset_to_triples</span>(small_country_dataset)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="fu">n_triples</span>(<span class="fu">mapply</span>(n_triple, triples<span class="sc">$</span>s, triples<span class="sc">$</span>p, triples<span class="sc">$</span>o))</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co">#&gt; [1] &quot;\&quot;1\&quot;^^&lt;http://www.w3.org/2001/XMLSchema#string&gt; \&quot;rowid\&quot;^^&lt;http://www.w3.org/2001/XMLSchema#string&gt; \&quot;eg:1\&quot;^^&lt;http://www.w3.org/2001/XMLSchema#string&gt; .&quot;     </span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co">#&gt; [2] &quot;\&quot;2\&quot;^^&lt;http://www.w3.org/2001/XMLSchema#string&gt; \&quot;rowid\&quot;^^&lt;http://www.w3.org/2001/XMLSchema#string&gt; \&quot;eg:2\&quot;^^&lt;http://www.w3.org/2001/XMLSchema#string&gt; .&quot;     </span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="co">#&gt; [3] &quot;\&quot;1\&quot;^^&lt;http://www.w3.org/2001/XMLSchema#string&gt; \&quot;country_name\&quot;^^&lt;http://www.w3.org/2001/XMLSchema#string&gt; \&quot;AD\&quot;^^&lt;http://www.w3.org/2001/XMLSchema#string&gt; .&quot;</span></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="co">#&gt; [4] &quot;\&quot;2\&quot;^^&lt;http://www.w3.org/2001/XMLSchema#string&gt; \&quot;country_name\&quot;^^&lt;http://www.w3.org/2001/XMLSchema#string&gt; \&quot;LI\&quot;^^&lt;http://www.w3.org/2001/XMLSchema#string&gt; .&quot;</span></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="co">#&gt; [5] &quot;\&quot;1\&quot;^^&lt;http://www.w3.org/2001/XMLSchema#string&gt; \&quot;gdp\&quot;^^&lt;http://www.w3.org/2001/XMLSchema#string&gt; \&quot;3897\&quot;^^&lt;http://www.w3.org/2001/XMLSchema#string&gt; .&quot;       </span></span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="co">#&gt; [6] &quot;\&quot;2\&quot;^^&lt;http://www.w3.org/2001/XMLSchema#string&gt; \&quot;gdp\&quot;^^&lt;http://www.w3.org/2001/XMLSchema#string&gt; \&quot;7365\&quot;^^&lt;http://www.w3.org/2001/XMLSchema#string&gt; .&quot;</span></span></code></pre></div>
+<p>This supports export to:</p>
+<ul>
+<li><p><strong>Wikibase</strong> via <code>wbdataset</code></p></li>
+<li><p><strong>RDF Data Cube</strong> via <code>datacube</code></p></li>
+<li><p><strong>DataCite or DCAT</strong> metadata formats</p></li>
+</ul>
+<p>This vignette represents the final conceptual structure for
+<code>dataset_df</code> before its rOpenSci submission. Future work will
+build on this foundation without breaking it.</p>
+</div>
+<div id="summary-why-use-dataset_df" class="section level2">
+<h2>Summary: Why Use <code>dataset_df</code></h2>
 <table>
 <thead>
 <tr class="header">
-<th align="left">s</th>
-<th align="left">p</th>
-<th align="left">o</th>
+<th>Feature</th>
+<th>What It Adds</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">eg:01</td>
-<td align="left">a</td>
-<td align="left"><a href="qb:Observation" class="uri">qb:Observation</a></td>
+<td><code>label</code></td>
+<td>Human-readable variable name</td>
 </tr>
 <tr class="even">
-<td align="left">eg:02</td>
-<td align="left">a</td>
-<td align="left"><a href="qb:Observation" class="uri">qb:Observation</a></td>
+<td><code>unit</code></td>
+<td>Explicit unit (e.g., <code>MIO_EUR</code>)</td>
 </tr>
 <tr class="odd">
-<td align="left">eg:01</td>
-<td align="left">eg-var:</td>
-<td align="left">“1”^^<xs:decimal></td>
+<td><code>concept</code></td>
+<td>URI identifying what is measured</td>
 </tr>
 <tr class="even">
-<td align="left">eg:02</td>
-<td align="left">eg-var:</td>
-<td align="left">“2”^^<xs:decimal></td>
+<td><code>subject</code></td>
+<td>Dataset-level topical classification</td>
 </tr>
 <tr class="odd">
-<td align="left">eg:01</td>
-<td align="left">rdfs:label</td>
-<td align="left">“Example observation”</td>
+<td><code>namespace</code></td>
+<td>Base URI for RDF subject identifiers</td>
+</tr>
+<tr class="even">
+<td><code>dataset_bibentry</code></td>
+<td>Bibliographic metadata via Dublin Core</td>
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>example_file<span class="ot">&lt;-</span> <span class="fu">file.path</span>(<span class="fu">tempdir</span>(), <span class="st">&quot;example_ttl.ttl&quot;</span>)</span>
-<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="fu">ttl_write</span>(<span class="at">tdf=</span>tdf, <span class="at">ttl_namespace=</span><span class="cn">NULL</span>, <span class="at">file_path=</span>example_file)</span>
-<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a></span>
-<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a><span class="fu">readLines</span>(example_file)</span></code></pre></div>
+<p>The <code>dataset_df</code> class is designed to remain fully
+compatible with the <strong>tidyverse</strong> data workflow, while
+offering a metadata structure suitable for:</p>
+<ul>
+<li><p><strong>Receiving SDMX-style statistical data</strong> into
+R</p></li>
+<li><p><strong>Exporting semantically meaningful datasets</strong> to
+DCAT, RDF, or Wikibase</p></li>
+<li><p><strong>Complying with open science repository
+requirements</strong> (e.g., DataCite, Zenodo)</p></li>
+</ul>
+<p>Start tidy. Stay meaningful. Embrace <code>dataset_df</code>.</p>
 </div>
 
 

@@ -10,18 +10,20 @@
 \usage{
 dataset_df(
   ...,
-  dataset_bibentry = NULL,
+  identifier = c(eg = "http://example.com/dataset#"),
   var_labels = NULL,
   units = NULL,
-  definitions = NULL,
+  concepts = NULL,
+  dataset_bibentry = NULL,
   dataset_subject = NULL
 )
 
 as_dataset_df(
   df,
+  identifier = c(eg = "http://example.com/dataset#"),
   var_labels = NULL,
   units = NULL,
-  definitions = NULL,
+  concepts = NULL,
   dataset_bibentry = NULL,
   dataset_subject = NULL,
   ...
@@ -36,15 +38,24 @@ is_dataset_df(x)
 \arguments{
 \item{...}{The vectors (variables) that should be included in the dataset.}
 
-\item{dataset_bibentry}{A list of bibliographic references and descriptive metadata
-about the dataset as a whole created with \code{\link{datacite}} or
-\code{\link{dublincore}}.}
+\item{identifier}{Defaults to \code{c(eg="http://example.com/dataset#")},
+which should be changed to the permanent identifier of the dataset. For
+example, if your dataset will be released with the Digital Object
+Identifier (DOI) \verb{https;//doi.org/1234}, you should use a short prefixed
+identifier like \code{c(obs="https://doi.org/1234#")}, which will resolve
+to the rows being identified as
+https://doi.org/1234#1...https://doi.org/1234#n.}
 
 \item{var_labels}{The long, human readable labels of each variable.}
 
 \item{units}{The units of measurement for the measured variables.}
 
-\item{definitions}{The linked definitions of the variables, attributes, or constants.}
+\item{concepts}{The linked concepts of the variables, attributes, or
+constants.}
+
+\item{dataset_bibentry}{A list of bibliographic references and descriptive
+metadata about the dataset as a whole created with \code{\link{datacite}}
+or \code{\link{dublincore}}.}
 
 \item{dataset_subject}{The subject of the dataset, see \code{\link{subject}}.}
 
@@ -53,42 +64,60 @@ about the dataset as a whole created with \code{\link{datacite}} or
 \item{x}{A \code{dataset_df} object for S3 methods.}
 }
 \value{
-\code{dataset_df} is the constructor of this type, it returns an object
-inherited from a data frame with semantically rich metadata.
+\code{dataset_df} is the constructor of this type, it returns an
+object inherited from a data frame with semantically rich metadata.
 
 \code{is.dataset_df} returns a logical value
 (if the object is of class \code{dataset_df}.)
 }
 \description{
-The \code{dataset_df} constructor creates the objects of this class, which
-are semantically rich, modern data frames inherited from
+The \code{dataset_df} constructor creates the objects of this
+class, which are semantically rich, modern data frames inherited from
 \code{\link[tibble:tibble]{tibble::tibble}}.
 }
 \details{
-To check if an object has the class dataset_df use \code{is.dataset_df}.\cr
-\cr
-\code{print} is the method to print out the semantically rich data frames
-created with the constructor of \code{dataset_df}.\cr
-\cr
-\code{summary} is the method to summarise these semantically rich data frames.\cr
-\cr
-For more details, please check the \code{vignette("dataset_df", package = "dataset")}
+To check if an object has the class dataset_df use
+\code{is.dataset_df}.\cr \cr \code{print} is the method to print out the
+semantically rich data frames created with the constructor of
+\code{dataset_df}.\cr \cr \code{summary} is the method to summarise these
+semantically rich data frames.\cr \cr
+For more details, please check the \code{vignette("dataset_df",
+package = "dataset")}
 vignette.
 }
 \examples{
 my_dataset <- dataset_df(
-   country_name = defined(
-     c("AD", "LI"),
-     definition = "http://data.europa.eu/bna/c_6c2bb82d",
-     namespace = "https://www.geonames.org/countries/$1/"),
-   gdp = defined(
-     c(3897, 7365),
-     label = "Gross Domestic Product",
-     unit = "million dollars",
-     definition = "http://data.europa.eu/83i/aa/GDP")
-)
+  country_name = defined(
+    c("AD", "LI"),
+    concept = "http://data.europa.eu/bna/c_6c2bb82d",
+    namespace = "https://www.geonames.org/countries/$1/"
+  ),
+  gdp = defined(
+    c(3897, 7365),
+    label = "Gross Domestic Product",
+    unit = "million dollars",
+    concept = "http://data.europa.eu/83i/aa/GDP"
+  ),
+  dataset_bibentry =  dublincore(
+    title = "GDP of Andorra And Lichtenstein",
+    description = "A small but semantically rich datset example.",
+    creator = person("Jane", "Doe", role = "cre"),
+    publisher = "Open Data Institute",
+    language = "en")
+ )
 
+# Use standard methods, like print, summary, head, tail
 print(my_dataset)
+head(my_dataset)
+tail(my_dataset)
 
+# Check class:
 is.dataset_df(my_dataset)
+
+# To check the bibliographic metadata of a dataset,
+# use as_dublincore for DCTERMS:
+as_dublincore(my_dataset)
+
+# ... and as_datacite for DataCite:
+as_datacite(my_dataset)
 }
