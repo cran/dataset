@@ -4,30 +4,113 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 
-## ----setup--------------------------------------------------------------------
+## ----loaddata-----------------------------------------------------------------
 library(dataset)
+data("gdp")
 
-## ----smallcountries-----------------------------------------------------------
+## ----printgdp-----------------------------------------------------------------
+print(gdp)
+
+## ----createdataasetdf---------------------------------------------------------
 small_country_dataset <- dataset_df(
-  country_name = defined(c("AD", "LI"),
+  geo = defined(
+    gdp$geo,
     label = "Country name",
-    concept = "http://data.europa.eu/bna/c_6c2bb82d",
-    namespace = "https://www.geonames.org/countries/$1/"
+    concept = "http://purl.org/linked-data/sdmx/2009/dimension#refArea",
+    namespace = "https://dd.eionet.europa.eu/vocabulary/eurostat/geo/$1"
   ),
-  gdp = defined(c(3897, 7365),
+  year = defined(
+    gdp$year,
+    label = "Reference Period (Year)",
+    concept = "http://purl.org/linked-data/sdmx/2009/dimension#refPeriod"
+  ),
+  gdp = defined(
+    gdp$gdp,
     label = "Gross Domestic Product",
-    unit = "million dollars",
+    unit = "CP_MEUR",
     concept = "http://data.europa.eu/83i/aa/GDP"
+  ),
+  unit = defined(
+    gdp$unit,
+    label = "Unit of Measure",
+    concept = "http://purl.org/linked-data/sdmx/2009/attribute#unitMeasure",
+    namespace = "https://dd.eionet.europa.eu/vocabulary/eurostat/unit/$1"
+  ),
+  freq = defined(
+    gdp$freq,
+    label = "Frequency",
+    concept = "http://purl.org/linked-data/sdmx/2009/code"
   ),
   dataset_bibentry = dublincore(
     title = "Small Country Dataset",
     creator = person("Jane", "Doe"),
-    publisher = "Example Inc."
+    publisher = "Example Inc.",
+    datasource = "https://doi.org/10.2908/NAIDA_10_GDP",
+    rights = "CC-BY",
+    coverage = "Andorra, Liechtenstein, San Marino and the Feroe Islands"
   )
 )
 
-## ----serialisation------------------------------------------------------------
-triples <- dataset_to_triples(small_country_dataset)
+## ----varlabel-----------------------------------------------------------------
+var_label(small_country_dataset$gdp)
 
-n_triples(mapply(n_triple, triples$s, triples$p, triples$o))
+## ----varunit------------------------------------------------------------------
+var_unit(small_country_dataset$gdp)
+
+## ----language-----------------------------------------------------------------
+language(small_country_dataset) <- "en"
+
+## ----bibentry-----------------------------------------------------------------
+print(get_bibentry(small_country_dataset), "bibtex")
+
+## ----feroedf------------------------------------------------------------------
+feroe_df <- data.frame(
+  geo = rep("FO", 3),
+  year = 2020:2022,
+  gdp = c(2523.6, 2725.8, 3013.2),
+  unit = rep("CP_MEUR", 3),
+  freq = rep("A", 3)
+)
+
+## ----notevaluatedrbind, eval=FALSE--------------------------------------------
+# rbind(small_country_dataset, feroe_df)
+
+## ----fereodataset-------------------------------------------------------------
+feroe_dataset <- dataset_df(
+  geo = defined(
+    feroe_df$geo,
+    label = "Country name",
+    concept = "http://purl.org/linked-data/sdmx/2009/dimension#refArea",
+    namespace = "https://dd.eionet.europa.eu/vocabulary/eurostat/geo/$1"
+  ),
+  year = defined(
+    feroe_df$year,
+    label = "Reference Period (Year)",
+    concept = "http://purl.org/linked-data/sdmx/2009/dimension#refPeriod"
+  ),
+  gdp = defined(
+    feroe_df$gdp,
+    label = "Gross Domestic Product",
+    unit = "CP_MEUR",
+    concept = "http://data.europa.eu/83i/aa/GDP"
+  ),
+  unit = defined(
+    feroe_df$unit,
+    label = "Unit of Measure",
+    concept = "http://purl.org/linked-data/sdmx/2009/attribute#unitMeasure",
+    namespace = "https://dd.eionet.europa.eu/vocabulary/eurostat/unit/$1"
+  ),
+  freq = defined(
+    feroe_df$freq,
+    label = "Frequency",
+    concept = "http://purl.org/linked-data/sdmx/2009/code"
+  )
+)
+
+## ----binddefinedrows----------------------------------------------------------
+joined_dataset <- bind_defined_rows(small_country_dataset, feroe_dataset)
+joined_dataset
+
+## ----backwardcompatibility----------------------------------------------------
+attributes(as.data.frame(joined_dataset))
 

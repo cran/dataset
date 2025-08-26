@@ -1,214 +1,136 @@
-test_that("new_dublincore() works", {
-  expect_equal(
-    new_dublincore(
-      title = "Test",
-      creator = person("Jane", "Doe", role = "cre")
-    )$author,
-    person("Jane", "Doe", role = "cre")
-  )
-
-  expect_equal(
-    new_dublincore(
-      title = "Test",
-      creator = c(
-        person("Jane", "Doe", role = "cre"),
-        person("Joe", "Doe", role = "cre")
-      )
-    )$author,
-    c(
-      person("Jane", "Doe", role = "cre"),
-      person("Joe", "Doe", role = "cre")
-    )
-  )
-
-  expect_equal(
-    new_dublincore(
-      title = "Test",
-      creator = person("Jane", "Doe", role = "cre")
-    )$title,
-    "Test"
-  )
-
-  expect_equal(
-    new_dublincore(
-      title = "Test",
-      creator = person("Jane", "Doe", role = "cre"),
-      publisher = person("My Publisher Inc.", role = "pbl")
-    )$publisher,
-    "My Publisher Inc. [pbl]"
-  )
-
-  expect_equal(
-    new_dublincore(
-      title = "Test",
-      creator = person("Jane", "Doe", role = "cre"),
-      datasource = "https://doi.org/10.1111/j.1469-1809.1936.tb02137.x"
-    )$datasource,
-    "https://doi.org/10.1111/j.1469-1809.1936.tb02137.x"
-  )
-
-  expect_equal(
-    new_dublincore(
-      title = "Test",
-      creator = person("Jane", "Doe", role = "cre"),
-      dataset_date = 1935
-    )$date,
-    "1935"
-  )
-
-  expect_equal(
-    new_dublincore(
-      title = "Test",
-      creator = person("Jane", "Doe", role = "cre"),
-      dataset_date = 1935
-    )$year,
-    "1935"
-  )
-
-  expect_equal(
-    new_dublincore(
-      title = "Test",
-      creator = person("Jane", "Doe", role = "cre"),
-      language = "en"
-    )$language,
-    "en"
-  )
-})
-
-test_that("dublincore works", {
-  dct_iris1 <- dublincore(
-    title = "Iris Dataset",
-    creator = c(
-      person(given = "Edgar", family = "Anderson", role = "aut"),
-      person(given = "Jane D", family = "Anderson", role = "cre")
-    ),
-    publisher = person("American Iris Society", role = "pbl"),
-    datasource = "https://doi.org/10.1111/j.1469-1809.1936.tb02137.x",
-    dataset_date = 1935,
-    language = "en",
-    description = "The famous (Fisher's or Anderson's) iris data set gives the measurements in centimeters of the variables sepal length and width and petal length and width, respectively, for 50 flowers from each of 3 species of iris. The species are Iris setosa, versicolor, and virginica."
-  )
-  expect_equal(dct_iris1$author, c(
-    person(given = "Edgar", family = "Anderson", role = "aut"),
-    person(given = "Jane D", family = "Anderson", role = "cre")
-  ))
-  expect_equal(dct_iris1$publisher, "American Iris Society")
-  dct_iris <- dublincore(
-    title = "Iris Dataset",
-    creator = person("Edgar", "Anderson", role = "aut"),
-    publisher = person("American Iris Society", role = "pbl"),
-    contributor = person("Daniel", "Antal", role = "dtm"),
-    datasource = "https://doi.org/10.1111/j.1469-1809.1936.tb02137.x",
-    dataset_date = 1935,
-    language = "en",
-    description = "The famous (Fisher's or Anderson's) iris data set gives the measurements in centimeters of the variables sepal length and width and petal length and width, respectively, for 50 flowers from each of 3 species of iris. The species are Iris setosa, versicolor, and virginica."
-  )
-  expect_equal(dct_iris$publisher, "American Iris Society")
-  expect_equal(attr(dct_iris, "contributor"), person("Daniel", "Antal", role = "dtm"))
-  expect_equal(dct_iris$date, "1935")
-  expect_true(is.dublincore(dct_iris))
-})
-
-
-test_that("dublincore() works", {
-  dct_iris <- dublincore(
-    title = "Iris Dataset",
-    creator = person("Edgar", "Anderson", role = "aut"),
-    publisher = "American Iris Society",
-    datasource = "https://doi.org/10.1111/j.1469-1809.1936.tb02137.x",
-    dataset_date = 1935,
-    language = "en",
-    description = "The famous (Fisher's or Anderson's) iris data set gives the measurements in centimeters of the variables sepal length and width and petal length and width, respectively, for 50 flowers from each of 3 species of iris. The species are Iris setosa, versicolor, and virginica."
-  )
-  expect_equal(dct_iris$language, "en")
-  expect_equal(dct_iris$publisher, "American Iris Society")
-  expect_equal(dct_iris$date, "1935")
-  expect_equal(dct_iris$datasource, "https://doi.org/10.1111/j.1469-1809.1936.tb02137.x")
-  expect_equal(dct_iris$identifier, ":tba")
-  expect_equal(dct_iris$rights, ":tba")
-  expect_equal(dct_iris$author, person("Edgar", "Anderson", role = "aut"))
-  expect_equal(dct_iris$type, "DCMITYPE:Dataset")
-  expect_equal(dct_iris$description, "The famous (Fisher's or Anderson's) iris data set gives the measurements in centimeters of the variables sepal length and width and petal length and width, respectively, for 50 flowers from each of 3 species of iris. The species are Iris setosa, versicolor, and virginica.")
-})
-
-test_that("as_dublincore() works", {
-  expect_true(is.dublincore(as_dublincore(x = iris_dataset)))
-  expect_true(is.list(as_dublincore(x = iris_dataset, type = "list")))
-  expect_equal(as_dublincore(iris_dataset)$date, "1935")
-  expect_equal(as_dublincore(iris_dataset)$description, "The famous (Fisher's or Anderson's) iris data set.")
-  expect_equal(as_dublincore(iris_dataset)$rights, ":tba")
-  expect_equal(as_dublincore(iris_dataset)$coverage, ":unas")
-  iris_dc_triples <- as_dublincore(iris_dataset, "ntriples")
-  expect_equal(iris_dc_triples[1], '<https://doi.org/10.5281/zenodo.10396807> <http://purl.org/dc/terms/title> \"Iris Dataset\"^^<http://www.w3.org/2001/XMLSchema#string> .')
-})
-
-
-test_that("as_dublincore() gives warning", {
-  expect_warning(as_dublincore(iris_dataset, type = "character"))
-})
-
-test_that("dublincore() new example works", {
-  orange_bibentry <- dublincore(
-    title = "Growth of Orange Trees",
-    creator = c(
-      person(
-        given = "N.R.",
-        family = "Draper",
-        role = "cre",
-        comment = c(VIAF = "http://viaf.org/viaf/84585260")
-      ),
-      person(
-        given = "H",
-        family = "Smith",
-        role = "cre"
-      )
-    ),
-    contributor = person(
-      given = "Antal",
-      family = "Daniel",
-      role = "dtm"
-    ), # Add data manager
-    publisher = "Wiley",
-    datasource = "https://isbnsearch.org/isbn/9780471170822",
-    dataset_date = 1998,
-    identifier = "https://doi.org/10.5281/zenodo.14917851",
-    language = "en",
-    description = "The Orange data frame has 35 rows and 3 columns of records of the growth of orange trees."
-  )
-  expect_equal(orange_bibentry$description, "The Orange data frame has 35 rows and 3 columns of records of the growth of orange trees.")
-})
-
-test_that("print.dublincore outputs expected lines", {
+test_that("creates valid dublincore object", {
   dc <- dublincore(
-    title = "Test Dataset",
-    creator = person(given = "Jane", family = "Doe", role = "aut"),
-    contributor = person(given = "John", family = "Smith", role = "ctb"),
-    publisher = "Example Publisher",
-    dataset_date = 2023,
-    language = "en",
-    description = "Example dataset for testing."
+    title = "Sample Dataset",
+    creator = person("Jane", "Doe")
   )
-
-  output <- capture.output(print(dc))
-
-  expect_true(any(grepl("Dublin Core Metadata Record", output)))
-  expect_true(any(grepl("Title:\\s+Test Dataset", output)))
-  expect_true(any(grepl("Jane Doe", output)))
-  expect_true(any(grepl("John Smith", output)))
-  expect_true(any(grepl("Publisher:\\s+Example Publisher", output)))
+  expect_s3_class(dc, c("dublincore", "bibrecord", "bibentry"))
+  expect_equal(dc$title, "Sample Dataset")
+  expect_true(inherits(dc$author[[1]], "person"))
 })
 
-test_that("dublincore_to_triples produces valid n-triples format", {
-  dc <- as.list(dublincore(
-    title = "Test Dataset",
+test_that("dublincore() errors when title has length > 1", {
+  expect_error(
+    dublincore(
+      title = c("Too", "Many", "Titles"),
+      creator = person("Jane", "Doe")
+    ),
+    "title must be a single character string"
+  )
+})
+
+
+test_that("missing creator fails", {
+  expect_error(
+    dublincore(title = "Missing Creator"),
+    "creator.*required"
+  )
+})
+
+test_that("default values are set", {
+  dc <- dublincore(
+    title = "Defaults Example",
+    creator = person("Jane", "Doe")
+  )
+  expect_equal(dc$rights, ":tba")
+  expect_equal(dc$format, "application/r-rds")
+  expect_equal(dc$relation, ":unas")
+})
+
+test_that("custom contributor is set", {
+  contrib <- person(given = "Antal", family = "Daniel", role = "dtm")
+  dc <- dublincore(
+    title = "Contrib Example",
     creator = person("Jane", "Doe"),
-    identifier = "http://example.org/test",
-    subject = "testing"
-  ))
+    contributor = contrib
+  )
+  expect_equal(attr(dc, "contributor")[[1]]$given, "Antal")
+  expect_equal(attr(dc, "contributor")[[1]]$role, "dtm")
+})
 
-  triples <- dublincore_to_triples(dc, dataset_id = "http://example.org/test")
+test_that("dataset_date sets year correctly", {
+  dc <- dublincore(
+    title = "Date Example",
+    creator = person("Jane", "Doe"),
+    dataset_date = as.Date("2022-06-01")
+  )
+  expect_equal(dc$year, "2022")
+})
 
-  expect_type(triples, "character")
-  expect_true(any(grepl("^<http://example.org/test> <http://purl.org/dc/terms/title>", triples)))
-  expect_true(any(grepl("<http://purl.org/dc/terms/subject>", triples)))
+test_that("identifier, language, and format are preserved", {
+  dc <- dublincore(
+    title = "Complete Example",
+    creator = person("Jane", "Doe"),
+    identifier = "https://doi.org/10.1234/test",
+    language = "en",
+    dataset_format = "application/json"
+  )
+  expect_equal(dc$identifier, "https://doi.org/10.1234/test")
+  expect_equal(dc$language, "en")
+  expect_equal(dc$format, "application/json")
+})
+
+test_that("print.dublincore prints key fields", {
+  s1 <- subject_create("Climate Change", schemeURI = "http://id.loc.gov/subjects", subjectScheme = "LCSH")
+
+  dc <- dublincore(
+    title = "Climate Data",
+    creator = person("Eve", "Rivera", role = "cre"),
+    publisher = "Climate Org",
+    subject = s1,
+    description = "A dataset on climate change indicators."
+  )
+
+  expect_output(print(dc), "Dublin Core Metadata Record")
+
+  out <- capture_output(print(dc))
+
+  # Header
+  expect_match(out, "Dublin Core Metadata Record")
+  expect_match(out, "--------------------------")
+
+  # Fields
+  expect_match(out, "Title:\\s+Climate Data")
+  expect_match(out, "Creator\\(s\\):\\s+Eve Rivera \\[cre\\]")
+  expect_match(out, "Subject\\(s\\):\\s+Climate Change")
+  expect_match(out, "Publisher:\\s+Climate Org")
+  expect_match(out, "Year:\\s+:tba")
+  expect_match(out, "Description:\\s+A dataset on climate change indicators")
+
+  # Alignment: all labels should have the colon at same position
+  lines <- strsplit(out, "\n")[[1]]
+  meta_lines <- grep(":", lines, value = TRUE)
+
+  # find where values start (first non-space after colon)
+  value_start <- vapply(meta_lines, function(l) {
+    m <- regexpr(":", l)
+    rest <- substr(l, m + 1, nchar(l))
+    m + regexpr("[^ ]", rest)
+  }, integer(1))
+
+  expect_true(length(unique(value_start)) == 1)
+})
+
+test_that("is.dublincore returns TRUE for dublincore object", {
+  dc <- dublincore(
+    title = "Dublin Check",
+    creator = person("Jane", "Doe")
+  )
+  expect_true(is.dublincore(dc))
+})
+
+test_that("is.dublincore returns FALSE for non-dublincore object", {
+  df <- data.frame(x = 1:3)
+  expect_false(is.dublincore(df))
+})
+
+test_that("dublincore stores structured relation as attribute and
+          flat relation in slot", {
+  rel <- related_create("https://doi.org/10.5678/def", "References", "DOI")
+  dc <- dublincore(
+    title = "X",
+    creator = person("A", "B", role = "cre"),
+    relation = rel
+  )
+  expect_equal(dc$relation, "https://doi.org/10.5678/def")
+  expect_s3_class(attr(dc, "relation"), "related", exact = FALSE)
 })

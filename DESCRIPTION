@@ -1,7 +1,7 @@
 Package: dataset
-Title: Create Data Frames that are Easier to Exchange and Reuse
-Version: 0.3.9
-Date: 2025-05-25
+Title: Create Data Frames for Exchange and Reuse
+Version: 0.4.0
+Date: 2025-08-26
 Language: en-GB
 Authors@R: 
     c(person(given = "Daniel", family = "Antal", 
@@ -15,19 +15,26 @@ Authors@R:
              ), 
      person(given = "Anna Márta", family =  "Mester", 
             role = c("rev"), 
-            comment = c(ORCID = "0009-0008-2274-8163"))
+            comment = c(ORCID = "0009-0008-2274-8163")
+            ),
+      person(given = "Mauro", family =  "Lepore", 
+            role = c("rev"), 
+            comment = c(ORCID = "0000-0002-1986-7988")
+            )
       )
 Maintainer: Daniel Antal <daniel.antal@dataobservatory.eu>
-Description: The aim of the 'dataset' package is to make tidy datasets easier to release, 
-    exchange and reuse. It organizes and formats data frame 'R' objects into well-referenced, 
-    well-described, interoperable datasets into release and reuse ready form.
+Description: The 'dataset' package helps create semantically rich, 
+    machine-readable, and interoperable datasets in R. It extends tidy
+    data frames with metadata that preserves meaning, improves 
+    interoperability, and makes datasets easier to publish, exchange, 
+    and reuse in line with ISO and W3C standards.
 License: GPL (>= 3)
 Encoding: UTF-8
 URL: https://dataset.dataobservatory.eu/
 BugReports: https://github.com/dataobservatory-eu/dataset/issues/
 LazyData: true
-Imports: assertthat, haven, ISOcodes, labelled, pillar, rlang, tibble,
-        utils, vctrs
+Imports: assertthat, haven, ISOcodes, labelled, pillar, tibble, utils,
+        vctrs
 RoxygenNote: 7.3.2
 Suggests: dplyr, jsonld, knitr, rdflib, rmarkdown, spelling, tidyr,
         testthat (>= 3.0.0)
@@ -35,11 +42,12 @@ Config/testthat/edition: 3
 Depends: R (>= 3.5)
 VignetteBuilder: knitr
 NeedsCompilation: no
-Packaged: 2025-05-25 15:44:54 UTC; antal
+Packaged: 2025-08-25 22:11:39 UTC; DanielAntal
 Author: Daniel Antal [aut, cre] (ORCID:
     <https://orcid.org/0000-0001-7513-6760>),
   Marcelo Perlin [rev] (ORCID: <https://orcid.org/0000-0002-9839-4268>),
   Anna Márta Mester [rev] (ORCID:
-    <https://orcid.org/0009-0008-2274-8163>)
+    <https://orcid.org/0009-0008-2274-8163>),
+  Mauro Lepore [rev] (ORCID: <https://orcid.org/0000-0002-1986-7988>)
 Repository: CRAN
-Date/Publication: 2025-05-25 16:20:02 UTC
+Date/Publication: 2025-08-26 09:30:02 UTC

@@ -1,61 +1,65 @@
-## ----setupdefined, include = FALSE--------------------------------------------
+## ----setupdefinedvignette, include = FALSE------------------------------------
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
 
-## ----load---------------------------------------------------------------------
+## ----setup--------------------------------------------------------------------
 library(dataset)
+data("gdp")
 
-## ----definedvector------------------------------------------------------------
+## ----gdp1---------------------------------------------------------------------
 gdp_1 <- defined(
-  c(3897, 7365),
+  gdp$gdp,
   label = "Gross Domestic Product",
-  unit = "million dollars",
+  unit = "CP_MEUR",
   concept = "http://data.europa.eu/83i/aa/GDP"
 )
 
-cat("The print method:\n")
+## ----seeattributes------------------------------------------------------------
+attributes(gdp_1)
+
+## ----convenience--------------------------------------------------------------
+cat("Get the label only: ", var_label(gdp_1), "\n")
+cat("Get the unit only: ", var_unit(gdp_1), "\n")
+cat("Get the concept definition only: ", var_concept(gdp_1), "\n")
+cat("All attributes:\n")
+
+## ----printdefined-------------------------------------------------------------
 print(gdp_1)
-cat("And the summary:\n")
+
+## ----summarydefined-----------------------------------------------------------
 summary(gdp_1)
 
-## ----definedattributes--------------------------------------------------------
-attributes(gdp_1)
-cat("Get the label only: ")
-var_label(gdp_1)
-cat("Get the unit only: ")
-var_unit(gdp_1)
-cat("Get the concept definition only: ")
-var_concept(gdp_1)
+## ----ambiguous----------------------------------------------------------------
+gdp_2 <- defined(
+  c(2523.6, 2725.8, 3013.2),
+  label = "Gross Domestic Product"
+)
 
-## ----combine------------------------------------------------------------------
-a <- defined(1:3, label = "Length", unit = "metres")
-b <- defined(4:6, label = "Length", unit = "metres")
-
-c(a, b)
-
-## ----newexample---------------------------------------------------------------
-gdp_2 <- defined(2034, label = "Gross Domestic Product")
-
-## ----error, eval=FALSE--------------------------------------------------------
+## ----notevaluatedc, eval=FALSE------------------------------------------------
 # c(gdp_1, gdp_2)
 
-## ----smgdp, gpd2--------------------------------------------------------------
-var_unit(gdp_2) <- "million dollars"
+## ----gpd2---------------------------------------------------------------------
+var_unit(gdp_2) <- "CP_MEUR"
 
 ## ----vardef2------------------------------------------------------------------
 var_concept(gdp_2) <- "http://data.europa.eu/83i/aa/GDP"
 
-## ----concat-------------------------------------------------------------------
-summary(c(gdp_1, gdp_2))
+## ----c------------------------------------------------------------------------
+new_gdp <- c(gdp_1, gdp_2)
+summary(new_gdp)
 
 ## ----country------------------------------------------------------------------
-country <- defined(c("AD", "LI", "SM"),
+country <- defined(
+  c("AD", "LI", "SM"),
   label = "Country name",
-  concept = "http://data.europa.eu/bna/c_6c2bb82d",
+  concept = "http://purl.org/linked-data/sdmx/2009/dimension#refArea",
   namespace = "https://www.geonames.org/countries/$1/"
 )
+
+## ----shownamespace------------------------------------------------------------
+var_namespace(country)
 
 ## ----characters---------------------------------------------------------------
 countries <- defined(
@@ -67,15 +71,20 @@ countries <- defined(
 countries
 as_character(countries)
 
-## ----basicmethods-------------------------------------------------------------
+## ----subsettingmethods--------------------------------------------------------
 gdp_1[1:2]
-gdp_1 > 5000
+gdp_1[gdp_1 > 5000]
+
+## ----coerctionmethods---------------------------------------------------------
 as.vector(gdp_1)
 as.list(gdp_1)
 
 ## ----coerce-char--------------------------------------------------------------
 as_character(country)
 as_character(c(gdp_1, gdp_2))
+
+## ----coerce-factor------------------------------------------------------------
+as_factor(country)
 
 ## ----coerce-num---------------------------------------------------------------
 as_numeric(c(gdp_1, gdp_2))

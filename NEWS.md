@@ -1,3 +1,30 @@
+# dataset 0.4.0
+
+A new CRAN release with much improved unit testing and documentation to 
+meet the rOpenSci standards and better methods for the main s3 classes of
+the package.
+
+- Rewritten vignettes.
+- Improved print, summary methods for `dataset_df` and `defined`.
+- Better handling of multible contributors in `bibrecord`. 
+- A new `dataset_to_triples` and `xsd_convert` for better serialisation.
+- A better handling of empty nodes in RDF.
+- Many bug fixes in the way semantic information is translated to RDF.
+- `var_labels()` now similar to `labelled::var_lables()` behavior, generally 
+haven_labelled_defined as an s3 class works better in the tidyverse.
+- New bibliographic helper functions for `dataset_format()` and `contributor()`.
+- Countless small bug fixes to convert to various metadata schemas edge cases, 
+like missing contributors, formatted subjects, etc.
+- Better handling of structured metadata with `subject()`
+
+# dataset 0.3.9
+
+- New CRAN release with many bug fixes, and improvements from peer-review.
+- The `definition` attributes is renamed to `concept`.
+- Improved printing for `defined` and `dataset_df` classes.
+- Improved compatibility and coercion methods for base R character and numeric types.
+- A clearer `bibrecord` class for extending `utils::person` and `utils::bibentry` classes for more modern and cleaner bibliographic references. 
+
 # dataset 0.3.4027
 
 - The new `bibrecord()` class is handles is the superclass of the `dublincore` and
@@ -15,10 +42,11 @@ semantically richer `orange_df` example dataset.
 
 # dataset 0.3.4023
 
-- Changed `iris_df` to `orange_df` in all examples
-- `xsd_convert()` handles difftime classes and edge cases
-- Small errors fixed in examples
-- Test coverage increased
+- Changed `iris_df` to `orange_df` in all examples.
+- `xsd_convert()` handles difftime classes and edge cases.
+- Small errors fixed in examples.
+- Test coverage increased.
+- The `master` branch is renamed to `main`.
 
 # dataset 0.3.4021
 
@@ -36,10 +64,6 @@ This update significantly improves the usability and robustness of semantically 
 
 - New release on CRAN.
 
-# dataset 0.3.2
-
-- [New Requirement](https://dataset.dataobservatory.eu/articles/new-requirements.html) setting for further works.
-
 # dataset 0.3.0
 
 - Released on CRAN.
@@ -54,11 +78,8 @@ This update significantly improves the usability and robustness of semantically 
 
 New vignettes on
 
-- [x] [Richer Semantics for the Dataset's Variables](https://dataset.dataobservatory.eu/articles/columns.html)
+- [x] [Richer Semantics for the Dataset's Variables](https://dataset.dataobservatory.eu/articles/defined.html)
 
-- [x] [Richer Semantics for the Dataset's Observations](https://dataset.dataobservatory.eu/articles/rows.html)
-
-- [x] [Richer Description of the Datasets's Structure for Meaningful Reuse Opportunities](https://dataset.dataobservatory.eu/articles/DSD.html)
 
 # dataset 0.2.7 
 
@@ -130,4 +151,5 @@ A minor correction to avoid vignettes downloading data from the Eurostat data wa
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.6703765.svg)](https://doi.org/10.5281/zenodo.6703765) First development version release.
 
-* Added the [Motivation of the dataset package](https://dataset.dataobservatory.eu/articles/Motivation.html) vignette article.
+* Added the `Motivation of the dataset package` vignette article, which is later
+replaced with [Design Principles & Future Work Semantically Enriched, Standards-Aligned Datasets in R](https://dataset.dataobservatory.eu/articles/design.html).

@@ -1,31 +1,85 @@
-
-test_that("as_dublincore returns a dublincore (bibentry) object by default", {
-  dc <- as_dublincore(orange_df)
-  expect_s3_class(dc, "dublincore")
-  expect_s3_class(dc, "bibentry")
-  expect_equal(dc$title, "Growth of Orange Trees")
-  expect_true(inherits(dc$author, "person") || all(vapply(dc$author, inherits, logical(1), "person")))
+test_that("returns dublincore bibentry by default", {
+  df <- dataset_df(x = 1:3)
+  attr(df, "dataset_bibentry") <- dublincore(
+    title = "Test Dataset",
+    creator = person("Jane", "Doe")
+  )
+  result <- as_dublincore(df)
+  expect_s3_class(result, "dublincore")
+  expect_s3_class(result, "bibentry")
 })
 
-test_that("as_dublincore(type = 'list') returns a named list with correct fields", {
-  dc_list <- as_dublincore(orange_df, type = "list")
-  expect_type(dc_list, "list")
-  expect_equal(dc_list$title, "Growth of Orange Trees")
-  expect_equal(dc_list$type, "DCMITYPE:Dataset")
-  expect_true("creator" %in% names(dc_list))
-  expect_true("identifier" %in% names(dc_list))
+test_that("returns list if type = 'list'", {
+  df <- dataset_df(x = 1:3)
+  attr(df, "dataset_bibentry") <- dublincore(
+    title = "List Output",
+    creator = person("Jane", "Doe")
+  )
+  result <- as_dublincore(df, type = "list")
+  expect_type(result, "list")
+  expect_named(result, c(
+    "title", "creator", "identifier", "publisher", "subject", "type",
+    "contributor", "date", "language", "relation", "dataset_format", "rights",
+    "datasource", "description", "coverage"
+  ))
 })
 
-test_that("as_dublincore(type = 'dataset_df') returns a dataset_df", {
-  dc_df <- as_dublincore(orange_df, type = "dataset_df")
-  expect_s3_class(dc_df, "dataset_df")
-  expect_true(is.data.frame(dc_df))
-  expect_equal(ncol(dc_df), 16)  # all metadata fields included
+test_that("returns dataset_df if type = 'dataset_df'", {
+  df <- dataset_df(x = 1:3)
+  attr(df, "dataset_bibentry") <- dublincore(
+    title = "Structured Output",
+    creator = person("Jane", "Doe"),
+    identifier = "doi:10.1234/example",
+    publisher = "DataPub",
+    subject = "Science",
+    contributor = person("Contributor", "Name"),
+    dataset_date = "2022",
+    language = "en",
+    relation = "https://related.example.org",
+    dataset_format = "text/csv",
+    rights = "CC-BY",
+    datasource = "https://example.org/data",
+    description = "A dataset about something",
+    coverage = "Global"
+  )
+  result <- as_dublincore(df, type = "dataset_df")
+  expect_s3_class(result, "dataset_df")
+  expect_true(all(c("title", "creator", "identifier", "publisher") %in% names(result)))
 })
 
-test_that("as_dublincore(type = 'ntriples') returns valid N-Triples syntax", {
-  dc_nt <- as_dublincore(orange_df, type = "ntriples")
-  expect_type(dc_nt, "character")
-  expect_true(any(grepl("http://purl.org/dc/terms/title", dc_nt)))
-  expect_true(any(grepl("http://purl.org/dc/terms/creator", dc_nt)))
+test_that("returns ntriples string if type = 'ntriples'", {
+  df <- dataset_df(x = 1:3)
+  attr(df, "dataset_bibentry") <- dublincore(
+    title = "Triple Output",
+    creator = person("Jane", "Doe"),
+    contributor = person("Contributor", "Name")
+  )
+  result <- as_dublincore(df, type = "ntriples")
+  expect_type(result, "character")
+  expect_true(grepl("http", result[1]))
+})
+
+test_that("invalid type falls back to bibentry with warning", {
+  df <- dataset_df(x = 1:3)
+  attr(df, "dataset_bibentry") <- dublincore(
+    title = "Fallback",
+    creator = person("Jane", "Doe")
+  )
+  expect_warning(
+    result <- as_dublincore(df, type = "nonsense"),
+    "type cannot be"
+  )
+  expect_s3_class(result, "dublincore")
+})
+
+test_that("errors if author argument is not a person", {
+  df <- dataset_df(x = 1:3)
+  attr(df, "dataset_bibentry") <- dublincore(
+    title = "Bad Author",
+    creator = person("Jane", "Doe")
+  )
+  expect_error(
+    as_dublincore(df, author = "not a person"),
+    "author must be created with utils\\:\\:person"
+  )
 })

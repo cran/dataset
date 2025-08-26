@@ -1,18 +1,52 @@
-#' @title Create/add/retrieve a subject
+#' @title Create, add, or retrieve a subject
+#'
+#' @description
+#' Manage the subject metadata of a dataset. The subject can be stored as a
+#' simple character term or as a structured object with subproperties created by
+#' [subject_create()].
+#'
 #' @details
-#' The subject class and its function record the subject property of the dataset.
-#' The DataCite definition allows the use of multiple subproperties, however, these
-#' cannot be added to the standard \code{\link[utils:bibentry]{utils::bibentry}}
-#' object. Therefore, if the user sets the value of the subject field to a
-#' character string, it is added to the bibentry of the dataset, and also to
-#' a separate \code{subject} attribute. If the user wants to use the more detailed
-#' subproperties (see examples with \code{subject_create}), then the subject$term
-#' value is added to the bibentry as a text, and the more complex subject object
-#' is added as a separate attribute to the dataset_df object.#'
-#' @param x A dataset object created with \code{\link{dataset_df}} or
-#' \code{dataset::\link{as_dataset_df}}.
+#' The subject property records what the dataset is about.
+#' The [DataCite subject property](https://schema.datacite.org/meta/kernel-4/)
+#' allows multiple subproperties, but these cannot be stored directly in a
+#' standard [`utils::bibentry`] object.
+#' Therefore:
+#'
+#' * If you set a character string as the subject, it is stored in both the
+#'   bibentry and the `"subject"` attribute.
+#' * If you set a structured subject (via [subject_create()]), the `$term` value
+#'   is stored in the bibentry, and the full object is stored in the `"subject"`
+#'   attribute of the [`dataset_df`] object.
+#'
+#' @param x A dataset object created with [dataset_df()] or [as_dataset_df()].
+#' @param term A subject term, for example `"Data sets"`.
+#' @param schemeURI URI of the subject identifier scheme, for example
+#'   `"http://id.loc.gov/authorities/subjects"`.
+#' @param valueURI URI of the subject term, for example
+#'   `"https://id.loc.gov/authorities/subjects/sh2018002256"`.
+#' @param prefix Abbreviated prefix for a scheme URI, for example `"lcch:"`.
+#'   Widely used namespaces (schemes) have conventional abbreviations.
+#' @param subjectScheme Name of the subject scheme, classification code, or
+#'   authority if one is used. This acts as a namespace.
+#' @param classificationCode Classification code for schemes that do not have
+#'   `valueURI` entries for each subject term (e.g., ANZSRC).
+#' @param value A subject object created by [subject_create()] or a character
+#'   string. Used by `subject<-` to replace the subject.
+#'
+#' @return
+#' * `subject(x)` returns:
+#'   - a single `"subject"` object if only one is present,
+#'   - a list of `"subject"` objects if multiple are present,
+#'   - otherwise falls back to the plain string from the bibentry.
+#' * `subject(x) <- value` accepts a character vector, a `"subject"` object, or
+#'   a list of `"subject"` objects, and updates both the bibentry slot and the
+#'   `"subject"` attribute. Returns the dataset invisibly.
+#' * `subject_create()` returns a structured `"subject"` object — or a list of
+#'   them if multiple terms are provided.
+#' * `is.subject(x)` returns `TRUE` if `x` inherits from class `"subject"`.
+#'
 #' @examples
-#' # To set the subject of a dataset_df object:
+#' # Set a structured subject
 #' subject(orange_df) <- subject_create(
 #'   term = "Oranges",
 #'   schemeURI = "http://id.loc.gov/authorities/subjects",
@@ -21,44 +55,42 @@
 #'   prefix = "lcch:"
 #' )
 #'
-#' # To retrieve the subject with its subproperties:
+#' # Retrieve subject with subproperties
 #' subject(orange_df)
-#' @export
-#' @return \code{subject(x)} returns the subject attribute of the
-#' \code{\link{dataset_df}} object \code{x}, \code{subject(x)<-value} sets
-#' the same attribute to \code{value} and invisibly returns the
-#' \code{x} object with the changed attributes.
+#'
+#' @family bibliographic helper functions
 #' @importFrom assertthat assert_that
-#' @rdname subject
+#' @export
+#' @export
 subject <- function(x) {
-  assert_that(is.dataset_df(x),
+  assertthat::assert_that(
+    is.dataset_df(x),
     msg = "subject(x): x must be a dataset_df object created with dataset_df() or as_dataset_df()."
   )
 
-  if ("subject" %in% names(attributes(x))) {
-    attr(x, "subject")
-  } else if (!is.null(get_bibentry(x)$subject)) {
-    get_bibentry(x)$subject
-  } else {
-    message("No subject is recorded.")
+  subj_attr <- attr(x, "subject", exact = TRUE)
+  if (!is.null(subj_attr)) {
+    if (is.subject(subj_attr)) {
+      return(subj_attr)
+    }
+    if (is.list(subj_attr) && all(vapply(subj_attr, is.subject, logical(1)))) {
+      return(if (length(subj_attr) == 1) subj_attr[[1]] else subj_attr)
+    }
+    return(subj_attr)
   }
+
+  subj_bib <- get_bibentry(x)$subject
+  if (!is.null(subj_bib)) {
+    return(subj_bib)
+  }
+
+  message("No subject is recorded.")
+  NULL
 }
 
+
+
 #' @rdname subject
-#' @param term A subject term, for example, \code{"Data sets"}.
-#' @param subjectScheme The name of the subject scheme or classification code or
-#' authority if one is used. It is a namespace.
-#' @param schemeURI The URI of the subject identifier scheme, for example
-#' \code{"http://id.loc.gov/authorities/subjects"}
-#' @param valueURI The URI of the subject term.
-#' \code{"https://id.loc.gov/authorities/subjects/sh2018002256"}
-#' @param prefix An abbreviated prefix of a scheme URI, for example,
-#' \code{"lcch:"} representing \code{"http://id.loc.gov/authorities/subjects"}.
-#' Widely used namespaces (schemes) have conventional abbreviations.
-#' @param classificationCode The classificationCode subproperty may be used for
-#' subject schemes, like ANZSRC, which do not have valueURIs for each subject term.
-#' @return A \code{subject_create} returns a named list with the subject term,
-#' the subject scheme, URIs and prefix.
 #' @export
 subject_create <- function(term,
                            schemeURI = NULL,
@@ -68,33 +100,29 @@ subject_create <- function(term,
                            classificationCode = NULL) {
   if (is.null(term)) term <- ":tba"
 
-  # if (! all.equal(length(heading), length(subjectScheme))) {
-  #  stop("You must provide exactly one subjectSchemes, URIs and Codes for each heading.")
-  # }
-
   if (length(term) > 1) {
-    dataset_subject <- lapply(1:seq_along(term), function(x) {
-      new_Subject(term[x],
-        subjectScheme = subjectScheme[x],
-        schemeURI = schemeURI[x],
-        classificationCode = classificationCode[x],
-        prefix = prefix[x]
+    dataset_subject <- lapply(seq_along(term), function(i) {
+      new_Subject(
+        term[i],
+        subjectScheme = subjectScheme[i],
+        schemeURI = schemeURI[i],
+        valueURI = if (!is.null(valueURI)) valueURI[i] else NULL,
+        classificationCode = if (!is.null(classificationCode)) classificationCode[i] else NULL,
+        prefix = prefix[i]
       )
     })
-    # this is not nice
-    class(dataset_subject) <- c("subject", class(subject))
+    # don’t force class on the whole list
+    return(dataset_subject)
   } else {
-    dataset_subject <- new_Subject(
+    return(new_Subject(
       term = term,
       subjectScheme = subjectScheme,
       schemeURI = schemeURI,
       valueURI = valueURI,
       classificationCode = classificationCode,
       prefix = prefix
-    )
+    ))
   }
-
-  dataset_subject
 }
 
 #' @inheritParams Subject
@@ -135,33 +163,48 @@ new_Subject <- function(term,
 }
 
 #' @rdname subject
-#' @param value A subject field created by \code{\link{subject}}.
-#' The subject field is overwritten with this value.
 #' @export
 `subject<-` <- function(x, value) {
-  assert_that(is.dataset_df(x),
+  assert_that(
+    is.dataset_df(x),
     msg = "subject<-(x, value): x must be a dataset object created with dataset_df() or as_dataset_df()."
   )
 
   ds_bibentry <- get_bibentry(x)
 
+  # normalize input
   if (is.null(value)) {
-    value <- new_Subject(term = ":tba")
+    value <- list(new_Subject(term = ":tba"))
   } else if (is.character(value)) {
-    value <- new_Subject(term = value)
-  } else if (!is.subject(value)) {
-    stop("subject(x, value)<- : value must be a created with 'subject_create()` or it must be a character string.")
+    value <- lapply(value, new_Subject)
+  } else if (is.subject(value)) {
+    value <- list(value) # wrap single subject
+  } else if (is.list(value) && all(vapply(value, is.subject, logical(1)))) {
+    # already a list of subjects, ok
+  } else {
+    stop("subject(x, value)<- : value must be created with `subject_create()` or be a character string (or list thereof).")
   }
 
-  ds_bibentry$subject <- ifelse(is.character(value), value, value$term)
+  # flatten terms into bibentry
+  ds_bibentry$subject <- vapply(value, function(s) s$term, character(1))
   attr(x, "dataset_bibentry") <- ds_bibentry
+
+  # keep full structured objects
   attr(x, "subject") <- value
+
   invisible(x)
 }
 
 #' @rdname subject
-#' @return \code{is.subject} returns a logical value, \code{TRUE} if the subject as a list
-#' is well-formatted by \code{\link{subject_create}} with its necessary key-value pairs.
 is.subject <- function(x) {
   ifelse(inherits(x, "subject"), TRUE, FALSE)
 }
+
+#' @keywords internal
+default_subject <- subject_create(
+  term = "Data sets",
+  subjectScheme = "LCSH",
+  schemeURI = "http://id.loc.gov/authorities/subjects",
+  valueURI = "http://id.loc.gov/authorities/subjects/sh2018002256",
+  prefix = "lcsh:"
+)

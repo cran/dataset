@@ -2,30 +2,40 @@
 % Please edit documentation in R/describe.R
 \name{describe}
 \alias{describe}
-\title{Describe a dataset}
+\title{Describe a dataset in N-Triples format}
 \usage{
-describe(x, con = NULL)
+describe(x, con)
 }
 \arguments{
-\item{x}{A dataset_df object.}
+\item{x}{A \code{dataset_df} object.}
 
-\item{con}{A connection, for example, \code{con=tempfile()}.}
+\item{con}{A connection or a character string path (e.g. from \code{tempfile()}).}
 }
 \value{
-The description of the dataset_df object is written to the
-connection in the N-Triples form. If \code{con=NULL}, then the serialisation
-takes place in \code{tempfile()} and the contents are printed to the console;
-if a file is given, than no output is returned.
+Writes N-Triples to \code{con} and invisibly returns \code{x}.
 }
 \description{
-Describe a dataset
+Writes provenance and Dublin Core metadata of a dataset to a
+file or connection in N-Triples format.
 }
 \examples{
+test_ds <- dataset_df(
+  rowid = defined(c("eg:1", "eg:2"),
+    namespace = "http://example.com/dataset#"
+  ),
+  geo = defined(
+    gdp$geo[1:2],
+    label = "Country",
+    concept = "http://example.com/prop/geo",
+    namespace = "https://eionet.europa.eu/geo/$1"
+  ),
+  dataset_bibentry = dublincore(
+    title = "Example Dataset",
+    creator = person("John", "Doe")
+  )
+)
 
-# See the serialisation on the screen:
-describe(orange_df)
-
-# Save it to a connection:
-temporary_connection <- tempfile()
-describe(orange_df, con = temporary_connection)
+# returns invisibly the contents of the text file serialisation:
+testdescription <- describe(test_ds, con = tempfile())
+testdescription
 }

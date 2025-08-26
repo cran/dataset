@@ -23,6 +23,7 @@ strip_defined(gdp)
 fruits <- defined(c("apple", "avocado", "kiwi"),
   label = "Fruit", unit = "kg"
 )
+
 strip_defined(fruits)
 }
 \seealso{
