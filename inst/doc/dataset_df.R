@@ -114,3 +114,13 @@ joined_dataset
 ## ----backwardcompatibility----------------------------------------------------
 attributes(as.data.frame(joined_dataset))
 
+## ----coercion-----------------------------------------------------------------
+as.data.frame(small_country_dataset)
+
+## ----richdataframe------------------------------------------------------------
+as.data.frame(small_country_dataset, 
+              strip_attributes = FALSE)
+
+## ----astibble-----------------------------------------------------------------
+as_tibble(orange_df)
+

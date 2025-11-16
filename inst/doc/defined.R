@@ -89,3 +89,22 @@ as_factor(country)
 ## ----coerce-num---------------------------------------------------------------
 as_numeric(c(gdp_1, gdp_2))
 
+## ----coerce-logical-----------------------------------------------------------
+flag <- defined(c(TRUE, FALSE, TRUE), label = "Example flag")
+as_logical(flag)
+
+## ----coerce-date--------------------------------------------------------------
+dates <- defined(
+  as.Date(c("2020-01-01", "2020-01-02")),
+  label = "Reference date"
+)
+as.Date(dates)
+
+## ----coerce-posix-------------------------------------------------------------
+times <- defined(
+  as.POSIXct(c("2020-01-01 12:00:00", "2020-01-01 18:00:00")),
+  label = "Timestamp"
+)
+
+times 
+

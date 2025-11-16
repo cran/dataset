@@ -2,29 +2,45 @@
 % Please edit documentation in R/as_factor.R
 \name{as_factor}
 \alias{as_factor}
+\alias{as_factor.haven_labelled_defined}
 \title{Coerce a defined vector to a factor}
 \usage{
 as_factor(x, ...)
+
+\method{as_factor}{haven_labelled_defined}(x, strip_attributes = TRUE, ...)
 }
 \arguments{
 \item{x}{A vector created with \code{\link[=defined]{defined()}}.}
 
-\item{...}{Reserved for future extensions; not used.}
+\item{...}{Reserved for future extensions.}
+
+\item{strip_attributes}{Logical; should semantic metadata attributes
+(such as \code{label}, \code{unit}, \code{definition}, and
+\code{namespace}) be removed from the returned vector?
+Defaults to \code{TRUE}.}
 }
 \value{
-A factor vector with levels derived from the value labels.
+A factor vector.
 }
 \description{
-Converts a \code{\link[=defined]{defined()}} vector with value labels into a
-factor using \code{\link[haven:as_factor]{haven::as_factor()}}. This allows categorical \code{defined}
-vectors to behave like standard factors in models and plotting.
+\code{as_factor()} converts a \code{\link[=defined]{defined()}} vector into a standard R
+factor. If value labels are present, they are turned into factor levels
+via \code{\link[haven:as_factor]{haven::as_factor()}}. Otherwise, the underlying values are converted
+with \code{\link[base:factor]{base::factor()}}.
+}
+\details{
+Use \code{strip_attributes = TRUE} when flattening or preparing data for
+external pipelines, but keep the default when working with defined
+vectors directly.
 }
 \examples{
 sex <- defined(
   c(0, 1, 1, 0),
-  label = "Sex",
+  label  = "Sex",
   labels = c("Female" = 0, "Male" = 1)
 )
+
 as_factor(sex)
+as_factor(sex, strip_attributes = FALSE)
 
 }

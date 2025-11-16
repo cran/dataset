@@ -48,8 +48,9 @@ overflow: visible;
 }
 </style>
 <style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -60,7 +61,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
 { counter-reset: source-line 0; }
@@ -363,7 +364,8 @@ countries (<code>geo</code>) with unique identifiers
 triples using standard vocabularies.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(dataset)</span>
 <span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(rdflib)</span>
-<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;gdp&quot;</span>)</span></code></pre></div>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="co">#&gt; Warning: package &#39;rdflib&#39; was built under R version 4.5.1</span></span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;gdp&quot;</span>)</span></code></pre></div>
 </div>
 <div id="creating-a-minimal-semantically-defined-dataset" class="section level2">
 <h2>Creating a minimal semantically defined dataset</h2>
@@ -387,11 +389,11 @@ a DOI-based identifier such as:</p>
 <p>So let’s see how this minimal dataset prints in R:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">print</span>(small_geo)</span>
 <span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="co">#&gt; Unknown (2025): Untitled Dataset [dataset]</span></span>
-<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co">#&gt;   rowid     geo       </span></span>
-<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co">#&gt;   &lt;defined&gt; &lt;defined&gt;</span></span>
-<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co">#&gt; 1 obs1      AD       </span></span>
-<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="co">#&gt; 2 obs2      AD       </span></span>
-<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="co">#&gt; 3 obs3      AD</span></span></code></pre></div>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co">#&gt;   rowid geo   </span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt; &lt;chr&gt;</span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co">#&gt; 1 obs1  AD   </span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="co">#&gt; 2 obs2  AD   </span></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="co">#&gt; 3 obs3  AD</span></span></code></pre></div>
 <p>A tidy dataset can always be pivotted to a three-column long (tidy)
 format, which can define every cell value in the tabular dataset with a
 subject-predicate-object triple.</p>
@@ -499,8 +501,8 @@ objects living in the memory:</p>
 <span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="fu">rm</span>(rdf_graph)</span>
 <span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="fu">gc</span>()</span>
 <span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a><span class="co">#&gt;           used (Mb) gc trigger  (Mb) max used (Mb)</span></span>
-<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a><span class="co">#&gt; Ncells  983786 52.6    1913322 102.2  1444067 77.2</span></span>
-<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a><span class="co">#&gt; Vcells 1763779 13.5    8388608  64.0  3137445 24.0</span></span></code></pre></div>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a><span class="co">#&gt; Ncells  986450 52.7    1926101 102.9  1433733 76.6</span></span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a><span class="co">#&gt; Vcells 1770706 13.6    8388608  64.0  3069488 23.5</span></span></code></pre></div>
 </div>
 <div id="scale-up" class="section level2">
 <h2>Scale up</h2>
@@ -672,8 +674,8 @@ the whole dataset, too.</li>
 <span id="cb18-31"><a href="#cb18-31" tabindex="-1"></a><span class="co">#&gt;       },</span></span></code></pre></div>
 </div>
 <pre><code>#&gt;           used (Mb) gc trigger  (Mb) max used  (Mb)
-#&gt; Ncells 1048686 56.1    1913322 102.2  1913322 102.2
-#&gt; Vcells 1872251 14.3    8388608  64.0  3137445  24.0</code></pre>
+#&gt; Ncells 1051121 56.2    1926101 102.9  1926101 102.9
+#&gt; Vcells 1878181 14.4    8388608  64.0  3069488  23.5</code></pre>
 </div>
 
 

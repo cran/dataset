@@ -48,8 +48,9 @@ overflow: visible;
 }
 </style>
 <style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -60,7 +61,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
 { counter-reset: source-line 0; }
@@ -760,7 +761,7 @@ system time and, optionally, the software environment.</p>
 <span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="co">#&gt; [4] &quot;_:doejane &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/ns/prov#Agent&gt; .&quot;                                              </span></span>
 <span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a><span class="co">#&gt; [5] &quot;&lt;https://doi.org/10.32614/CRAN.package.dataset&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/ns/prov#SoftwareAgent&gt; .&quot;</span></span>
 <span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a><span class="co">#&gt; [6] &quot;&lt;http://example.com/creation&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/ns/prov#Activity&gt; .&quot;                       </span></span>
-<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a><span class="co">#&gt; [7] &quot;&lt;http://example.com/creation&gt; &lt;http://www.w3.org/ns/prov#generatedAtTime&gt; \&quot;2025-08-25T22:11:32Z\&quot;^^&lt;xsd:dateTime&gt; .&quot;</span></span></code></pre></div>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a><span class="co">#&gt; [7] &quot;&lt;http://example.com/creation&gt; &lt;http://www.w3.org/ns/prov#generatedAtTime&gt; \&quot;2025-11-16T15:43:58Z\&quot;^^&lt;xsd:dateTime&gt; .&quot;</span></span></code></pre></div>
 <p>This provenance is also included in the machine-readable metadata
 that can be exported using <code>describe()</code>, which generates an
 RDF description of the dataset.</p>
@@ -771,7 +772,7 @@ RDF description of the dataset.</p>
 <span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a><span class="fu">readLines</span>(description_nt)[<span class="dv">5</span><span class="sc">:</span><span class="dv">8</span>]</span>
 <span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a><span class="co">#&gt; [1] &quot;&lt;https://doi.org/10.32614/CRAN.package.dataset&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/ns/prov#SoftwareAgent&gt; .&quot;</span></span>
 <span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a><span class="co">#&gt; [2] &quot;&lt;http://example.com/creation&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/ns/prov#Activity&gt; .&quot;                       </span></span>
-<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a><span class="co">#&gt; [3] &quot;&lt;http://example.com/creation&gt; &lt;http://www.w3.org/ns/prov#generatedAtTime&gt; \&quot;2025-08-25T22:11:32Z\&quot;^^&lt;xsd:dateTime&gt; .&quot;                         </span></span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a><span class="co">#&gt; [3] &quot;&lt;http://example.com/creation&gt; &lt;http://www.w3.org/ns/prov#generatedAtTime&gt; \&quot;2025-11-16T15:43:58Z\&quot;^^&lt;xsd:dateTime&gt; .&quot;                         </span></span>
 <span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a><span class="co">#&gt; [4] &quot;&lt;http://example.com/dataset_tba/&gt; &lt;http://purl.org/dc/terms/title&gt; \&quot;Small GDP Dataset\&quot;^^&lt;http://www.w3.org/2001/XMLSchema#string&gt; .&quot;</span></span></code></pre></div>
 <p>The dataset grammar provides a lightweight but standards-compliant
 way to attach metadata during the creation of R objects. Unlike
@@ -901,11 +902,11 @@ explicit overwrite permissions.</p>
 <span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a><span class="fu">description</span>(global_dataset) <span class="ot">&lt;-</span> <span class="st">&quot;A dataset created from various sources about the GDP of very small states.&quot;</span></span>
 <span id="cb15-7"><a href="#cb15-7" tabindex="-1"></a>global_dataset</span>
 <span id="cb15-8"><a href="#cb15-8" tabindex="-1"></a><span class="co">#&gt; Jane Doe [aut] (2025): Global Microstates GDP [dataset]</span></span>
-<span id="cb15-9"><a href="#cb15-9" tabindex="-1"></a><span class="co">#&gt;   rowid     geo       gdp       </span></span>
-<span id="cb15-10"><a href="#cb15-10" tabindex="-1"></a><span class="co">#&gt;   &lt;defined&gt; &lt;defined&gt; &lt;defined&gt;</span></span>
-<span id="cb15-11"><a href="#cb15-11" tabindex="-1"></a><span class="co">#&gt; 1 obs1      AD        2355     </span></span>
-<span id="cb15-12"><a href="#cb15-12" tabindex="-1"></a><span class="co">#&gt; 2 obs2      LI        2592     </span></span>
-<span id="cb15-13"><a href="#cb15-13" tabindex="-1"></a><span class="co">#&gt; 3 obs3      TV          57.1</span></span></code></pre></div>
+<span id="cb15-9"><a href="#cb15-9" tabindex="-1"></a><span class="co">#&gt;   rowid geo      gdp </span></span>
+<span id="cb15-10"><a href="#cb15-10" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt; &lt;chr&gt;  &lt;dbl&gt;</span></span>
+<span id="cb15-11"><a href="#cb15-11" tabindex="-1"></a><span class="co">#&gt; 1 obs1  AD    2355  </span></span>
+<span id="cb15-12"><a href="#cb15-12" tabindex="-1"></a><span class="co">#&gt; 2 obs2  LI    2592  </span></span>
+<span id="cb15-13"><a href="#cb15-13" tabindex="-1"></a><span class="co">#&gt; 3 obs3  TV      57.1</span></span></code></pre></div>
 <p>You can review the descriptive metadata of the dataset with
 <code>as_dublincore()</code> or <code>[as_datacite()]</code> in various
 formats.</p>

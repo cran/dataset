@@ -1,71 +1,76 @@
 #' Coerce a defined vector to character
 #'
 #' `as_character()` is the recommended method to convert a
-#' [`defined()`][defined] vector to a character type. It is metadata-aware and
-#' ensures that the underlying data is character before coercion.
+#' [`defined()`][defined] vector into a character vector. It is metadata-aware
+#' and provides explicit control over whether semantic attributes are preserved.
 #'
 #' If `preserve_attributes = TRUE`, the returned character vector retains
-#' semantic metadata such as `unit`, `concept`, and `namespace`, though the
-#' `"defined"` class itself is removed. If `preserve_attributes = FALSE`
-#' (default), a plain character vector is returned with all attributes stripped.
+#' metadata attributes (`unit`, `concept`, `namespace`, `label`). The
+#' `"defined"` class is always removed.
 #'
-#' For numeric-based `defined` vectors, `as_character()` throws an informative
-#' error to avoid accidental coercion of non-character data.
+#' If `preserve_attributes = FALSE` (default), a plain character vector is
+#' returned with *all* metadata stripped.
 #'
-#' Note: `as.character()` (base R) is supported but simply returns the raw
-#' values, and does not preserve or warn about metadata loss.
+#' @details
+#' Use \code{strip_attributes = TRUE} when flattening or preparing data for
+#' external pipelines, but keep the default when working with defined
+#' vectors directly.
+#'
+#' Base R's `as.character()` always drops all attributes and returns plain
+#' character values. It is equivalent to:
+#' `as_character(x, strip_attributes = TRUE)`.
 #'
 #' @param x A vector created with [defined()].
-#' @param preserve_attributes Logical. If `TRUE`, retains `unit`, `concept`, and
-#'   `namespace` attributes. Defaults to `FALSE`.
-#' @param ... Reserved for future use.
+#' @param strip_attributes Logical; should semantic metadata attributes
+#'   (such as \code{label}, \code{unit}, \code{definition}, and
+#'   \code{namespace}) be removed from the returned vector?
+#'   Defaults to \code{FALSE}.
 #'
-#' @return A character vector.
+#' @param ... Reserved for potential future use.
+#'
+#' @return A character vector (plain or with attributes).
 #'
 #' @examples
-#' # Recommended use
-#' fruits <- defined(c("apple", "avocado", "kiwi"), label = "Fruit", unit = "kg")
-#' as_character(fruits, preserve_attributes = TRUE)
+#' x <- defined(c("apple", "banana"), label = "Fruit", unit = "kg")
 #'
-#' # Strip metadata
-#' as_character(fruits, preserve_attributes = FALSE)
+#' # Recommended:
+#' as_character(x)
 #'
-#' # Equivalent base R fallback
-#' as.character(fruits)
+#' # Preserve metadata:
+#' as_character(x, strip_attributes = FALSE)
 #'
-#' @seealso [strip_defined()], [as_numeric()]
+#' # Base R:
+#' as.character(x)
+#'
 #' @export
 as_character <- function(x, ...) {
   UseMethod("as_character", x)
 }
 
 #' @rdname as_character
-#' @importFrom vctrs vec_data
 #' @export
 as_character.haven_labelled_defined <- function(
     x,
-    preserve_attributes = FALSE,
+    strip_attributes = TRUE,
     ...) {
   base <- vctrs::vec_data(x)
+  out <- as.character(base)
 
-  tmp <- as.character(base)
-
-  if (preserve_attributes) {
-    attr(tmp, "unit") <- attr(x, "unit")
-    attr(tmp, "concept") <- attr(x, "concept")
-    attr(tmp, "namespace") <- attr(x, "namespace")
+  if (! strip_attributes) {
+    attr(out, "label") <- attr(x, "label")
+    attr(out, "unit") <- attr(x, "unit")
+    attr(out, "concept") <- attr(x, "concept")
+    attr(out, "namespace") <- attr(x, "namespace")
   }
 
-  tmp
+  out
 }
 
 #' @rdname as_character
-#' @description Base R's `as.character()` method applied to `defined` vectors
-#' simply strips the class and returns the values as a plain character vector.
-#' This is equivalent to calling [as_character()] with `preserve_attributes =
-#' FALSE`.
+#' @description
+#' Base R `as.character()` always strips the class and metadata.
 #'
 #' @export
 as.character.haven_labelled_defined <- function(x, ...) {
-  unclass(vctrs::vec_data(x))
+  as.character(vctrs::vec_data(x))
 }
