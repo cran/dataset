@@ -4,8 +4,9 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 
-if (!requireNamespace("rdflib", 
-                      quietly = TRUE)) {
+if (!requireNamespace("rdflib",
+  quietly = TRUE
+)) {
   stop("Please install 'rdflib' to run this vignette.")
 }
 
@@ -54,10 +55,13 @@ triples <- dataset_to_triples(small_dataset,
 triples
 
 ## ----ntexample----------------------------------------------------------------
-mycon <- tempfile("my_dataset", 
-                  fileext = "nt")
-my_description <- describe(x = small_dataset, 
-                           con = mycon)
+mycon <- tempfile("my_dataset",
+  fileext = "nt"
+)
+my_description <- describe(
+  x = small_dataset,
+  con = mycon
+)
 
 # Only three statements are shown:
 readLines(mycon)[c(4, 8, 12)]
@@ -67,15 +71,17 @@ readLines(mycon)[c(4, 8, 12)]
 provenance(small_dataset)[c(6, 7)]
 
 ## ----smalldf------------------------------------------------------------------
-small_df <- as.data.frame(small_dataset, 
-              strip_attributes = FALSE)
+small_df <- as.data.frame(small_dataset,
+  strip_attributes = FALSE
+)
 
 attr(small_dataset, "subject")
 
 ## ----smalltbl-----------------------------------------------------------------
 small_tbl <- as_tibble(
-  small_dataset, 
-  strip_attributes = TRUE)
+  small_dataset,
+  strip_attributes = TRUE
+)
 
 small_tbl
 

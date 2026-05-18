@@ -118,8 +118,9 @@ attributes(as.data.frame(joined_dataset))
 as.data.frame(small_country_dataset)
 
 ## ----richdataframe------------------------------------------------------------
-as.data.frame(small_country_dataset, 
-              strip_attributes = FALSE)
+as.data.frame(small_country_dataset,
+  strip_attributes = FALSE
+)
 
 ## ----astibble-----------------------------------------------------------------
 as_tibble(orange_df)

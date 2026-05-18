@@ -507,7 +507,7 @@ BibTeX-style entry, which is suitable for citation or export.</p>
 <span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="co">#&gt; Title:       Small Country Dataset</span></span>
 <span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="co">#&gt; Creator(s):  Jane Doe [ctb]</span></span>
 <span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="co">#&gt; Publisher:   Example Inc.</span></span>
-<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="co">#&gt; Year:        2025</span></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="co">#&gt; Year:        2026</span></span>
 <span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a><span class="co">#&gt; Language:    eng</span></span></code></pre></div>
 <p>This prints a complete BibTeX-style entry, suitable for citation or
 export.</p>
@@ -575,7 +575,7 @@ as the original.</p>
 the existing one using <code>bind_defined_rows()</code>.</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>joined_dataset <span class="ot">&lt;-</span> <span class="fu">bind_defined_rows</span>(small_country_dataset, feroe_dataset)</span>
 <span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>joined_dataset</span>
-<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a><span class="co">#&gt; Doe (2025): Small Country Dataset [dataset]</span></span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a><span class="co">#&gt; Doe (2026): Small Country Dataset [dataset]</span></span>
 <span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a><span class="co">#&gt;    rowid geo    year   gdp unit    freq  </span></span>
 <span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a><span class="co">#&gt;    &lt;chr&gt; &lt;chr&gt; &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;</span></span>
 <span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a><span class="co">#&gt;  1 obs1  AD     2020 2355. CP_MEUR A    </span></span>
@@ -611,7 +611,7 @@ remain in the object’s attributes.</p>
 <span id="cb13-14"><a href="#cb13-14" tabindex="-1"></a><span class="co">#&gt; Title:       Small Country Dataset</span></span>
 <span id="cb13-15"><a href="#cb13-15" tabindex="-1"></a><span class="co">#&gt; Creator(s):  Jane Doe [ctb]</span></span>
 <span id="cb13-16"><a href="#cb13-16" tabindex="-1"></a><span class="co">#&gt; Publisher:   Example Inc.</span></span>
-<span id="cb13-17"><a href="#cb13-17" tabindex="-1"></a><span class="co">#&gt; Year:        2025</span></span>
+<span id="cb13-17"><a href="#cb13-17" tabindex="-1"></a><span class="co">#&gt; Year:        2026</span></span>
 <span id="cb13-18"><a href="#cb13-18" tabindex="-1"></a><span class="co">#&gt; Language:    eng</span></span>
 <span id="cb13-19"><a href="#cb13-19" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb13-20"><a href="#cb13-20" tabindex="-1"></a><span class="co">#&gt; $subject</span></span>
@@ -643,7 +643,7 @@ remain in the object’s attributes.</p>
 <span id="cb13-46"><a href="#cb13-46" tabindex="-1"></a><span class="co">#&gt; [4] &quot;_:unknownauthor &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/ns/prov#Agent&gt; .&quot;                                        </span></span>
 <span id="cb13-47"><a href="#cb13-47" tabindex="-1"></a><span class="co">#&gt; [5] &quot;&lt;https://doi.org/10.32614/CRAN.package.dataset&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/ns/prov#SoftwareAgent&gt; .&quot;</span></span>
 <span id="cb13-48"><a href="#cb13-48" tabindex="-1"></a><span class="co">#&gt; [6] &quot;&lt;http://example.com/creation&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/ns/prov#Activity&gt; .&quot;                       </span></span>
-<span id="cb13-49"><a href="#cb13-49" tabindex="-1"></a><span class="co">#&gt; [7] &quot;&lt;http://example.com/creation&gt; &lt;http://www.w3.org/ns/prov#generatedAtTime&gt; \&quot;2025-11-16T15:43:55Z\&quot;^^&lt;xsd:dateTime&gt; .&quot;</span></span></code></pre></div>
+<span id="cb13-49"><a href="#cb13-49" tabindex="-1"></a><span class="co">#&gt; [7] &quot;&lt;http://example.com/creation&gt; &lt;http://www.w3.org/ns/prov#generatedAtTime&gt; \&quot;2026-05-18T07:25:20Z\&quot;^^&lt;xsd:dateTime&gt; .&quot;</span></span></code></pre></div>
 <div id="coercion-inside-dataset_df-conversion" class="section level3">
 <h3>Coercion inside <code>dataset_df</code> conversion</h3>
 <p>When converting a <code>dataset_df</code> to a base
@@ -677,19 +677,20 @@ removed.</p></li>
 <code>prov</code>, <code>subject</code>) is preserved.</p></li>
 <li><p>You can retain semantic attributes via:</p></li>
 </ul>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="fu">as.data.frame</span>(small_country_dataset, </span>
-<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a>              <span class="at">strip_attributes =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a><span class="co">#&gt;    rowid geo year    gdp    unit freq</span></span>
-<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a><span class="co">#&gt; 1   obs1  AD 2020 2354.8 CP_MEUR    A</span></span>
-<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a><span class="co">#&gt; 2   obs2  AD 2021 2593.9 CP_MEUR    A</span></span>
-<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a><span class="co">#&gt; 3   obs3  AD 2022 2883.7 CP_MEUR    A</span></span>
-<span id="cb15-7"><a href="#cb15-7" tabindex="-1"></a><span class="co">#&gt; 4   obs4  AD 2023 3119.5 CP_MEUR    A</span></span>
-<span id="cb15-8"><a href="#cb15-8" tabindex="-1"></a><span class="co">#&gt; 5   obs5  LI 2020 5430.5 CP_MEUR    A</span></span>
-<span id="cb15-9"><a href="#cb15-9" tabindex="-1"></a><span class="co">#&gt; 6   obs6  LI 2021 6423.7 CP_MEUR    A</span></span>
-<span id="cb15-10"><a href="#cb15-10" tabindex="-1"></a><span class="co">#&gt; 7   obs7  LI 2022 6758.6 CP_MEUR    A</span></span>
-<span id="cb15-11"><a href="#cb15-11" tabindex="-1"></a><span class="co">#&gt; 8   obs8  SM 2020 1265.1 CP_MEUR    A</span></span>
-<span id="cb15-12"><a href="#cb15-12" tabindex="-1"></a><span class="co">#&gt; 9   obs9  SM 2021 1461.4 CP_MEUR    A</span></span>
-<span id="cb15-13"><a href="#cb15-13" tabindex="-1"></a><span class="co">#&gt; 10 obs10  SM 2022 1612.3 CP_MEUR    A</span></span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="fu">as.data.frame</span>(small_country_dataset,</span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a>  <span class="at">strip_attributes =</span> <span class="cn">FALSE</span></span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a>)</span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a><span class="co">#&gt;    rowid geo year    gdp    unit freq</span></span>
+<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a><span class="co">#&gt; 1   obs1  AD 2020 2354.8 CP_MEUR    A</span></span>
+<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a><span class="co">#&gt; 2   obs2  AD 2021 2593.9 CP_MEUR    A</span></span>
+<span id="cb15-7"><a href="#cb15-7" tabindex="-1"></a><span class="co">#&gt; 3   obs3  AD 2022 2883.7 CP_MEUR    A</span></span>
+<span id="cb15-8"><a href="#cb15-8" tabindex="-1"></a><span class="co">#&gt; 4   obs4  AD 2023 3119.5 CP_MEUR    A</span></span>
+<span id="cb15-9"><a href="#cb15-9" tabindex="-1"></a><span class="co">#&gt; 5   obs5  LI 2020 5430.5 CP_MEUR    A</span></span>
+<span id="cb15-10"><a href="#cb15-10" tabindex="-1"></a><span class="co">#&gt; 6   obs6  LI 2021 6423.7 CP_MEUR    A</span></span>
+<span id="cb15-11"><a href="#cb15-11" tabindex="-1"></a><span class="co">#&gt; 7   obs7  LI 2022 6758.6 CP_MEUR    A</span></span>
+<span id="cb15-12"><a href="#cb15-12" tabindex="-1"></a><span class="co">#&gt; 8   obs8  SM 2020 1265.1 CP_MEUR    A</span></span>
+<span id="cb15-13"><a href="#cb15-13" tabindex="-1"></a><span class="co">#&gt; 9   obs9  SM 2021 1461.4 CP_MEUR    A</span></span>
+<span id="cb15-14"><a href="#cb15-14" tabindex="-1"></a><span class="co">#&gt; 10 obs10  SM 2022 1612.3 CP_MEUR    A</span></span></code></pre></div>
 <p><code>as_tibble()</code> behaves the same way as
 <code>as.data.frame()</code> but returns a tibble:</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="fu">as_tibble</span>(orange_df)</span>

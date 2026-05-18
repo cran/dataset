@@ -434,7 +434,7 @@ transformation or storage.</p>
 <span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a>)</span>
 <span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a></span>
 <span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a>small_dataset</span>
-<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a><span class="co">#&gt; Doe (2025): Small GDP Dataset [dataset]</span></span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a><span class="co">#&gt; Doe (2026): Small GDP Dataset [dataset]</span></span>
 <span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a><span class="co">#&gt;   rowid geo     gdp </span></span>
 <span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt;</span></span>
 <span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a><span class="co">#&gt; 1 gdp1  AD     2355</span></span>
@@ -451,7 +451,7 @@ repository-level publication.</p>
 <span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="co">#&gt; Contributor(s): :unas</span></span>
 <span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="co">#&gt; Subject(s):  Gross Domestic Product</span></span>
 <span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="co">#&gt; Publisher:   Small Repository</span></span>
-<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="co">#&gt; Year:        2025</span></span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="co">#&gt; Year:        2026</span></span>
 <span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="co">#&gt; Language:    :unas</span></span>
 <span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a><span class="co">#&gt; Description: :unas</span></span></code></pre></div>
 </div>
@@ -482,20 +482,23 @@ not familiar with RDF.</p>
 <p>This 3-column format (subject–predicate–object) is compatible with
 semantic web tools such as SPARQL, <code>rdflib</code>, and triple
 stores.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>mycon <span class="ot">&lt;-</span> <span class="fu">tempfile</span>(<span class="st">&quot;my_dataset&quot;</span>, </span>
-<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>                  <span class="at">fileext =</span> <span class="st">&quot;nt&quot;</span>)</span>
-<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>my_description <span class="ot">&lt;-</span> <span class="fu">describe</span>(<span class="at">x =</span> small_dataset, </span>
-<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>                           <span class="at">con =</span> mycon)</span>
-<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a></span>
-<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a><span class="co"># Only three statements are shown:</span></span>
-<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a><span class="fu">readLines</span>(mycon)[<span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">8</span>, <span class="dv">12</span>)]</span>
-<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a><span class="co">#&gt; [1] &quot;_:doejane &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/ns/prov#Agent&gt; .&quot;                                      </span></span>
-<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a><span class="co">#&gt; [2] &quot;&lt;http://example.com/dataset_tba/&gt; &lt;http://purl.org/dc/terms/title&gt; \&quot;Small GDP Dataset\&quot;^^&lt;http://www.w3.org/2001/XMLSchema#string&gt; .&quot;</span></span>
-<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a><span class="co">#&gt; [3] &quot;&lt;http://example.com/dataset_tba/&gt; &lt;http://purl.org/dc/terms/type&gt; &lt;http://purl.org/dc/dcmitype/Dataset&gt; .&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>mycon <span class="ot">&lt;-</span> <span class="fu">tempfile</span>(<span class="st">&quot;my_dataset&quot;</span>,</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>  <span class="at">fileext =</span> <span class="st">&quot;nt&quot;</span></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>)</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>my_description <span class="ot">&lt;-</span> <span class="fu">describe</span>(</span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>  <span class="at">x =</span> small_dataset,</span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>  <span class="at">con =</span> mycon</span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>)</span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a><span class="co"># Only three statements are shown:</span></span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a><span class="fu">readLines</span>(mycon)[<span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">8</span>, <span class="dv">12</span>)]</span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a><span class="co">#&gt; [1] &quot;_:doejane &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/ns/prov#Agent&gt; .&quot;                                      </span></span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a><span class="co">#&gt; [2] &quot;&lt;http://example.com/dataset_tba/&gt; &lt;http://purl.org/dc/terms/title&gt; \&quot;Small GDP Dataset\&quot;^^&lt;http://www.w3.org/2001/XMLSchema#string&gt; .&quot;</span></span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a><span class="co">#&gt; [3] &quot;&lt;http://example.com/dataset_tba/&gt; &lt;http://purl.org/dc/terms/type&gt; &lt;http://purl.org/dc/dcmitype/Dataset&gt; .&quot;</span></span></code></pre></div>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="do">## Show two lines of provenance:</span></span>
 <span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="fu">provenance</span>(small_dataset)[<span class="fu">c</span>(<span class="dv">6</span>, <span class="dv">7</span>)]</span>
 <span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="co">#&gt; [1] &quot;&lt;http://example.com/creation&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/ns/prov#Activity&gt; .&quot;</span></span>
-<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="co">#&gt; [2] &quot;&lt;http://example.com/creation&gt; &lt;http://www.w3.org/ns/prov#generatedAtTime&gt; \&quot;2025-11-16T15:44:01Z\&quot;^^&lt;xsd:dateTime&gt; .&quot;</span></span></code></pre></div>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="co">#&gt; [2] &quot;&lt;http://example.com/creation&gt; &lt;http://www.w3.org/ns/prov#generatedAtTime&gt; \&quot;2026-05-18T07:25:24Z\&quot;^^&lt;xsd:dateTime&gt; .&quot;</span></span></code></pre></div>
 </div>
 <div id="coercing-back" class="section level2">
 <h2>Coercing back</h2>
@@ -503,30 +506,31 @@ stores.</p>
 simplified to as base R <code>data.frame</code> or a
 <code>tbf_df</code>.</p>
 <p>We offer two coercion forms:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>small_df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(small_dataset, </span>
-<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>              <span class="at">strip_attributes =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a></span>
-<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="fu">attr</span>(small_dataset, <span class="st">&quot;subject&quot;</span>)</span>
-<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="co">#&gt; $term</span></span>
-<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Data sets&quot;</span></span>
-<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a><span class="co">#&gt; $subjectScheme</span></span>
-<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a><span class="co">#&gt; [1] &quot;LCSH&quot;</span></span>
-<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a><span class="co">#&gt; $schemeURI</span></span>
-<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a><span class="co">#&gt; [1] &quot;http://id.loc.gov/authorities/subjects&quot;</span></span>
-<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a><span class="co">#&gt; $valueURI</span></span>
-<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a><span class="co">#&gt; [1] &quot;http://id.loc.gov/authorities/subjects/sh2018002256&quot;</span></span>
-<span id="cb7-16"><a href="#cb7-16" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb7-17"><a href="#cb7-17" tabindex="-1"></a><span class="co">#&gt; $classificationCode</span></span>
-<span id="cb7-18"><a href="#cb7-18" tabindex="-1"></a><span class="co">#&gt; NULL</span></span>
-<span id="cb7-19"><a href="#cb7-19" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb7-20"><a href="#cb7-20" tabindex="-1"></a><span class="co">#&gt; $prefix</span></span>
-<span id="cb7-21"><a href="#cb7-21" tabindex="-1"></a><span class="co">#&gt; [1] &quot;lcsh:&quot;</span></span>
-<span id="cb7-22"><a href="#cb7-22" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb7-23"><a href="#cb7-23" tabindex="-1"></a><span class="co">#&gt; attr(,&quot;class&quot;)</span></span>
-<span id="cb7-24"><a href="#cb7-24" tabindex="-1"></a><span class="co">#&gt; [1] &quot;subject&quot; &quot;list&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>small_df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(small_dataset,</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>  <span class="at">strip_attributes =</span> <span class="cn">FALSE</span></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>)</span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="fu">attr</span>(small_dataset, <span class="st">&quot;subject&quot;</span>)</span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="co">#&gt; $term</span></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Data sets&quot;</span></span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a><span class="co">#&gt; $subjectScheme</span></span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a><span class="co">#&gt; [1] &quot;LCSH&quot;</span></span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a><span class="co">#&gt; $schemeURI</span></span>
+<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a><span class="co">#&gt; [1] &quot;http://id.loc.gov/authorities/subjects&quot;</span></span>
+<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a><span class="co">#&gt; $valueURI</span></span>
+<span id="cb7-16"><a href="#cb7-16" tabindex="-1"></a><span class="co">#&gt; [1] &quot;http://id.loc.gov/authorities/subjects/sh2018002256&quot;</span></span>
+<span id="cb7-17"><a href="#cb7-17" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-18"><a href="#cb7-18" tabindex="-1"></a><span class="co">#&gt; $classificationCode</span></span>
+<span id="cb7-19"><a href="#cb7-19" tabindex="-1"></a><span class="co">#&gt; NULL</span></span>
+<span id="cb7-20"><a href="#cb7-20" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-21"><a href="#cb7-21" tabindex="-1"></a><span class="co">#&gt; $prefix</span></span>
+<span id="cb7-22"><a href="#cb7-22" tabindex="-1"></a><span class="co">#&gt; [1] &quot;lcsh:&quot;</span></span>
+<span id="cb7-23"><a href="#cb7-23" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-24"><a href="#cb7-24" tabindex="-1"></a><span class="co">#&gt; attr(,&quot;class&quot;)</span></span>
+<span id="cb7-25"><a href="#cb7-25" tabindex="-1"></a><span class="co">#&gt; [1] &quot;subject&quot; &quot;list&quot;</span></span></code></pre></div>
 <p>Using the <code>strip_attributes = FALSE</code> the rich attributes
 remain in the base R data.frame. In most pipelines the attributes play
 no role, and you can retain it, and perhaps later load it back to a
@@ -534,16 +538,17 @@ richer form.</p>
 <p>You can also strip all these attributes, and choose
 <code>tbl_df</code> (if you have <code>tibble</code>) installed”:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>small_tbl <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(</span>
-<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>  small_dataset, </span>
-<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>  <span class="at">strip_attributes =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a></span>
-<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>small_tbl</span>
-<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a><span class="co">#&gt; # A tibble: 3 × 3</span></span>
-<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a><span class="co">#&gt;   rowid geo     gdp</span></span>
-<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt;</span></span>
-<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a><span class="co">#&gt; 1 gdp1  AD     2355</span></span>
-<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a><span class="co">#&gt; 2 gdp2  AD     2592</span></span>
-<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a><span class="co">#&gt; 3 gdp3  AD     2884</span></span></code></pre></div>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>  small_dataset,</span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>  <span class="at">strip_attributes =</span> <span class="cn">TRUE</span></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>)</span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a>small_tbl</span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a><span class="co">#&gt; # A tibble: 3 × 3</span></span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a><span class="co">#&gt;   rowid geo     gdp</span></span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt;</span></span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a><span class="co">#&gt; 1 gdp1  AD     2355</span></span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a><span class="co">#&gt; 2 gdp2  AD     2592</span></span>
+<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a><span class="co">#&gt; 3 gdp3  AD     2884</span></span></code></pre></div>
 </div>
 <div id="summary" class="section level2">
 <h2>Summary</h2>

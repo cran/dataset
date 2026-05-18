@@ -1,7 +1,7 @@
 Package: dataset
 Title: Create Data Frames for Exchange and Reuse
-Version: 0.4.1
-Date: 2025-11-15
+Version: 0.4.4
+Date: 2026-05-18
 Language: en-GB
 Authors@R: 
     c(person(given = "Daniel", family = "Antal", 
@@ -37,14 +37,14 @@ BugReports: https://github.com/ropensci/dataset/issues
 LazyData: true
 Imports: assertthat, haven, ISOcodes, labelled, pillar, tibble, utils,
         vctrs
-RoxygenNote: 7.3.3
 Suggests: dplyr, jsonld, knitr, rdflib, rmarkdown, spelling, tidyr,
         testthat (>= 3.0.0)
 Config/testthat/edition: 3
 Depends: R (>= 3.5)
 VignetteBuilder: knitr
+Config/roxygen2/version: 8.0.0
 NeedsCompilation: no
-Packaged: 2025-11-16 15:44:08 UTC; DanielAntal
+Packaged: 2026-05-18 07:25:30 UTC; DanielAntal
 Author: Daniel Antal [aut, cre] (ORCID:
     <https://orcid.org/0000-0001-7513-6760>),
   Marcelo Perlin [rev] (ORCID: <https://orcid.org/0000-0002-9839-4268>),
@@ -52,4 +52,4 @@ Author: Daniel Antal [aut, cre] (ORCID:
     <https://orcid.org/0009-0008-2274-8163>),
   Mauro Lepore [rev] (ORCID: <https://orcid.org/0000-0002-1986-7988>)
 Repository: CRAN
-Date/Publication: 2025-11-16 16:20:02 UTC
+Date/Publication: 2026-05-18 07:50:02 UTC

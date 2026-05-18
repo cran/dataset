@@ -388,7 +388,7 @@ a DOI-based identifier such as:</p>
 <p><code>https://doi.org/10.5281/zenodo.14917851#obs:1</code></p>
 <p>So let’s see how this minimal dataset prints in R:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">print</span>(small_geo)</span>
-<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="co">#&gt; Unknown (2025): Untitled Dataset [dataset]</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="co">#&gt; Unknown (2026): Untitled Dataset [dataset]</span></span>
 <span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co">#&gt;   rowid geo   </span></span>
 <span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt; &lt;chr&gt;</span></span>
 <span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co">#&gt; 1 obs1  AD   </span></span>
@@ -501,8 +501,8 @@ objects living in the memory:</p>
 <span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="fu">rm</span>(rdf_graph)</span>
 <span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="fu">gc</span>()</span>
 <span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a><span class="co">#&gt;           used (Mb) gc trigger  (Mb) max used (Mb)</span></span>
-<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a><span class="co">#&gt; Ncells  986450 52.7    1926101 102.9  1433733 76.6</span></span>
-<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a><span class="co">#&gt; Vcells 1770706 13.6    8388608  64.0  3069488 23.5</span></span></code></pre></div>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a><span class="co">#&gt; Ncells 1002205 53.6    1961682 104.8  1452598 77.6</span></span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a><span class="co">#&gt; Vcells 1795374 13.7    8388608  64.0  2987233 22.8</span></span></code></pre></div>
 </div>
 <div id="scale-up" class="section level2">
 <h2>Scale up</h2>
@@ -674,8 +674,8 @@ the whole dataset, too.</li>
 <span id="cb18-31"><a href="#cb18-31" tabindex="-1"></a><span class="co">#&gt;       },</span></span></code></pre></div>
 </div>
 <pre><code>#&gt;           used (Mb) gc trigger  (Mb) max used  (Mb)
-#&gt; Ncells 1051121 56.2    1926101 102.9  1926101 102.9
-#&gt; Vcells 1878181 14.4    8388608  64.0  3069488  23.5</code></pre>
+#&gt; Ncells 1067237 57.0    1961682 104.8  1961682 104.8
+#&gt; Vcells 1903655 14.6    8388608  64.0  3076232  23.5</code></pre>
 </div>
 
 

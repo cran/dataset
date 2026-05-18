@@ -106,5 +106,5 @@ times <- defined(
   label = "Timestamp"
 )
 
-times 
+times
 
