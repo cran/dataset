@@ -353,10 +353,22 @@ column, each observation is a row, and each type of observational unit
 forms a table. It adds an additional semantic layer to individual
 vectors so their meaning is explicit, consistent, and
 machine-readable.</p>
+<p>In many workflows, semantic clarity is reached gradually. Values may
+first be cleaned, compared, or provisionally harmonised before the
+analyst is ready to attach a stable definition. The
+<code>prelabelled</code> class supports this earlier stage: it records
+provisional semantic mappings while preserving the original observed
+values. Once these assumptions become stable, they can be formalised
+with <code>defined()</code>.</p>
 <p>This vignette focuses specifically on the <code>defined</code>
 function, which you can use to create a semantically enriched vector.
 For details on semantically enriched data frames, see
 <code>vignette(&quot;dataset_df&quot;, package = &quot;dataset&quot;)</code>.</p>
+<p>This vignette focuses on the <code>defined()</code> function, which
+is used once semantic assumptions are sufficiently stable to create
+semantically enriched vectors. For provisional mappings before this
+stage, see <code>vignette(&quot;prelabelled&quot;, package = &quot;dataset&quot;)</code>:
+Handling Semantic Ambiguity with <code>prelabelled</code> Vectors.</p>
 <div id="purpose" class="section level2">
 <h2>Purpose</h2>
 <p>The <code>defined()</code> function helps you create
@@ -602,14 +614,13 @@ These methods avoid silent metadata loss and provide predictable
 conversions while respecting the underlying data type.</p>
 <p>All coercion functions follow the same principles:</p>
 <ul>
-<li><strong>They operate on the underlying values</strong>, not on
-labels.<br />
-</li>
-<li><strong>Metadata is removed by default</strong> unless explicitly
-preserved.<br />
-</li>
-<li><strong>Errors are thrown when coercion would lose
-information</strong> (e.g., converting character data to numeric).</li>
+<li><p><strong>They operate on the underlying values</strong>, not on
+labels.</p></li>
+<li><p><strong>Metadata is removed by default</strong> unless explicitly
+preserved.</p></li>
+<li><p><strong>Errors are thrown when coercion would lose
+information</strong> (e.g., converting character data to
+numeric).</p></li>
 </ul>
 <p>Below are the available coercion helpers.</p>
 <div id="character-coercion" class="section level4">

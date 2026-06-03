@@ -343,17 +343,19 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <div id="overview" class="section level2">
 <h2>Overview</h2>
-<p>The <code>dataset</code> package enriches R’s native data structures
-with machine-readable metadata. It allows variables and datasets to
-carry semantic definitions — such as URIs, labels, units, and provenance
-— which makes them suitable for long-term reuse, FAIR-compliant
-publishing, and integration into semantic web systems.</p>
-<p>Unlike most metadata packages that attach metadata after the fact,
-<code>dataset</code> follows a <strong>semantic early-binding</strong>
-approach: metadata is embedded as soon as the data is created.</p>
+<p>The <code>dataset</code> package extends tidy data with semantic
+metadata, provenance, and machine-readable definitions.</p>
+<p>It supports a gradual workflow from provisional semantic
+harmonisation with <code>prelabel()</code> to formally defined variables
+with <code>defined()</code> and fully described datasets with
+<code>dataset_df()</code>.</p>
+<p>This makes datasets easier to exchange, reuse, publish, and serialize
+to RDF and other FAIR-compliant formats.</p>
 <p>This vignette provides a high-level introduction. For details on key
-components, see the following:</p>
+components, see:</p>
 <ul>
+<li><code>vignette(&quot;prelabelled&quot;, package = &quot;dataset&quot;)</code>: Handling
+Semantic Ambiguity with <code>prelabelled</code> Vectors.</li>
 <li><code>vignette(&quot;defined&quot;, package = &quot;dataset&quot;)</code>: Semantic
 vectors with <code>defined()</code></li>
 <li><code>vignette(&quot;dataset_df&quot;, package = &quot;dataset&quot;)</code>:
@@ -366,94 +368,161 @@ rich citation metadata using <code>bibrecord()</code></li>
 </div>
 <div id="why-extend-tidy-data" class="section level2">
 <h2>Why extend tidy data?</h2>
-<p>Hadley Wickham (2014) defines tidy data with three principles:</p>
+<p>Hadley Wickham (2014) defines <a href="https://vita.had.co.nz/papers/tidy-data.pdf">tidy data</a> with
+three principles:</p>
 <ul>
 <li>Each variable forms a column</li>
 <li>Each observation forms a row</li>
 <li>Each observational unit forms a table</li>
 </ul>
-<p>This structure is ideal for analysis, but lacks <strong>semantic
-clarity</strong>, particularly when an analyst is working in a
-realistic, but not ideal scenario with several datasets received from
-various internet services. For example, two datasets might both contain
-a column named <code>gdp</code>, but one might be in euros and the other
-in dollars. Without metadata, tools cannot detect this mismatch.</p>
-<p>The <code>dataset</code> package addresses this by allowing you to
-define variables explicitly, and to store dataset-level metadata within
-a tidy tibble.</p>
+<p>This structure is ideal for analysis because it links the structure
+of a dataset with its meaning. A variable represents an underlying
+attribute, and an observation represents measurements collected on the
+same unit.</p>
+<p>In practice, however, analysts rarely begin with perfectly harmonized
+data. During data cleaning, transformation, and integration, they make
+many semantic decisions: resolving inconsistent coding schemes,
+standardizing categories, selecting units of measurement, or deciding
+how concepts from different sources correspond to one another. By the
+time a dataset is ready for analysis, these assumptions are usually
+clear to the analyst who created it.</p>
+<p>The problem arises when the dataset leaves its original context.
+Other analysts may use different terminology, apply different coding
+conventions, or simply lack knowledge of the decisions that were made
+during data preparation. Even the original analyst may find these
+assumptions difficult to reconstruct months or years later.</p>
+<p>The <code>dataset</code> package extends tidy data by making such
+semantic assumptions explicit and preserving them alongside the data.
+Rather than treating semantic harmonisation and data provenance as
+undocumented steps in a workflow, it allows them to be recorded
+incrementally as the dataset evolves.</p>
+<p>The goal is not to burden analysts with complex semantic
+technologies. Instead, the package provides lightweight tools for
+gradually recording the information needed to review, reuse, audit,
+publish, and correctly combine datasets across projects, organisations,
+and time.</p>
+</div>
+<div id="example-gradual-semantic-stabilisation" class="section level2">
+<h2>Example: gradual semantic stabilisation</h2>
+<p>Many data integration problems begin with values that refer to the
+same concept but use different coding conventions.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(dataset)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>country <span class="ot">&lt;-</span> <span class="fu">prelabel</span>(</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>  <span class="fu">c</span>(<span class="st">&quot;AD&quot;</span>, <span class="st">&quot;Andorra&quot;</span>, <span class="st">&quot;AND&quot;</span>, <span class="st">&quot;LI&quot;</span>, <span class="st">&quot;Liechtenstein&quot;</span>),</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>  <span class="at">labels =</span> <span class="fu">c</span>(</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>    <span class="at">Andorra =</span> <span class="st">&quot;AD&quot;</span>,</span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a>    <span class="at">AND =</span> <span class="st">&quot;AD&quot;</span>,</span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a>    <span class="at">Liechtenstein =</span> <span class="st">&quot;LI&quot;</span></span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a>  )</span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a>)</span>
+<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a>country</span>
+<span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a><span class="co">#&gt; [1] &quot;AD&quot;            &quot;Andorra&quot;       &quot;AND&quot;           &quot;LI&quot;           </span></span>
+<span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a><span class="co">#&gt; [5] &quot;Liechtenstein&quot;</span></span>
+<span id="cb1-15"><a href="#cb1-15" tabindex="-1"></a><span class="co">#&gt; attr(,&quot;prelabel&quot;)</span></span>
+<span id="cb1-16"><a href="#cb1-16" tabindex="-1"></a><span class="co">#&gt;       Andorra           AND Liechtenstein            AD            LI </span></span>
+<span id="cb1-17"><a href="#cb1-17" tabindex="-1"></a><span class="co">#&gt;          &quot;AD&quot;          &quot;AD&quot;          &quot;LI&quot;          &quot;AD&quot;          &quot;LI&quot; </span></span>
+<span id="cb1-18"><a href="#cb1-18" tabindex="-1"></a><span class="co">#&gt; attr(,&quot;class&quot;)</span></span>
+<span id="cb1-19"><a href="#cb1-19" tabindex="-1"></a><span class="co">#&gt; [1] &quot;prelabelled&quot; &quot;character&quot;</span></span></code></pre></div>
+<p>The <code>prelabelled</code> class records provisional semantic
+assumptions without requiring a formal semantic definition. In this
+example, “AD”, “Andorra”, and “AND” are treated as equivalent
+representations of the same geopolitical entity.</p>
+<p>The current mappings can be inspected directly:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">attr</span>(country, <span class="st">&quot;prelabel&quot;</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="co">#&gt;       Andorra           AND Liechtenstein            AD            LI </span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="co">#&gt;          &quot;AD&quot;          &quot;AD&quot;          &quot;LI&quot;          &quot;AD&quot;          &quot;LI&quot;</span></span></code></pre></div>
+<p>This approach is useful during data cleaning and integration, where
+semantic assumptions may still evolve. Once these assumptions become
+sufficiently stable, they can be formalized with
+<code>defined()</code>.</p>
+<p>For further information, see
+<code>vignette(&quot;prelabelled&quot;, package = &quot;dataset&quot;)</code>: Handling
+Semantic Ambiguity with <code>prelabelled</code> Vectors.</p>
 </div>
 <div id="example-defining-semantically-rich-vectors" class="section level2">
 <h2>Example: defining semantically rich vectors</h2>
+<p>After values have been harmonized, variables can be formally defined
+with machine-readable semantic metadata.</p>
 <p>Semantically rich vectors are vectors in a data.frame that contain
 richer semantics than a simple column name; a long-form human-readable
 title; a machine- and human-readable variable definition; and if needed,
 an external resource that contains the codebook.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(dataset)</span>
-<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>gdp <span class="ot">&lt;-</span> <span class="fu">defined</span>(</span>
-<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>  <span class="fu">c</span>(<span class="dv">2355</span>, <span class="dv">2592</span>, <span class="dv">2884</span>),</span>
-<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>  <span class="at">label =</span> <span class="st">&quot;Gross Domestic Product&quot;</span>,</span>
-<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>  <span class="at">unit =</span> <span class="st">&quot;CP_MEUR&quot;</span>,</span>
-<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a>  <span class="at">concept =</span> <span class="st">&quot;http://data.europa.eu/83i/aa/GDP&quot;</span></span>
-<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a>)</span>
-<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a></span>
-<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a>geo <span class="ot">&lt;-</span> <span class="fu">defined</span>(</span>
-<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a>  <span class="fu">rep</span>(<span class="st">&quot;AD&quot;</span>, <span class="dv">3</span>),</span>
-<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a>  <span class="at">label =</span> <span class="st">&quot;Geopolitical Entity&quot;</span>,</span>
-<span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a>  <span class="at">concept =</span> <span class="st">&quot;http://purl.org/linked-data/sdmx/2009/dimension#refArea&quot;</span>,</span>
-<span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a>  <span class="at">namespace =</span> <span class="st">&quot;https://www.geonames.org/countries/$1/&quot;</span></span>
-<span id="cb1-15"><a href="#cb1-15" tabindex="-1"></a>)</span>
-<span id="cb1-16"><a href="#cb1-16" tabindex="-1"></a></span>
-<span id="cb1-17"><a href="#cb1-17" tabindex="-1"></a>gdp</span>
-<span id="cb1-18"><a href="#cb1-18" tabindex="-1"></a><span class="co">#&gt; x: Gross Domestic Product</span></span>
-<span id="cb1-19"><a href="#cb1-19" tabindex="-1"></a><span class="co">#&gt; Defined as http://data.europa.eu/83i/aa/GDP, measured in CP_MEUR </span></span>
-<span id="cb1-20"><a href="#cb1-20" tabindex="-1"></a><span class="co">#&gt; [1] 2355 2592 2884</span></span>
-<span id="cb1-21"><a href="#cb1-21" tabindex="-1"></a>geo</span>
-<span id="cb1-22"><a href="#cb1-22" tabindex="-1"></a><span class="co">#&gt; x: Geopolitical Entity</span></span>
-<span id="cb1-23"><a href="#cb1-23" tabindex="-1"></a><span class="co">#&gt; Defined as http://purl.org/linked-data/sdmx/2009/dimension#refArea </span></span>
-<span id="cb1-24"><a href="#cb1-24" tabindex="-1"></a><span class="co">#&gt; [1] &quot;AD&quot; &quot;AD&quot; &quot;AD&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">library</span>(dataset)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>gdp <span class="ot">&lt;-</span> <span class="fu">defined</span>(</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>  <span class="fu">c</span>(<span class="dv">2355</span>, <span class="dv">2592</span>, <span class="dv">2884</span>),</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>  <span class="at">label =</span> <span class="st">&quot;Gross Domestic Product&quot;</span>,</span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>  <span class="at">unit =</span> <span class="st">&quot;CP_MEUR&quot;</span>,</span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>  <span class="at">concept =</span> <span class="st">&quot;http://data.europa.eu/83i/aa/GDP&quot;</span></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a>)</span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a>geo <span class="ot">&lt;-</span> <span class="fu">defined</span>(</span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a>  <span class="fu">rep</span>(<span class="st">&quot;AD&quot;</span>, <span class="dv">3</span>),</span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a>  <span class="at">label =</span> <span class="st">&quot;Geopolitical Entity&quot;</span>,</span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a>  <span class="at">concept =</span> <span class="st">&quot;http://purl.org/linked-data/sdmx/2009/dimension#refArea&quot;</span>,</span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a>  <span class="at">namespace =</span> <span class="st">&quot;https://www.geonames.org/countries/$1/&quot;</span></span>
+<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a>)</span>
+<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a></span>
+<span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a>gdp</span>
+<span id="cb3-18"><a href="#cb3-18" tabindex="-1"></a><span class="co">#&gt; x: Gross Domestic Product</span></span>
+<span id="cb3-19"><a href="#cb3-19" tabindex="-1"></a><span class="co">#&gt; Defined as http://data.europa.eu/83i/aa/GDP, measured in CP_MEUR </span></span>
+<span id="cb3-20"><a href="#cb3-20" tabindex="-1"></a><span class="co">#&gt; [1] 2355 2592 2884</span></span>
+<span id="cb3-21"><a href="#cb3-21" tabindex="-1"></a>geo</span>
+<span id="cb3-22"><a href="#cb3-22" tabindex="-1"></a><span class="co">#&gt; x: Geopolitical Entity</span></span>
+<span id="cb3-23"><a href="#cb3-23" tabindex="-1"></a><span class="co">#&gt; Defined as http://purl.org/linked-data/sdmx/2009/dimension#refArea </span></span>
+<span id="cb3-24"><a href="#cb3-24" tabindex="-1"></a><span class="co">#&gt; [1] &quot;AD&quot; &quot;AD&quot; &quot;AD&quot;</span></span></code></pre></div>
 <p>In this case, we define <code>geo</code> as the geopolitical entity
 <a href="http://purl.org/linked-data/sdmx/2009/dimension#refArea" class="uri">http://purl.org/linked-data/sdmx/2009/dimension#refArea</a>,
 and we know that the <code>AD</code> value can resolve to Andorra: <a href="https://www.geonames.org/countries/AD/" class="uri">https://www.geonames.org/countries/AD/</a>. These vectors
 now carry metadata you can inspect directly — including their label,
 unit, and concept URI — which will be preserved even after
 transformation or storage.</p>
+<p>For further information, see vignette(“defined”, package =
+“dataset”)<code>: Semantic vectors with</code>defined()`.</p>
 </div>
 <div id="example-creating-a-dataset-from-a-metadata-enriched-data-frame" class="section level2">
 <h2>Example: creating a dataset from a metadata-enriched data frame</h2>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>small_dataset <span class="ot">&lt;-</span> <span class="fu">dataset_df</span>(</span>
-<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>  <span class="at">geo =</span> geo,</span>
-<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>  <span class="at">gdp =</span> gdp,</span>
-<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>  <span class="at">identifier =</span> <span class="fu">c</span>(<span class="at">gdp =</span> <span class="st">&quot;http://example.com/dataset#gdp&quot;</span>),</span>
-<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>  <span class="at">dataset_bibentry =</span> <span class="fu">dublincore</span>(</span>
-<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Small GDP Dataset&quot;</span>,</span>
-<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>    <span class="at">creator =</span> <span class="fu">person</span>(<span class="st">&quot;Jane&quot;</span>, <span class="st">&quot;Doe&quot;</span>, <span class="at">role =</span> <span class="st">&quot;aut&quot;</span>),</span>
-<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>    <span class="at">publisher =</span> <span class="st">&quot;Small Repository&quot;</span>,</span>
-<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>    <span class="at">subject =</span> <span class="st">&quot;Gross Domestic Product&quot;</span></span>
-<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a>  )</span>
-<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a>)</span>
-<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a></span>
-<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a>small_dataset</span>
-<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a><span class="co">#&gt; Doe (2026): Small GDP Dataset [dataset]</span></span>
-<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a><span class="co">#&gt;   rowid geo     gdp </span></span>
-<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt;</span></span>
-<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a><span class="co">#&gt; 1 gdp1  AD     2355</span></span>
-<span id="cb2-18"><a href="#cb2-18" tabindex="-1"></a><span class="co">#&gt; 2 gdp2  AD     2592</span></span>
-<span id="cb2-19"><a href="#cb2-19" tabindex="-1"></a><span class="co">#&gt; 3 gdp3  AD     2884</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>small_dataset <span class="ot">&lt;-</span> <span class="fu">dataset_df</span>(</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>  <span class="at">geo =</span> geo,</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>  <span class="at">gdp =</span> gdp,</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>  <span class="at">identifier =</span> <span class="fu">c</span>(<span class="at">gdp =</span> <span class="st">&quot;http://example.com/dataset#gdp&quot;</span>),</span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>  <span class="at">dataset_bibentry =</span> <span class="fu">dublincore</span>(</span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Small GDP Dataset&quot;</span>,</span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>    <span class="at">creator =</span> <span class="fu">person</span>(<span class="st">&quot;Jane&quot;</span>, <span class="st">&quot;Doe&quot;</span>, <span class="at">role =</span> <span class="st">&quot;aut&quot;</span>),</span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a>    <span class="at">publisher =</span> <span class="st">&quot;Small Repository&quot;</span>,</span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a>    <span class="at">subject =</span> <span class="st">&quot;Gross Domestic Product&quot;</span></span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a>  )</span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a>)</span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a></span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a>small_dataset</span>
+<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a><span class="co">#&gt; Doe (2026): Small GDP Dataset [dataset]</span></span>
+<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a><span class="co">#&gt;   rowid geo     gdp </span></span>
+<span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt;</span></span>
+<span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a><span class="co">#&gt; 1 gdp1  AD     2355</span></span>
+<span id="cb4-18"><a href="#cb4-18" tabindex="-1"></a><span class="co">#&gt; 2 gdp2  AD     2592</span></span>
+<span id="cb4-19"><a href="#cb4-19" tabindex="-1"></a><span class="co">#&gt; 3 gdp3  AD     2884</span></span></code></pre></div>
+<p>For further information see
+<code>vignette(&quot;dataset_df&quot;, package = &quot;dataset&quot;)</code>: Structuring
+and metadata with <code>dataset_df()</code>.</p>
 <p>This dataset not only stores the variables and values, but also
 includes embedded metadata that supports precise interpretation and
 repository-level publication.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">as_dublincore</span>(small_dataset)</span>
-<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="co">#&gt; Dublin Core Metadata Record</span></span>
-<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co">#&gt; --------------------------</span></span>
-<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co">#&gt; Title:       Small GDP Dataset</span></span>
-<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co">#&gt; Creator(s):  Jane Doe [aut]</span></span>
-<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="co">#&gt; Contributor(s): :unas</span></span>
-<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="co">#&gt; Subject(s):  Gross Domestic Product</span></span>
-<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="co">#&gt; Publisher:   Small Repository</span></span>
-<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="co">#&gt; Year:        2026</span></span>
-<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="co">#&gt; Language:    :unas</span></span>
-<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a><span class="co">#&gt; Description: :unas</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">as_dublincore</span>(small_dataset)</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="co">#&gt; Dublin Core Metadata Record</span></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="co">#&gt; --------------------------</span></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="co">#&gt; Title:       Small GDP Dataset</span></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="co">#&gt; Creator(s):  Jane Doe [aut]</span></span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a><span class="co">#&gt; Contributor(s): :unas</span></span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a><span class="co">#&gt; Subject(s):  Gross Domestic Product</span></span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a><span class="co">#&gt; Publisher:   Small Repository</span></span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a><span class="co">#&gt; Year:        2026</span></span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a><span class="co">#&gt; Language:    :unas</span></span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a><span class="co">#&gt; Description: :unas</span></span></code></pre></div>
+<p>For further information
+see<code>vignette(&quot;bibrecord&quot;, package = &quot;dataset&quot;)</code>: Creating
+rich citation metadata using <code>bibrecord()</code></p>
 </div>
 <div id="exporting-to-rdf" class="section level2">
 <h2>Exporting to RDF</h2>
@@ -469,36 +538,39 @@ not familiar with RDF.</p>
 <p>You can convert any <code>dataset_df</code> object into a tidy
 3-column representation (subject–predicate–object) using
 <code>dataset_to_triples()</code>:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>triples <span class="ot">&lt;-</span> <span class="fu">dataset_to_triples</span>(small_dataset,</span>
-<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>  <span class="at">format =</span> <span class="st">&quot;nt&quot;</span></span>
-<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>)</span>
-<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>triples</span>
-<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="co">#&gt; [1] &quot;&lt;http://example.com/dataset#gdpgdp1&gt; &lt;http://purl.org/linked-data/sdmx/2009/dimension#refArea&gt; &lt;https://www.geonames.org/countries/AD/&gt; .&quot;</span></span>
-<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="co">#&gt; [2] &quot;&lt;http://example.com/dataset#gdpgdp2&gt; &lt;http://purl.org/linked-data/sdmx/2009/dimension#refArea&gt; &lt;https://www.geonames.org/countries/AD/&gt; .&quot;</span></span>
-<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="co">#&gt; [3] &quot;&lt;http://example.com/dataset#gdpgdp3&gt; &lt;http://purl.org/linked-data/sdmx/2009/dimension#refArea&gt; &lt;https://www.geonames.org/countries/AD/&gt; .&quot;</span></span>
-<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="co">#&gt; [4] &quot;&lt;http://example.com/dataset#gdpgdp1&gt; &lt;http://data.europa.eu/83i/aa/GDP&gt; \&quot;2355\&quot;^^&lt;xsd:decimal&gt; .&quot;                                        </span></span>
-<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="co">#&gt; [5] &quot;&lt;http://example.com/dataset#gdpgdp2&gt; &lt;http://data.europa.eu/83i/aa/GDP&gt; \&quot;2592\&quot;^^&lt;xsd:decimal&gt; .&quot;                                        </span></span>
-<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a><span class="co">#&gt; [6] &quot;&lt;http://example.com/dataset#gdpgdp3&gt; &lt;http://data.europa.eu/83i/aa/GDP&gt; \&quot;2884\&quot;^^&lt;xsd:decimal&gt; .&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>triples <span class="ot">&lt;-</span> <span class="fu">dataset_to_triples</span>(small_dataset,</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>  <span class="at">format =</span> <span class="st">&quot;nt&quot;</span></span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>)</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>triples</span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="co">#&gt; [1] &quot;&lt;http://example.com/dataset#gdpgdp1&gt; &lt;http://purl.org/linked-data/sdmx/2009/dimension#refArea&gt; &lt;https://www.geonames.org/countries/AD/&gt; .&quot;</span></span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="co">#&gt; [2] &quot;&lt;http://example.com/dataset#gdpgdp2&gt; &lt;http://purl.org/linked-data/sdmx/2009/dimension#refArea&gt; &lt;https://www.geonames.org/countries/AD/&gt; .&quot;</span></span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="co">#&gt; [3] &quot;&lt;http://example.com/dataset#gdpgdp3&gt; &lt;http://purl.org/linked-data/sdmx/2009/dimension#refArea&gt; &lt;https://www.geonames.org/countries/AD/&gt; .&quot;</span></span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a><span class="co">#&gt; [4] &quot;&lt;http://example.com/dataset#gdpgdp1&gt; &lt;http://data.europa.eu/83i/aa/GDP&gt; \&quot;2355\&quot;^^&lt;xsd:decimal&gt; .&quot;                                        </span></span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a><span class="co">#&gt; [5] &quot;&lt;http://example.com/dataset#gdpgdp2&gt; &lt;http://data.europa.eu/83i/aa/GDP&gt; \&quot;2592\&quot;^^&lt;xsd:decimal&gt; .&quot;                                        </span></span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a><span class="co">#&gt; [6] &quot;&lt;http://example.com/dataset#gdpgdp3&gt; &lt;http://data.europa.eu/83i/aa/GDP&gt; \&quot;2884\&quot;^^&lt;xsd:decimal&gt; .&quot;</span></span></code></pre></div>
 <p>This 3-column format (subject–predicate–object) is compatible with
 semantic web tools such as SPARQL, <code>rdflib</code>, and triple
 stores.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>mycon <span class="ot">&lt;-</span> <span class="fu">tempfile</span>(<span class="st">&quot;my_dataset&quot;</span>,</span>
-<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>  <span class="at">fileext =</span> <span class="st">&quot;nt&quot;</span></span>
-<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>)</span>
-<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>my_description <span class="ot">&lt;-</span> <span class="fu">describe</span>(</span>
-<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>  <span class="at">x =</span> small_dataset,</span>
-<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>  <span class="at">con =</span> mycon</span>
-<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>)</span>
-<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a></span>
-<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a><span class="co"># Only three statements are shown:</span></span>
-<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a><span class="fu">readLines</span>(mycon)[<span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">8</span>, <span class="dv">12</span>)]</span>
-<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a><span class="co">#&gt; [1] &quot;_:doejane &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/ns/prov#Agent&gt; .&quot;                                      </span></span>
-<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a><span class="co">#&gt; [2] &quot;&lt;http://example.com/dataset_tba/&gt; &lt;http://purl.org/dc/terms/title&gt; \&quot;Small GDP Dataset\&quot;^^&lt;http://www.w3.org/2001/XMLSchema#string&gt; .&quot;</span></span>
-<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a><span class="co">#&gt; [3] &quot;&lt;http://example.com/dataset_tba/&gt; &lt;http://purl.org/dc/terms/type&gt; &lt;http://purl.org/dc/dcmitype/Dataset&gt; .&quot;</span></span></code></pre></div>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="do">## Show two lines of provenance:</span></span>
-<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="fu">provenance</span>(small_dataset)[<span class="fu">c</span>(<span class="dv">6</span>, <span class="dv">7</span>)]</span>
-<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="co">#&gt; [1] &quot;&lt;http://example.com/creation&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/ns/prov#Activity&gt; .&quot;</span></span>
-<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="co">#&gt; [2] &quot;&lt;http://example.com/creation&gt; &lt;http://www.w3.org/ns/prov#generatedAtTime&gt; \&quot;2026-05-18T07:25:24Z\&quot;^^&lt;xsd:dateTime&gt; .&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>mycon <span class="ot">&lt;-</span> <span class="fu">tempfile</span>(<span class="st">&quot;my_dataset&quot;</span>,</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>  <span class="at">fileext =</span> <span class="st">&quot;nt&quot;</span></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>)</span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>my_description <span class="ot">&lt;-</span> <span class="fu">describe</span>(</span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>  <span class="at">x =</span> small_dataset,</span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>  <span class="at">con =</span> mycon</span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>)</span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a><span class="co"># Only three statements are shown:</span></span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a><span class="fu">readLines</span>(mycon)[<span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">8</span>, <span class="dv">12</span>)]</span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a><span class="co">#&gt; [1] &quot;_:doejane &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/ns/prov#Agent&gt; .&quot;                                      </span></span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a><span class="co">#&gt; [2] &quot;&lt;http://example.com/dataset_tba/&gt; &lt;http://purl.org/dc/terms/title&gt; \&quot;Small GDP Dataset\&quot;^^&lt;http://www.w3.org/2001/XMLSchema#string&gt; .&quot;</span></span>
+<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a><span class="co">#&gt; [3] &quot;&lt;http://example.com/dataset_tba/&gt; &lt;http://purl.org/dc/terms/type&gt; &lt;http://purl.org/dc/dcmitype/Dataset&gt; .&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="do">## Show two lines of provenance:</span></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="fu">provenance</span>(small_dataset)[<span class="fu">c</span>(<span class="dv">6</span>, <span class="dv">7</span>)]</span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="co">#&gt; [1] &quot;&lt;http://example.com/creation&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/ns/prov#Activity&gt; .&quot;</span></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="co">#&gt; [2] &quot;&lt;http://example.com/creation&gt; &lt;http://www.w3.org/ns/prov#generatedAtTime&gt; \&quot;2026-06-03T06:51:19Z\&quot;^^&lt;xsd:dateTime&gt; .&quot;</span></span></code></pre></div>
+<p>For further information, see
+<code>vignette(&quot;rdf&quot;, package = &quot;dataset&quot;)</code>: Exporting to RDF and
+Linked Data.</p>
 </div>
 <div id="coercing-back" class="section level2">
 <h2>Coercing back</h2>
@@ -506,49 +578,49 @@ stores.</p>
 simplified to as base R <code>data.frame</code> or a
 <code>tbf_df</code>.</p>
 <p>We offer two coercion forms:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>small_df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(small_dataset,</span>
-<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>  <span class="at">strip_attributes =</span> <span class="cn">FALSE</span></span>
-<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>)</span>
-<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a></span>
-<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="fu">attr</span>(small_dataset, <span class="st">&quot;subject&quot;</span>)</span>
-<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="co">#&gt; $term</span></span>
-<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Data sets&quot;</span></span>
-<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a><span class="co">#&gt; $subjectScheme</span></span>
-<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a><span class="co">#&gt; [1] &quot;LCSH&quot;</span></span>
-<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a><span class="co">#&gt; $schemeURI</span></span>
-<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a><span class="co">#&gt; [1] &quot;http://id.loc.gov/authorities/subjects&quot;</span></span>
-<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a><span class="co">#&gt; $valueURI</span></span>
-<span id="cb7-16"><a href="#cb7-16" tabindex="-1"></a><span class="co">#&gt; [1] &quot;http://id.loc.gov/authorities/subjects/sh2018002256&quot;</span></span>
-<span id="cb7-17"><a href="#cb7-17" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb7-18"><a href="#cb7-18" tabindex="-1"></a><span class="co">#&gt; $classificationCode</span></span>
-<span id="cb7-19"><a href="#cb7-19" tabindex="-1"></a><span class="co">#&gt; NULL</span></span>
-<span id="cb7-20"><a href="#cb7-20" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb7-21"><a href="#cb7-21" tabindex="-1"></a><span class="co">#&gt; $prefix</span></span>
-<span id="cb7-22"><a href="#cb7-22" tabindex="-1"></a><span class="co">#&gt; [1] &quot;lcsh:&quot;</span></span>
-<span id="cb7-23"><a href="#cb7-23" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb7-24"><a href="#cb7-24" tabindex="-1"></a><span class="co">#&gt; attr(,&quot;class&quot;)</span></span>
-<span id="cb7-25"><a href="#cb7-25" tabindex="-1"></a><span class="co">#&gt; [1] &quot;subject&quot; &quot;list&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>small_df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(small_dataset,</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>  <span class="at">strip_attributes =</span> <span class="cn">FALSE</span></span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>)</span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a><span class="fu">attr</span>(small_dataset, <span class="st">&quot;subject&quot;</span>)</span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a><span class="co">#&gt; $term</span></span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Data sets&quot;</span></span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a><span class="co">#&gt; $subjectScheme</span></span>
+<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a><span class="co">#&gt; [1] &quot;LCSH&quot;</span></span>
+<span id="cb9-11"><a href="#cb9-11" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb9-12"><a href="#cb9-12" tabindex="-1"></a><span class="co">#&gt; $schemeURI</span></span>
+<span id="cb9-13"><a href="#cb9-13" tabindex="-1"></a><span class="co">#&gt; [1] &quot;http://id.loc.gov/authorities/subjects&quot;</span></span>
+<span id="cb9-14"><a href="#cb9-14" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb9-15"><a href="#cb9-15" tabindex="-1"></a><span class="co">#&gt; $valueURI</span></span>
+<span id="cb9-16"><a href="#cb9-16" tabindex="-1"></a><span class="co">#&gt; [1] &quot;http://id.loc.gov/authorities/subjects/sh2018002256&quot;</span></span>
+<span id="cb9-17"><a href="#cb9-17" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb9-18"><a href="#cb9-18" tabindex="-1"></a><span class="co">#&gt; $classificationCode</span></span>
+<span id="cb9-19"><a href="#cb9-19" tabindex="-1"></a><span class="co">#&gt; NULL</span></span>
+<span id="cb9-20"><a href="#cb9-20" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb9-21"><a href="#cb9-21" tabindex="-1"></a><span class="co">#&gt; $prefix</span></span>
+<span id="cb9-22"><a href="#cb9-22" tabindex="-1"></a><span class="co">#&gt; [1] &quot;lcsh:&quot;</span></span>
+<span id="cb9-23"><a href="#cb9-23" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb9-24"><a href="#cb9-24" tabindex="-1"></a><span class="co">#&gt; attr(,&quot;class&quot;)</span></span>
+<span id="cb9-25"><a href="#cb9-25" tabindex="-1"></a><span class="co">#&gt; [1] &quot;subject&quot; &quot;list&quot;</span></span></code></pre></div>
 <p>Using the <code>strip_attributes = FALSE</code> the rich attributes
 remain in the base R data.frame. In most pipelines the attributes play
 no role, and you can retain it, and perhaps later load it back to a
 richer form.</p>
 <p>You can also strip all these attributes, and choose
 <code>tbl_df</code> (if you have <code>tibble</code>) installed”:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>small_tbl <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(</span>
-<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>  small_dataset,</span>
-<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>  <span class="at">strip_attributes =</span> <span class="cn">TRUE</span></span>
-<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>)</span>
-<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a></span>
-<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a>small_tbl</span>
-<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a><span class="co">#&gt; # A tibble: 3 × 3</span></span>
-<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a><span class="co">#&gt;   rowid geo     gdp</span></span>
-<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt;</span></span>
-<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a><span class="co">#&gt; 1 gdp1  AD     2355</span></span>
-<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a><span class="co">#&gt; 2 gdp2  AD     2592</span></span>
-<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a><span class="co">#&gt; 3 gdp3  AD     2884</span></span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>small_tbl <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>  small_dataset,</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>  <span class="at">strip_attributes =</span> <span class="cn">TRUE</span></span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>)</span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>small_tbl</span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a><span class="co">#&gt; # A tibble: 3 × 3</span></span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a><span class="co">#&gt;   rowid geo     gdp</span></span>
+<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt;</span></span>
+<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a><span class="co">#&gt; 1 gdp1  AD     2355</span></span>
+<span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a><span class="co">#&gt; 2 gdp2  AD     2592</span></span>
+<span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a><span class="co">#&gt; 3 gdp3  AD     2884</span></span></code></pre></div>
 </div>
 <div id="summary" class="section level2">
 <h2>Summary</h2>
@@ -560,18 +632,7 @@ SDMX, DataCite, and Dublin Core. Use it when you need:</p>
 <li><p>Meaningful variable descriptions and URIs</p></li>
 <li><p>Dataset-level metadata embedded directly in .rds or .rda
 files</p></li>
-<li><p>Easy export to RDF and semantic web formats</p></li>
-</ul>
-<p>For deeper examples, see:</p>
-<ul>
-<li><p><code>vignette(&quot;defined&quot;, package = &quot;dataset&quot;)</code>: Working
-with semantic vectors</p></li>
-<li><p><code>vignette(&quot;dataset_df&quot;, package = &quot;dataset&quot;)</code>:
-Dataset-level metadata and structure</p></li>
-<li><p><code>vignette(&quot;rdf&quot;, package = &quot;dataset&quot;)</code>: Linked Data
-and export</p></li>
-<li><p><code>vignette(&quot;bibrecord&quot;, package = &quot;dataset&quot;)</code>: Creating
-rich citation metadata using <code>bibrecord()</code></p></li>
+<li><p>Easy export to RDF and semantic web formats.</p></li>
 </ul>
 </div>
 

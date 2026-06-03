@@ -5,10 +5,8 @@
 
 <!-- badges: start -->
 
-<!-- badges: start -->
-
 [![rhub](https://github.com/ropensci/dataset/actions/workflows/rhub.yaml/badge.svg)](https://github.com/ropensci/dataset/actions/workflows/rhub.yaml)
-[![devel-version](https://img.shields.io/badge/devel%20version-0.4.1-blue.svg)](https://github.com/ropensci/dataset)
+[![devel-version](https://img.shields.io/badge/devel%20version-0.4.5-blue.svg)](https://github.com/ropensci/dataset)
 [![Codecov test
 coverage](https://codecov.io/gh/ropensci/dataset/branch/main/graph/badge.svg)](https://app.codecov.io/gh/ropensci/dataset?branch=main)
 [![Project Status:
@@ -17,21 +15,25 @@ Active](https://www.repostatus.org/badges/latest/active.svg)](https://www.repost
 [![CRAN_time_from_release](https://www.r-pkg.org/badges/ago/dataset)](https://cran.r-project.org/package=dataset)
 <!-- [![DOI](https://img.shields.io/badge/DOI-10.32614/CRAN.package.dataset-blue)](https://doi.org/10.32614/CRAN.package.dataset) --->
 [![dataobservatory](https://img.shields.io/badge/ecosystem-dataobservatory.eu-3EA135.svg)](https://dataobservatory.eu/)
+
 <!-- badges: end -->
 
 # Overview
 
-The `dataset` package helps you create **semantically rich**,
-**machine-readable**, and **interoperable datasets** in R. It introduces
-S3 classes that extend data frames, vectors, and bibliographic entries
-with formal metadata structures inspired by:
+The `dataset` package extends tidyverse workflows with lightweight
+semantic metadata, provenance tracking, and interoperable dataset
+structures.
 
-- **SDMX** (Statistical Data and Metadata eXchange), widely used in
-  official statistics  
-- **Dublin Core** and **DataCite**, for FAIR-compliant depositing and
-  reuse in scientific and open data repositories  
-- **Open Science publishing practices**, to support transparent and
-  reproducible research
+It supports gradual semantic stabilization ranging from lightweight
+semantic mappings to formally defined variables and semantically
+enriched datasets suitable for FAIR, machine-readable, and
+standards-aligned data exchange.
+
+The package draws inspiration from:
+
+- **SDMX** and statistical data cube models
+- **Dublin Core** and **DataCite**
+- **FAIR and reproducible research workflows**
 
 The goal is to preserve metadata when reusing statistical and repository
 datasets, improve interoperability, and make it easy to turn tidy data
@@ -59,15 +61,58 @@ remotes::install_github("dataobservatory-eu/dataset")
 
 ## Minimal Example
 
+Real-world datasets rarely begin with fully standardized values. Early
+in a project, inconsistencies may be easy to spot, such as mixing `AD`
+and `Andorra` for the same country. As datasets are combined from
+multiple sources, however, additional variants often appear, for example
+the ISO-3166 alpha-2 code `AD`, the country name `Andorra`, or the
+ISO-3166 alpha-3 code `AND`.
+
+The `prelabel()` constructor provides a lightweight way to stabilize
+such values before committing to a formal semantic definition.
+
 ``` r
 library(dataset)
+
+x <- prelabel(
+  c("AD", "Andorra", "AND", "LI", "Liechtenstein"),
+  labels = c(
+    Andorra = "AD",
+    AND = "AD",
+    Liechtenstein = "LI"
+  )
+)
+
+as.character(x)
+#> [1] "AD" "AD" "AD" "LI" "LI"
+```
+
+Unlike a formal semantic definition, a `prelabelled` vector records
+provisional mappings that may still evolve during data integration. The
+original observational values remain available alongside the current
+semantic assumptions:
+
+``` r
+attr(x, "prelabel")
+#>       Andorra           AND Liechtenstein            AD            LI 
+#>          "AD"          "AD"          "LI"          "AD"          "LI"
+```
+
+When semantic assumptions become sufficiently stable, variables can be
+formalized with `defined()` and combined into a semantically enriched
+`dataset_df()` object:
+
+``` r
+library(dataset)
+
 df <- dataset_df(
   country = defined(
     c("AD", "LI"),
     label = "Country",
     namespace = "https://www.geonames.org/countries/$1/"
   ),
-  gdp = defined(c(3897, 7365),
+  gdp = defined(
+    c(3897, 7365),
     label = "GDP",
     unit = "million euros"
   ),
@@ -77,6 +122,7 @@ df <- dataset_df(
     publisher = "Small Repository"
   )
 )
+
 print(df)
 #> Doe (2026): GDP Dataset [dataset]
 #>   rowid country   gdp 
@@ -84,6 +130,24 @@ print(df)
 #> 1 obs1  AD       3897
 #> 2 obs2  LI       7365
 ```
+
+This illustrates the semantic lifecycle supported by the package:
+
+``` text
+raw values
+    ↓
+prelabelled
+    ↓
+defined
+    ↓
+dataset_df
+    ↓
+RDF and FAIR publication
+```
+
+Because semantic assumptions and provenance are preserved explicitly,
+semantically enriched datasets can be exported as interoperable RDF
+triples without manually reconstructing metadata at publication time.
 
 Export as RDF triples:
 
@@ -125,11 +189,16 @@ provenance(df)
     #> [4] "_:doejane <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/prov#Agent> ."                                              
     #> [5] "<https://doi.org/10.32614/CRAN.package.dataset> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/prov#SoftwareAgent> ."
     #> [6] "<http://example.com/creation> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/prov#Activity> ."                       
-    #> [7] "<http://example.com/creation> <http://www.w3.org/ns/prov#generatedAtTime> \"2026-05-18T07:18:53Z\"^^<xsd:dateTime> ."
+    #> [7] "<http://example.com/creation> <http://www.w3.org/ns/prov#generatedAtTime> \"2026-06-03T06:29:26Z\"^^<xsd:dateTime> ."
 
 </div>
 
 ## Contributing
+
+The package does not attempt automatic ontology alignment, entity
+reconciliation, or rule-based semantic inference. It focuses on
+preserving semantic assumptions made by the analyst in a transparent and
+reproducible form.
 
 We welcome contributions and discussion!
 

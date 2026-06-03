@@ -10,6 +10,23 @@ if (!requireNamespace("rdflib",
   stop("Please install 'rdflib' to run this vignette.")
 }
 
+## ----predefine----------------------------------------------------------------
+library(dataset)
+
+country <- prelabel(
+  c("AD", "Andorra", "AND", "LI", "Liechtenstein"),
+  labels = c(
+    Andorra = "AD",
+    AND = "AD",
+    Liechtenstein = "LI"
+  )
+)
+
+country
+
+## ----predefine-attribute------------------------------------------------------
+attr(country, "prelabel")
+
 ## ----definegdpdataset---------------------------------------------------------
 library(dataset)
 
